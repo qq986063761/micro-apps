@@ -27,7 +27,7 @@ export default {
         {
           label: '目标',
           value: 'okr',
-          url: '/app-okr'
+          url: 'http://localhost:8081/app-okr'
         },
         {
           label: '任务',
@@ -55,9 +55,9 @@ export default {
     registerMicroApps([
       {
         name: 'okrApp',
-        entry: '//localhost:3000',
+        entry: '//localhost:8081',
         container: '.app-main',
-        activeRule: '/app-okr',
+        activeRule: '/',
       },
       {
         name: 'taskApp',
