@@ -1,19 +1,6 @@
-# my-project
+# 主应用要做啥？
+- css 全局样式
 
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# 子应用要做啥？
+- css 样式别和主应用样式冲突，自己根元素要定根类名再往下写样式
+- 路由必须有一个根 name，比如 #/okr/about #/task/about

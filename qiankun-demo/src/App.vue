@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { registerMicroApps, start } from 'qiankun'
+import { registerMicroApps, start, prefetchApps, loadMicroApp } from 'qiankun'
 
 export default {
   data() {
@@ -46,33 +46,59 @@ export default {
     onSelect(val, path) {
       console.log('onSelect', val, path)
 
-      let item = this.menus.find(item => item.value === val)
-      location.href = item.url
+      switch (val) {
+        case 'okr':
+          // 如果微应用和 url 路径没关系，则可以自己手动加载微应用，否则可以用
+          loadMicroApp({
+            name: 'okr',
+            entry: '//localhost:8081',
+            container: '.app-main',
+            activeRule: '#/okr',
+          })
+          break
+        case 'task':
+          loadMicroApp({
+            name: 'task',
+            entry: '//localhost:8082',
+            container: '.app-main',
+            activeRule: '#/task',
+          })
+          break
+      }
+
+      // let item = this.menus.find(item => item.value === val)
+      // location.href = item.url
     }
   },
   mounted() {
-    // 启动 qiankun
-    registerMicroApps([
-      {
-        name: 'okrApp',
-        entry: '//localhost:8081',
-        container: '.app-main',
-        activeRule: '/',
-      },
-      {
-        name: 'taskApp',
-        entry: '//localhost:8080',
-        container: '.app-main',
-        activeRule: '/app-task',
-      },
-      {
-        name: 'sumApp',
-        entry: '//localhost:4200',
-        container: '.app-main',
-        activeRule: '/app-sum',
-      },
+    // 手动预加载微应用资源，配合 loadMicroApp 提高效率
+    prefetchApps([
+      { name: 'okr', entry: '//localhost:8081' },
+      { name: 'task', entry: '//localhost:8082' },
     ])
-    start()
+
+    // 启动 qiankun
+    // registerMicroApps([
+    //   {
+    //     name: 'okrApp',
+    //     entry: '//localhost:8081',
+    //     container: '.app-main',
+    //     activeRule: '/',
+    //   },
+    //   {
+    //     name: 'taskApp',
+    //     entry: '//localhost:8080',
+    //     container: '.app-main',
+    //     activeRule: '/app-task',
+    //   },
+    //   {
+    //     name: 'sumApp',
+    //     entry: '//localhost:4200',
+    //     container: '.app-main',
+    //     activeRule: '/app-sum',
+    //   },
+    // ])
+    // start()
   }
 }
 </script>
