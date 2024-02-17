@@ -6,6 +6,10 @@ import HomeView from '../views/HomeView.vue'
 
 const routes = [
   {
+    path: '/',
+    redirect: '/task/home'
+  },
+  {
     path: '/task/home',
     name: 'home',
     component: HomeView

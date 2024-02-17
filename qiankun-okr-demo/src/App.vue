@@ -1,8 +1,8 @@
 <template>
   <div class="okr-app" id="app">
     <nav>
-      <router-link to="/">目标-Home</router-link> |
-      <router-link to="/about">目标-About</router-link>
+      <router-link to="/okr/home">目标-Home</router-link> |
+      <router-link to="/okr/about">目标-About</router-link>
     </nav>
     <router-view/>
   </div>

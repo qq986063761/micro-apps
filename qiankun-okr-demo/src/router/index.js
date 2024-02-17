@@ -6,6 +6,10 @@ import HomeView from '../views/HomeView.vue'
 
 const routes = [
   {
+    path: '/',
+    redirect: '/okr/home'
+  },
+  {
     path: '/okr/home',
     name: 'home',
     component: HomeView

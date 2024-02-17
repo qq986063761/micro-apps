@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { registerMicroApps, start, prefetchApps, loadMicroApp } from 'qiankun'
+import { registerMicroApps, start, initGlobalState, prefetchApps, loadMicroApp } from 'qiankun'
 
 export default {
   data() {
@@ -27,78 +27,110 @@ export default {
         {
           label: '目标',
           value: 'okr',
-          url: 'http://localhost:8081/app-okr'
+          // url: 'http://localhost:8081/app-okr'
         },
         {
           label: '任务',
           value: 'task',
-          url: '/app-task'
+          // url: '/app-task'
         },
-        {
-          label: '总结',
-          value: 'sum',
-          url: '/app-sum'
-        },
+        // {
+        //   label: '总结',
+        //   value: 'sum',
+        //   url: '/app-sum'
+        // },
       ],
     }
   },
   methods: {
     onSelect(val, path) {
-      console.log('onSelect', val, path)
+      console.log('onSelect', val, path, this.appMap)
+
+      // 卸载上一个微应用
+      // if (this.preVal) {
+      //   let preApp = this.appMap[this.preVal]
+      //   if (preApp) preApp.unmount()
+      // }
+
+      // 已经加载过微应用
+      // let app = this.appMap[val]
+      // if (app) {
+      //   app.mount()
+      // } else {
+        
+      // }
 
       switch (val) {
         case 'okr':
+          location.href = location.href.split('#')[0] + '#/okr/home'
           // 如果微应用和 url 路径没关系，则可以自己手动加载微应用，否则可以用
-          loadMicroApp({
-            name: 'okr',
-            entry: '//localhost:8081',
-            container: '.app-main',
-            activeRule: '#/okr',
-          })
+          // this.appMap.okr = loadMicroApp({
+          //   name: 'okr',
+          //   entry: '//localhost:8081',
+          //   container: '.app-main',
+          //   activeRule: '#/okr',
+          // })
           break
+
         case 'task':
-          loadMicroApp({
-            name: 'task',
-            entry: '//localhost:8082',
-            container: '.app-main',
-            activeRule: '#/task',
-          })
+          location.href = location.href.split('#')[0] + '#/task/home'
+          // this.appMap.task = loadMicroApp({
+          //   name: 'task',
+          //   entry: '//localhost:8082',
+          //   container: '.app-main',
+          //   activeRule: '#/task',
+          // })
           break
       }
 
-      // let item = this.menus.find(item => item.value === val)
-      // location.href = item.url
+      this.preVal = val
     }
   },
   mounted() {
-    // 手动预加载微应用资源，配合 loadMicroApp 提高效率
-    prefetchApps([
-      { name: 'okr', entry: '//localhost:8081' },
-      { name: 'task', entry: '//localhost:8082' },
-    ])
+    this.appMap = {}
 
-    // 启动 qiankun
-    // registerMicroApps([
-    //   {
-    //     name: 'okrApp',
-    //     entry: '//localhost:8081',
-    //     container: '.app-main',
-    //     activeRule: '/',
-    //   },
-    //   {
-    //     name: 'taskApp',
-    //     entry: '//localhost:8080',
-    //     container: '.app-main',
-    //     activeRule: '/app-task',
-    //   },
-    //   {
-    //     name: 'sumApp',
-    //     entry: '//localhost:4200',
-    //     container: '.app-main',
-    //     activeRule: '/app-sum',
-    //   },
+    // 手动预加载微应用资源，配合 loadMicroApp 提高效率
+    // prefetchApps([
+    //   { name: 'okr', entry: '//localhost:8081' },
+    //   { name: 'task', entry: '//localhost:8082' },
     // ])
-    // start()
+
+    // 提供全局变量
+    let state = {
+      text: ''
+    }
+    let actions = initGlobalState(state)
+    actions.onGlobalStateChange((state, prev) => {
+      // state: 变更后的状态; prev 变更前的状态
+      console.log('主应用 onGlobalStateChange', state, prev);
+    })
+    actions.setGlobalState(state)
+
+    let props = {
+      components: {}
+    }
+    
+    // 启动 qiankun
+    registerMicroApps([
+      {
+        name: 'okr',
+        entry: '//localhost:8081',
+        container: '.app-main',
+        activeRule: '#/okr',
+        props
+      },
+      {
+        name: 'task',
+        entry: '//localhost:8082',
+        container: '.app-main',
+        activeRule: '#/task',
+        props
+      }
+    ], {
+      beforeLoad: (app) => console.log('before load', app),
+      beforeMount: [(app) => console.log('before mount', app)],
+    })
+    start()
   }
 }
 </script>
