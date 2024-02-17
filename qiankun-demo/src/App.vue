@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     onSelect(val, path) {
-      console.log('onSelect', val, path, this.appMap)
+      console.log('onSelect', val, path)
 
       // 卸载上一个微应用
       // if (this.preVal) {
@@ -87,7 +87,7 @@ export default {
     }
   },
   mounted() {
-    this.appMap = {}
+    // this.appMap = {}
 
     // 手动预加载微应用资源，配合 loadMicroApp 提高效率
     // prefetchApps([
@@ -96,18 +96,23 @@ export default {
     // ])
 
     // 提供全局变量
-    let state = {
-      text: ''
-    }
-    let actions = initGlobalState(state)
-    actions.onGlobalStateChange((state, prev) => {
-      // state: 变更后的状态; prev 变更前的状态
-      console.log('主应用 onGlobalStateChange', state, prev);
-    })
-    actions.setGlobalState(state)
+    // let state = {
+    //   text: 'root'
+    // }
+    // let actions = initGlobalState(state)
+    // actions.onGlobalStateChange((state, prev) => {
+    //   // state: 变更后的状态; prev 变更前的状态
+    //   console.log('主应用 onGlobalStateChange', state, prev);
+    // })
+    // actions.setGlobalState(state)
 
     let props = {
-      components: {}
+      components: {
+
+      },
+      plugins: {
+        ElementUI: window.ElementUI
+      }
     }
     
     // 启动 qiankun

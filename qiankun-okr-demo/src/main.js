@@ -13,12 +13,11 @@ let router = null;
 let instance = null;
 function render(props = {}) {
   console.log('okr 应用 props', props)
-  const { container } = props;
+  let { container, plugins } = props
+  let { ElementUI } = plugins
 
-  props.onGlobalStateChange((state, prev) => {
-    // state: 变更后的状态; prev 变更前的状态
-    console.log('okr 应用 onGlobalStateChange', state, prev);
-  })
+  // 注册插件
+  Vue.use(ElementUI)
 
   router = new VueRouter({
     // mode: 'history',
