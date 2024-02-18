@@ -25,9 +25,14 @@ function render(props = {}) {
     routes
   })
 
+  // router.beforeEach((to, from, next) => {
+  //   next()
+  // })
+
   instance = new Vue({
     router,
     store,
+    // i18n,
     render: h => h(App)
   }).$mount(container ? container.querySelector('#app') : '#app')
 }
