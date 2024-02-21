@@ -117,17 +117,19 @@ export default {
     }
     
     // 启动 qiankun
+    let host = location.host.split(':')[0]
+    let isDev = process.env.NODE_ENV !== 'production'
     registerMicroApps([
       {
         name: 'okr',
-        entry: '//localhost:8081',
+        entry: `//${host}${isDev ? ':8081' : ''}`,
         container: '.app-main',
         activeRule: '#/okr',
         props
       },
       {
         name: 'task',
-        entry: '//localhost:8082',
+        entry: `//${host}${isDev ? ':8082' : ''}`,
         container: '.app-main',
         activeRule: '#/task',
         props
