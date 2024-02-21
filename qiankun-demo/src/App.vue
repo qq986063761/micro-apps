@@ -112,7 +112,8 @@ export default {
       },
       plugins: {
         ElementUI: window.ElementUI
-      }
+      },
+      ajax: this.$ajax
     }
     
     // 启动 qiankun

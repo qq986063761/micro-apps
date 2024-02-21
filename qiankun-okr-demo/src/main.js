@@ -13,11 +13,12 @@ let router = null;
 let instance = null;
 function render(props = {}) {
   console.log('okr 应用 props', props)
-  let { container, plugins } = props
+  let { container, plugins, ajax } = props
   let { ElementUI } = plugins
 
   // 注册插件
   Vue.use(ElementUI)
+  Vue.prototype.$ajax = ajax
 
   router = new VueRouter({
     // mode: 'history',
@@ -33,7 +34,10 @@ function render(props = {}) {
     router,
     store,
     // i18n,
-    render: h => h(App)
+    render: h => h(App),
+    mounted() {
+      console.log('ajax', this.$ajax)
+    }
   }).$mount(container ? container.querySelector('#app') : '#app')
 }
 
