@@ -14,12 +14,11 @@ let instance = null;
 function render(props = {}) {
   console.log('task 应用 props', props)
   const { container } = props;
-
-  props.onGlobalStateChange((state, prev) => {
-    // state: 变更后的状态; prev 变更前的状态
-    console.log('task 应用 onGlobalStateChange', state, prev);
-  })
-
+  
+  if (container) {
+    
+  }
+  
   router = new VueRouter({
     // mode: 'history',
     // base: window.__POWERED_BY_QIANKUN__ ? '/task/' : '/',

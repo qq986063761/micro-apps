@@ -14,12 +14,15 @@ let instance = null;
 function render(props = {}) {
   console.log('okr 应用 props', props)
   let { container, plugins, ajax } = props
-  let { ElementUI } = plugins
 
-  // 注册插件
-  Vue.use(ElementUI)
-  Vue.prototype.$ajax = ajax
+  if (container) {
+    let { ElementUI } = plugins
 
+    // 注册插件
+    Vue.use(ElementUI)
+    Vue.prototype.$ajax = ajax
+  }
+  
   router = new VueRouter({
     // mode: 'history',
     // base: window.__POWERED_BY_QIANKUN__ ? '/okr/' : '/',
