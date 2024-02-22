@@ -12,12 +12,15 @@ Vue.use(VueRouter)
 let router = null;
 let instance = null;
 function render(props = {}) {
-  console.log('task 应用 props', props)
-  const { container } = props;
-  
-  if (container) {
-    
-  }
+  let { container, plugins, ajax, methods } = props
+  let { init, initAfter } = methods
+
+  init({
+    Vue,
+    ajaxList: {
+      getChildData() {}
+    }
+  })
   
   router = new VueRouter({
     // mode: 'history',
@@ -28,8 +31,15 @@ function render(props = {}) {
   instance = new Vue({
     router,
     store,
-    render: h => h(App)
+    render: h => h(App),
+    mounted() {
+      console.log('ajax', this.$ajax)
+    }
   }).$mount(container ? container.querySelector('#app') : '#app')
+
+  initAfter({
+    vm: instance
+  })
 }
 
 // 独立运行时

@@ -1,6 +1,5 @@
 <template>
   <div class="okr-app" id="app">
-    <el-button type="primary">微应用使用全局组件</el-button>
     <nav>
       <router-link to="/okr/home">目标-Home</router-link> |
       <router-link to="/okr/about">目标-About</router-link>

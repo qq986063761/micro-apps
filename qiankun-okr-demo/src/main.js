@@ -6,23 +6,21 @@ import routes from './router'
 import store from './store'
 
 Vue.config.productionTip = false
-
 Vue.use(VueRouter)
 
 let router = null;
 let instance = null;
 function render(props = {}) {
-  console.log('okr 应用 props', props)
-  let { container, plugins, ajax } = props
+  let { container, plugins, ajax, methods } = props
+  let { init, initAfter } = methods
 
-  if (container) {
-    let { ElementUI } = plugins
+  init({
+    Vue,
+    ajaxList: {
+      getChildData() {}
+    }
+  })
 
-    // 注册插件
-    Vue.use(ElementUI)
-    Vue.prototype.$ajax = ajax
-  }
-  
   router = new VueRouter({
     // mode: 'history',
     // base: window.__POWERED_BY_QIANKUN__ ? '/okr/' : '/',
@@ -42,6 +40,10 @@ function render(props = {}) {
       console.log('ajax', this.$ajax)
     }
   }).$mount(container ? container.querySelector('#app') : '#app')
+
+  initAfter({
+    vm: instance
+  })
 }
 
 // 独立运行时

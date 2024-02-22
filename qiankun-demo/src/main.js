@@ -4,16 +4,13 @@ import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import ajax from './ajax'
+import plugin from './plugins'
 
 Vue.config.productionTip = false
-
-window.ElementUI = ElementUI
 Vue.use(ElementUI)
+Vue.use(plugin)
 
-Vue.prototype.$ajax = ajax
-
-new Vue({
+window.rootVm = new Vue({
   router,
   store,
   render: h => h(App)

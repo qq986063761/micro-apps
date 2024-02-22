@@ -19,6 +19,7 @@
 
 <script>
 import { registerMicroApps, start, initGlobalState, prefetchApps, loadMicroApp } from 'qiankun'
+import ElementUI from 'element-ui'
 
 export default {
   data() {
@@ -44,7 +45,7 @@ export default {
   },
   methods: {
     onSelect(val, path) {
-      console.log('onSelect', val, path)
+      // console.log('onSelect', val, path)
 
       // 卸载上一个微应用
       // if (this.preVal) {
@@ -111,9 +112,30 @@ export default {
 
       },
       plugins: {
-        ElementUI: window.ElementUI
+        
       },
-      ajax: this.$ajax
+      methods: {
+        initAfter: ({
+          vm
+        }) => {
+          // 全局
+          window.vm = vm
+        },
+        init: ({
+          Vue: ChildVue,
+          ajaxList
+        }) => {
+          // 插件
+          ChildVue.use(ElementUI)
+
+          // 原型
+          // ajax
+          ChildVue.prototype.$ajax = {
+            ...this.$ajax,
+            ...ajaxList
+          }
+        }
+      }
     }
     
     // 启动 qiankun
