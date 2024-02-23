@@ -14,16 +14,74 @@
       </el-menu-item>
     </el-menu>
     <div class="app-main"></div>
+    <!-- <div
+      class="app-main"
+      :class="`app-main-${item.name}`"
+      :key="item.name"
+      v-for="item in apps"
+      v-show="curApp && curApp.name === item.name"
+    ></div> -->
   </div>
 </template>
 
 <script>
-import { registerMicroApps, start, initGlobalState, prefetchApps, loadMicroApp } from 'qiankun'
+import {
+  registerMicroApps,
+  start,
+  initGlobalState,
+  prefetchApps,
+  loadMicroApp,
+} from 'qiankun'
 import ElementUI from 'element-ui'
 
 export default {
   data() {
+    let host = location.host.split(':')[0]
+    let isDev = process.env.NODE_ENV !== 'production'
+
+    window.childVmMap = {}
+    let props = {
+      components: {},
+      plugins: {},
+      methods: {
+        initAfter: ({ vm }) => {
+          // 全局
+          window.vm = vm
+          window.childVmMap[this.curApp.name] = vm
+          console.log('initAfter', this.curApp, vm, window.childVmMap)
+        },
+        init: ({ Vue: ChildVue, ajaxList }) => {
+          // 插件
+          ChildVue.use(ElementUI)
+
+          // 原型
+          // ajax
+          ChildVue.prototype.$ajax = {
+            ...this.$ajax,
+            ...ajaxList,
+          }
+        },
+      },
+    }
+
     return {
+      curApp: null,
+      apps: [
+        {
+          name: 'okr',
+          entry: `//${host}${isDev ? ':8081' : ''}`,
+          container: '.app-main', // -okr
+          activeRule: '#/okr',
+          props,
+        },
+        {
+          name: 'task',
+          entry: `//${host}${isDev ? ':8082' : ''}`,
+          container: '.app-main', // -task
+          activeRule: '#/task',
+          props,
+        },
+      ],
       menus: [
         {
           label: '目标',
@@ -58,7 +116,7 @@ export default {
       // if (app) {
       //   app.mount()
       // } else {
-        
+
       // }
 
       switch (val) {
@@ -85,7 +143,7 @@ export default {
       }
 
       this.preVal = val
-    }
+    },
   },
   mounted() {
     // this.appMap = {}
@@ -107,61 +165,22 @@ export default {
     // })
     // actions.setGlobalState(state)
 
-    let props = {
-      components: {
-
-      },
-      plugins: {
-        
-      },
-      methods: {
-        initAfter: ({
-          vm
-        }) => {
-          // 全局
-          window.vm = vm
-        },
-        init: ({
-          Vue: ChildVue,
-          ajaxList
-        }) => {
-          // 插件
-          ChildVue.use(ElementUI)
-
-          // 原型
-          // ajax
-          ChildVue.prototype.$ajax = {
-            ...this.$ajax,
-            ...ajaxList
-          }
-        }
-      }
-    }
-    
     // 启动 qiankun
-    let host = location.host.split(':')[0]
-    let isDev = process.env.NODE_ENV !== 'production'
-    registerMicroApps([
-      {
-        name: 'okr',
-        entry: `//${host}${isDev ? ':8081' : ''}`,
-        container: '.app-main',
-        activeRule: '#/okr',
-        props
-      },
-      {
-        name: 'task',
-        entry: `//${host}${isDev ? ':8082' : ''}`,
-        container: '.app-main',
-        activeRule: '#/task',
-        props
-      }
-    ], {
-      beforeLoad: (app) => console.log('before load', app),
-      beforeMount: [(app) => console.log('before mount', app)],
+    registerMicroApps(this.apps, {
+      // beforeLoad: (app) => {
+      //   this.curApp = app
+      //   console.log('before load', app)
+      // },
+      beforeMount: [
+        (app) => {
+          this.curApp = app
+          console.log('before mount', app)
+        },
+      ],
     })
+
     start()
-  }
+  },
 }
 </script>
 

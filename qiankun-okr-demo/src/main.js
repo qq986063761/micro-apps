@@ -41,6 +41,15 @@ function render(props = {}) {
     }
   }).$mount(container ? container.querySelector('#app') : '#app')
 
+  // 接收行为
+  // instance.$on('action', () => {
+  //   this.$notify({
+  //     title: '警告',
+  //     message: '这是一条警告的提示消息',
+  //     type: 'warning'
+  //   })
+  // })
+
   initAfter({
     vm: instance
   })

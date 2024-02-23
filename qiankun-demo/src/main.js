@@ -15,3 +15,8 @@ window.rootVm = new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+// 监听全局行为
+window.rootVm.$on('action', () => {
+  // window.childVmMap.okr.$emit('action')
+})
