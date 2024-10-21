@@ -4,7 +4,6 @@ import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import WujieVue from "wujie-vue3"
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import App from './App.vue'
 import router from './router'
@@ -15,8 +14,5 @@ app.use(router)
 app.use(ElementPlus)
 app.use(WujieVue)
 
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  app.component(key, component)
-}
-
 app.mount('#app')
+console.log('create app', window.$wujie)
