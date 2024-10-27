@@ -15,5 +15,7 @@ let onClickLogo = () => {
 .wujie-child-app {
   height: 100vh;
   font-size: 50px;
+
+  
 }
 </style>
