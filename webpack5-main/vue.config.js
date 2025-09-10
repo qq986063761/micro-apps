@@ -15,17 +15,17 @@ module.exports = defineConfig({
           vue: {
             singleton: true,
             requiredVersion: '^2.6.14',
-            eager: false
+            eager: true
           },
           'vue-router': {
             singleton: true,
             requiredVersion: '^3.5.1',
-            eager: false
+            eager: true
           },
           vuex: {
             singleton: true,
             requiredVersion: '^3.6.2',
-            eager: false
+            eager: true
           }
         }
       })
