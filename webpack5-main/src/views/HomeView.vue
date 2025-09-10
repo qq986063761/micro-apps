@@ -60,6 +60,9 @@ export default {
         this.child1Loading = true
         this.child1Error = null
         
+        // 等待远程模块加载
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        
         // 动态导入 child1 的组件
         const { default: HelloWorld } = await import('child1/HelloWorld')
         const { default: AboutView } = await import('child1/AboutView')
@@ -78,6 +81,9 @@ export default {
       try {
         this.child2Loading = true
         this.child2Error = null
+        
+        // 等待远程模块加载
+        await new Promise(resolve => setTimeout(resolve, 1000))
         
         // 动态导入 child2 的组件
         const { default: HelloWorld } = await import('child2/HelloWorld')
