@@ -15,15 +15,18 @@ module.exports = defineConfig({
         shared: {
           vue: {
             singleton: true,
-            requiredVersion: '^2.6.14'
+            requiredVersion: '^2.6.14',
+            eager: false
           },
           'vue-router': {
             singleton: true,
-            requiredVersion: '^3.5.1'
+            requiredVersion: '^3.5.1',
+            eager: false
           },
           vuex: {
             singleton: true,
-            requiredVersion: '^3.6.2'
+            requiredVersion: '^3.6.2',
+            eager: false
           }
         }
       })
