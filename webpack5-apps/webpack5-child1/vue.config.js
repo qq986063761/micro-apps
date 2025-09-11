@@ -4,6 +4,11 @@ const { ModuleFederationPlugin } = require('webpack').container
 module.exports = defineConfig({
   transpileDependencies: true,
   configureWebpack: {
+    output: {
+      library: 'child1',
+      libraryTarget: 'umd',
+      globalObject: 'self'
+    },
     plugins: [
       new ModuleFederationPlugin({
         name: 'child1',
@@ -16,19 +21,19 @@ module.exports = defineConfig({
           vue: {
             singleton: true,
             requiredVersion: '^2.6.14',
-            eager: false,
+            eager: true,
             strictVersion: false
           },
           'vue-router': {
             singleton: true,
             requiredVersion: '^3.5.1',
-            eager: false,
+            eager: true,
             strictVersion: false
           },
           vuex: {
             singleton: true,
             requiredVersion: '^3.6.2',
-            eager: false,
+            eager: true,
             strictVersion: false
           }
         }

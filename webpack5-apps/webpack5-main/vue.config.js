@@ -4,6 +4,9 @@ const { ModuleFederationPlugin } = require('webpack').container
 module.exports = defineConfig({
   transpileDependencies: true,
   configureWebpack: {
+    optimization: {
+      splitChunks: false
+    },
     plugins: [
       new ModuleFederationPlugin({
         name: 'main',
@@ -38,6 +41,7 @@ module.exports = defineConfig({
     port: 8080,
     headers: {
       'Access-Control-Allow-Origin': '*'
-    }
+    },
+    allowedHosts: 'all'
   }
 })
