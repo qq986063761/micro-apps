@@ -4,18 +4,15 @@ const { ModuleFederationPlugin } = require('webpack').container
 module.exports = defineConfig({
   transpileDependencies: true,
   configureWebpack: {
-    output: {
-      library: 'child1',
-      libraryTarget: 'umd',
-      globalObject: 'self'
-    },
     plugins: [
       new ModuleFederationPlugin({
         name: 'child1',
+        library: { type: 'var', name: 'child1' },
         filename: 'remoteEntry.js',
         exposes: {
-          './HelloWorld': './src/components/HelloWorld.vue',
-          './AboutView': './src/views/AboutView.vue'
+          './Button': './src/components/Button.vue',
+          // './HelloWorld': './src/components/HelloWorld.vue',
+          // './AboutView': './src/views/AboutView.vue'
         },
         shared: {
           vue: {

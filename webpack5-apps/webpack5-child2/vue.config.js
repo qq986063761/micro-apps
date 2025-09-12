@@ -4,14 +4,10 @@ const { ModuleFederationPlugin } = require('webpack').container
 module.exports = defineConfig({
   transpileDependencies: true,
   configureWebpack: {
-    output: {
-      library: 'child2',
-      libraryTarget: 'umd',
-      globalObject: 'self'
-    },
     plugins: [
       new ModuleFederationPlugin({
         name: 'child2',
+        library: { type: 'var', name: 'child2' },
         filename: 'remoteEntry.js',
         exposes: {
           './HelloWorld': './src/components/HelloWorld.vue',
