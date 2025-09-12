@@ -1,0 +1,27 @@
+{
+  "name": "monorepo-micro-frontend",
+  "version": "1.0.0",
+  "description": "Monorepo 微前端应用 demo - Vue2 + qiankun",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:main\" \"npm run dev:child1\" \"npm run dev:child2\"",
+    "dev:main": "cd apps/main && npm run serve",
+    "dev:child1": "cd apps/child1 && npm run serve",
+    "dev:child2": "cd apps/child2 && npm run serve",
+    "build": "npm run build:main && npm run build:child1 && npm run build:child2",
+    "build:main": "cd apps/main && npm run build",
+    "build:child1": "cd apps/child1 && npm run build",
+    "build:child2": "cd apps/child2 && npm run build",
+    "install:all": "npm install && cd apps/main && npm install && cd ../child1 && npm install && cd ../child2 && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
