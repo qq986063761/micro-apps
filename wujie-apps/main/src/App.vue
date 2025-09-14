@@ -17,7 +17,6 @@
           name="child1"
           url="http://localhost:8081"
           :sync="false"
-          :alive="true"
         />
       </div>
       
@@ -29,7 +28,6 @@
           name="child2"
           url="http://localhost:8082"
           :sync="false"
-          :alive="true"
         />
       </div>
     </div>
@@ -66,6 +64,12 @@ export default {
     }
   },
   methods: {
+    handleChild1Ready() {
+      console.log('[主应用] Child1 加载完毕');
+    },
+    handleChild2Ready() {
+      console.log('[主应用] Child2 加载完毕');
+    },
     showChild1() {
       this.currentView = 'child1';
       console.log('[主应用] 切换到 Child1 应用');
