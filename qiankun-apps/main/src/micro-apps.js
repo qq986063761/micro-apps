@@ -32,11 +32,9 @@ export function registerApps() {
 
   // 启动 qiankun
   start({
-    sandbox: {
-      // 子应用样式隔离
-      strictStyleIsolation: true
-    }
+    // sandbox: {
+    //   // 子应用样式隔离
+    //   strictStyleIsolation: true
+    // }
   })
-
-  console.log('注册微应用')
 }

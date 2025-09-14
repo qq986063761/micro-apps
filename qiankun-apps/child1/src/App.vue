@@ -47,7 +47,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .child1-app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -133,5 +133,10 @@ export default {
     padding: 2rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
+}
+
+// 测试 css 隔离
+#app {
+  background: black;
 }
 </style>
