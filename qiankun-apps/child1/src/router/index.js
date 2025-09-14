@@ -1,26 +1,33 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: '/user/list',
+    name: 'userList',
+    component: () => import('../views/UserList.vue')
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/user/profile',
+    name: 'userProfile',
+    component: () => import('../views/UserProfile.vue')
+  },
+  {
+    path: '/user/settings',
+    name: 'userSettings',
+    component: () => import('../views/UserSettings.vue')
+  },
+  {
+    path: '/',
+    redirect: '/user/list'
   }
 ]
 
 const router = new VueRouter({
+  mode: 'hash', // 'history',
+  base: window.__POWERED_BY_QIANKUN__ ? '/user' : '/',
   routes
 })
 
