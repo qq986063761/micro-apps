@@ -21,6 +21,7 @@ export default new Vuex.Store({
   },
   getters: {
     productCount: state => state.products.length,
+    productList: state => state.products,
     totalSales: state => state.products.reduce((sum, product) => sum + (product.price * product.sales), 0),
     lowStockProducts: state => state.products.filter(product => product.stock < 30),
     topSellingProducts: state => [...state.products].sort((a, b) => b.sales - a.sales).slice(0, 3)
@@ -71,8 +72,13 @@ export default new Vuex.Store({
       }
       commit('ADD_PRODUCT', newProduct)
     },
-    updateProduct({ commit }, { id, productData }) {
-      commit('UPDATE_PRODUCT', { id, productData })
+    updateProduct({ commit }, productData) {
+      if (productData.id) {
+        commit('UPDATE_PRODUCT', { id: productData.id, productData })
+      } else {
+        // 如果没有 id，则添加新产品
+        commit('ADD_PRODUCT', productData)
+      }
     },
     deleteProduct({ commit }, id) {
       commit('DELETE_PRODUCT', id)
@@ -87,12 +93,6 @@ export default new Vuex.Store({
     updateOrderStatus({ commit }, { id, status }) {
       commit('UPDATE_ORDER_STATUS', { id, status })
     },
-    updateGlobalState({ }, data) {
-      // 向主应用发送全局状态更新
-      if (window.__POWERED_BY_QIANKUN__ && window.microAppActions) {
-        window.microAppActions.setGlobalState(data)
-      }
-    },
     // 从主应用同步全局状态到本地
     syncGlobalState({ commit }, globalState) {
       // 可以根据需要同步全局状态到本地
@@ -100,11 +100,16 @@ export default new Vuex.Store({
     },
     // 监听主应用状态变化
     watchGlobalState({ dispatch }) {
-      if (window.__POWERED_BY_QIANKUN__ && window.microAppActions) {
-        window.microAppActions.onGlobalStateChange((state, prevState) => {
-          // 当全局状态变化时，同步到本地
-          dispatch('syncGlobalState', state)
-        }, true)
+      if (window.__POWERED_BY_QIANKUN__ && window.microAppStore) {
+        // 使用 Vuex 的 watch 功能监听全局状态变化
+        window.microAppStore.watch(
+          (state) => state.lastUpdate,
+          () => {
+            const globalState = window.microAppStore.getters.globalState
+            dispatch('syncGlobalState', globalState)
+          },
+          { immediate: true }
+        )
       }
     }
   }

@@ -8,9 +8,11 @@
             <img :src="userInfo.avatar" :alt="userInfo.name" class="user-avatar">
             <span class="user-name">{{ userInfo.name }}</span>
           </div>
-          <button @click="toggleTheme" class="theme-toggle">
-            {{ theme === 'light' ? '🌙' : '☀️' }}
-          </button>
+          <div class="action-buttons">
+            <button @click="toggleTheme" class="theme-toggle">
+              {{ theme === 'light' ? '🌙' : '☀️' }}
+            </button>
+          </div>
         </div>
       </div>
     </header>
@@ -31,7 +33,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { onGlobalStateChange, setGlobalState } from './micro-apps'
 
 export default {
   name: 'App',
@@ -45,20 +46,11 @@ export default {
     toggleTheme() {
       const newTheme = this.theme === 'light' ? 'dark' : 'light'
       this.$store.commit('setTheme', newTheme)
-      setGlobalState({ theme: newTheme })
-    }
+    },
+    
   },
   mounted() {
-    // 监听全局状态变化
-    onGlobalStateChange((state, prev) => {
-      console.log('全局状态变化:', state, prev)
-      if (state.theme !== this.theme) {
-        this.$store.commit('setTheme', state.theme)
-      }
-      if (state.user && state.user !== this.userInfo) {
-        this.$store.commit('setUserInfo', state.user)
-      }
-    })
+    // 应用挂载完成
   }
 }
 </script>
@@ -114,6 +106,12 @@ export default {
     gap: 1rem;
   }
 
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
   .user-info {
     display: flex;
     align-items: center;
@@ -129,6 +127,21 @@ export default {
 
   .user-name {
     font-weight: 500;
+  }
+
+  .action-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 0.5rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
   }
 
   .theme-toggle {

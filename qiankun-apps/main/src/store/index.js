@@ -23,12 +23,7 @@ export default new Vuex.Store({
     // 最后更新时间
     lastUpdate: null,
     // 全局消息
-    message: null,
-    // 子应用状态同步
-    childAppStates: {
-      child1: {},
-      child2: {}
-    }
+    message: null
   },
   getters: {
     isDarkTheme: state => state.theme === 'dark',
@@ -61,11 +56,6 @@ export default new Vuex.Store({
     },
     setMessage(state, message) {
       state.message = message
-      state.lastUpdate = new Date().toISOString()
-    },
-    // 更新子应用状态
-    updateChildAppState(state, { appName, data }) {
-      state.childAppStates[appName] = { ...state.childAppStates[appName], ...data }
       state.lastUpdate = new Date().toISOString()
     },
     // 设置全局状态（供子应用调用）
@@ -108,10 +98,6 @@ export default new Vuex.Store({
       setTimeout(() => {
         commit('setMessage', null)
       }, 3000)
-    },
-    // 子应用状态更新
-    updateChildAppState({ commit }, { appName, data }) {
-      commit('updateChildAppState', { appName, data })
     },
     // 设置全局状态（供子应用调用）
     setGlobalState({ commit }, newState) {

@@ -15,6 +15,7 @@ export default new Vuex.Store({
   },
   getters: {
     userCount: state => state.users.length,
+    userList: state => state.users,
     activeUsers: state => state.users.filter(user => user.status === 'active'),
     adminUsers: state => state.users.filter(user => user.role === 'admin')
   },
@@ -57,17 +58,16 @@ export default new Vuex.Store({
       }
       commit('ADD_USER', newUser)
     },
-    updateUser({ commit }, { id, userData }) {
-      commit('UPDATE_USER', { id, userData })
+    updateUser({ commit }, userData) {
+      if (userData.id) {
+        commit('UPDATE_USER', { id: userData.id, userData })
+      } else {
+        // 如果没有 id，则更新当前用户
+        commit('SET_CURRENT_USER', userData)
+      }
     },
     deleteUser({ commit }, id) {
       commit('DELETE_USER', id)
-    },
-    updateGlobalState({ }, data) {
-      // 向主应用发送全局状态更新
-      if (window.__POWERED_BY_QIANKUN__ && window.microAppActions) {
-        window.microAppActions.setGlobalState(data)
-      }
     },
     // 从主应用同步全局状态到本地
     syncGlobalState({ commit }, globalState) {
@@ -77,11 +77,16 @@ export default new Vuex.Store({
     },
     // 监听主应用状态变化
     watchGlobalState({ dispatch }) {
-      if (window.__POWERED_BY_QIANKUN__ && window.microAppActions) {
-        window.microAppActions.onGlobalStateChange((state, prevState) => {
-          // 当全局状态变化时，同步到本地
-          dispatch('syncGlobalState', state)
-        }, true)
+      if (window.__POWERED_BY_QIANKUN__ && window.microAppStore) {
+        // 使用 Vuex 的 watch 功能监听全局状态变化
+        window.microAppStore.watch(
+          (state) => state.lastUpdate,
+          () => {
+            const globalState = window.microAppStore.getters.globalState
+            dispatch('syncGlobalState', globalState)
+          },
+          { immediate: true }
+        )
       }
     }
   }

@@ -75,7 +75,6 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { setGlobalState } from '../micro-apps'
 
 export default {
   name: 'HomeView',
@@ -93,11 +92,9 @@ export default {
     ...mapMutations(['setTheme', 'setLanguage']),
     updateTheme() {
       this.setTheme(this.selectedTheme)
-      setGlobalState({ theme: this.selectedTheme })
     },
     updateLanguage() {
       this.setLanguage(this.selectedLanguage)
-      setGlobalState({ language: this.selectedLanguage })
     },
     saveSettings() {
       this.updateTheme()
