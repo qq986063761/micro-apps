@@ -4,8 +4,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
       <button @click="showChild1" :class="{ active: currentView === 'child1' }">Child1</button> |
-      <button @click="showChild2" :class="{ active: currentView === 'child2' }">Child2</button> |
-      <button @click="checkWujieStatus" class="debug-btn">检查状态</button>
+      <button @click="showChild2" :class="{ active: currentView === 'child2' }">Child2</button>
     </nav>
     
     <!-- 微前端应用展示区域 -->
@@ -182,32 +181,6 @@ export default {
         tryGetWindow();
       });
     },
-    // 调试方法：检查 wujie 状态
-    checkWujieStatus() {
-      console.log('[主应用] === 检查 Wujie 状态 ===');
-      console.log('[主应用] 当前视图:', this.currentView);
-      console.log('[主应用] Child1 wujie 实例:', this.$refs.wujie1);
-      console.log('[主应用] Child2 wujie 实例:', this.$refs.wujie2);
-      
-      if (this.$refs.wujie1) {
-        console.log('[主应用] Child1 iframe:', this.$refs.wujie1.$el?.querySelector('iframe'));
-      }
-      if (this.$refs.wujie2) {
-        console.log('[主应用] Child2 iframe:', this.$refs.wujie2.$el?.querySelector('iframe'));
-      }
-      
-      // 检查全局方法
-      console.log('[主应用] window.child2Modal:', window.child2Modal);
-      console.log('[主应用] window.$wujie:', window.$wujie);
-      
-      // 测试获取 Child2 window
-      this.getChild2Window().then(childWindow => {
-        console.log('[主应用] 成功获取 Child2 window:', childWindow);
-        console.log('[主应用] Child2 是否有 child2Modal:', !!childWindow.child2Modal);
-      }).catch(error => {
-        console.error('[主应用] 获取 Child2 window 失败:', error);
-      });
-    }
   },
   watch: {
     '$route'(to, from) {
@@ -260,20 +233,6 @@ nav {
     }
   }
 
-  .debug-btn {
-    background-color: #ff9800;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s;
-
-    &:hover {
-      background-color: #f57c00;
-    }
-  }
 }
 
 .micro-apps-container {
