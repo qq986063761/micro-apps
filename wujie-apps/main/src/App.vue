@@ -66,19 +66,11 @@ export default {
     },
     showChild1() {
       this.currentView = 'child1';
-      console.log('[主应用] 切换到 Child1 应用');
-      // 延迟检查 wujie 实例
-      this.$nextTick(() => {
-        console.log('[主应用] Child1 wujie 实例:', this.$refs.wujie1);
-      });
+      console.log('[主应用] 切换到 Child1 应用')
     },
     showChild2() {
       this.currentView = 'child2';
-      console.log('[主应用] 切换到 Child2 应用');
-      // 延迟检查 wujie 实例
-      this.$nextTick(() => {
-        console.log('[主应用] Child2 wujie 实例:', this.$refs.wujie2);
-      });
+      console.log('[主应用] 切换到 Child2 应用')
     },
     // 通过 wujie2 调用 Child2 的弹窗方法
     showChild2Modal(title, message) {
@@ -95,71 +87,6 @@ export default {
           console.log('[主应用] 成功调用 Child2 弹窗', data);
         }]
       })
-    },
-    // 获取 Child2 应用的 window 对象
-    getChild2Window() {
-      return new Promise((resolve, reject) => {
-        const maxRetries = 10;
-        let retryCount = 0;
-        
-        const tryGetWindow = () => {
-          retryCount++;
-          console.log(`[主应用] 尝试获取 Child2 window (第${retryCount}次)`);
-          
-          // 方法1: 通过 wujie 实例获取
-          if (this.$refs.wujie2) {
-            const wujieInstance = this.$refs.wujie2;
-            console.log('[主应用] wujie2 实例:', wujieInstance);
-            
-            // 尝试通过 wujie 的 getWindow 方法
-            if (wujieInstance.getWindow && typeof wujieInstance.getWindow === 'function') {
-              try {
-                const childWindow = wujieInstance.getWindow();
-                if (childWindow) {
-                  console.log('[主应用] 通过 wujie.getWindow() 获取到 Child2 window');
-                  resolve(childWindow);
-                  return;
-                }
-              } catch (error) {
-                console.log('[主应用] wujie.getWindow() 失败:', error);
-              }
-            }
-            
-            // 方法2: 通过 iframe 获取
-            if (wujieInstance.$el) {
-              const iframe = wujieInstance.$el.querySelector('iframe');
-              if (iframe && iframe.contentWindow) {
-                console.log('[主应用] 通过 iframe.contentWindow 获取到 Child2 window');
-                resolve(iframe.contentWindow);
-                return;
-              }
-            }
-          }
-          
-          // 方法3: 通过 wujie 全局方法获取
-          if (window.$wujie && window.$wujie.getWindow) {
-            try {
-              const childWindow = window.$wujie.getWindow('child2');
-              if (childWindow) {
-                console.log('[主应用] 通过 window.$wujie.getWindow() 获取到 Child2 window');
-                resolve(childWindow);
-                return;
-              }
-            } catch (error) {
-              console.log('[主应用] window.$wujie.getWindow() 失败:', error);
-            }
-          }
-          
-          // 如果还没获取到，重试
-          if (retryCount < maxRetries) {
-            setTimeout(tryGetWindow, 200);
-          } else {
-            reject(new Error('无法获取 Child2 window 对象'));
-          }
-        };
-        
-        tryGetWindow();
-      });
     },
   },
   watch: {

@@ -47,7 +47,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach((to, from) => {
-  console.log(`[Child1] 路由变化完成: ${from.path} -> ${to.path}`)
+  console.log(`[Child1] 路由变化完成: ${from.path} -> ${to.path}`, location.href)
 })
 
 export default router

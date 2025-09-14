@@ -20,11 +20,6 @@
         </router-link>
       </nav>
 
-      <!-- 路由内容区域 -->
-      <main class="app-content">
-        <router-view />
-      </main>
-
       <!-- 路由信息显示 -->
       <div class="route-info">
         <p>当前路由: <strong>{{ $route.path }}</strong></p>
@@ -32,6 +27,11 @@
         <button @click="goBack" class="back-btn" :disabled="!canGoBack">浏览器返回</button>
         <button @click="showModal" class="modal-btn">显示弹窗</button>
       </div>
+
+      <!-- 路由内容区域 -->
+      <main class="app-content">
+        <router-view />
+      </main>
     </div>
 
     <!-- 弹窗组件 -->
@@ -92,7 +92,7 @@ export default {
   methods: {
     goBack() {
       if (this.canGoBack) {
-        this.$router.go(-1)
+        this.$router.back()
       }
     },
     handlePopState() {
@@ -131,7 +131,6 @@ export default {
   },
   watch: {
     '$route'(to, from) {
-      console.log(`[Child2] 路由变化: ${from.path} -> ${to.path}`)
       this.updateCanGoBack()
     }
   }
