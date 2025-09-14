@@ -46,11 +46,6 @@ export default {
     }
   },
   mounted() {
-    console.log('主应用已挂载，微前端应用引用:', {
-      child1: this.$refs.wujie1,
-      child2: this.$refs.wujie2
-    });
-    
     // 暴露 child2Modal 方法到全局，供子应用调用
     window.child2Modal = {
       show: this.showChild2Modal,
@@ -88,16 +83,18 @@ export default {
     },
     // 通过 wujie2 调用 Child2 的弹窗方法
     showChild2Modal(title, message) {
-      console.log('[主应用] 调用 Child2 弹窗:', { title, message });
-      
       // 确保 Child2 可见
       if (this.currentView !== 'child2') {
         this.currentView = 'child2';
       }
 
-      const childWindow = window.document.querySelector("iframe[name=child2]").contentWindow
-      childWindow.child2Modal.show(title, message, (data) => {
-        console.log('[主应用] 成功调用 Child2 弹窗', data);
+      const { child2 } = window.$microApp.apps
+      child2.window.$microApp.useComponent({
+        component: 'child2Modal',
+        method: 'show',
+        args: [title, message, (data) => {
+          console.log('[主应用] 成功调用 Child2 弹窗', data);
+        }]
       })
     },
     showChild2ModalWithInput(title, message) {

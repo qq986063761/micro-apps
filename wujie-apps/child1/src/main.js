@@ -5,31 +5,20 @@ import store from './store'
 
 Vue.config.productionTip = false
 
-window.useChildApp = async (opts) => {
-  const { type } = opts
-  switch (type) {
-    case 'component':
-      break
+// 提供给主应用
+window.$microApp = {
+  useComponent: (opts) => {
+    const { component, method, args } = opts
+    window.vm['$' + component][method](...args)
   }
 }
 
-window.getChildApp = async (opts) => {
-  const { type } = opts
-  switch (type) {
-    case 'component':
-      break
-  }
-}
-
-new Vue({
+window.vm = new Vue({
   router,
   store,
   render: h => h(App),
   mounted() {
-    window.parent.useMainApp({
-      type: 'ready',
-      window: window
-    })
+    window.parent.$microApp.onReady(window)
   }
 }).$mount('#app')
 
