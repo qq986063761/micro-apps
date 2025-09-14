@@ -9,9 +9,8 @@ Vue.config.productionTip = false
 let instance = null
 
 function render(props = {}) {
-  const { container, data, actions, store: mainStore } = props
+  const { container } = props
 
-  
   instance = new Vue({
     router,
     store,

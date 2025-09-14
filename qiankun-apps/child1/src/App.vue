@@ -136,7 +136,7 @@ export default {
 }
 
 // 测试 css 隔离
-#app {
-  background: black;
-}
+// #app {
+//   background: black;
+// }
 </style>
