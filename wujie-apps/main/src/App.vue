@@ -48,8 +48,7 @@ export default {
   mounted() {
     // 暴露 child2Modal 方法到全局，供子应用调用
     window.child2Modal = {
-      show: this.showChild2Modal,
-      showWithInput: this.showChild2ModalWithInput
+      show: this.showChild2Modal
     };
   },
   beforeDestroy() {
@@ -96,26 +95,6 @@ export default {
           console.log('[主应用] 成功调用 Child2 弹窗', data);
         }]
       })
-    },
-    showChild2ModalWithInput(title, message) {
-      console.log('[主应用] 调用 Child2 输入弹窗:', { title, message });
-      
-      // 确保 Child2 可见
-      if (this.currentView !== 'child2') {
-        this.currentView = 'child2';
-      }
-      
-      // 获取子应用的 window 对象
-      this.getChild2Window().then(childWindow => {
-        if (childWindow && childWindow.child2Modal && childWindow.child2Modal.showWithInput) {
-          childWindow.child2Modal.showWithInput(title, message);
-          console.log('[主应用] 成功调用 Child2 输入弹窗');
-        } else {
-          console.log('[主应用] Child2 输入弹窗方法暂不可用');
-        }
-      }).catch(error => {
-        console.error('[主应用] 获取 Child2 window 失败:', error);
-      });
     },
     // 获取 Child2 应用的 window 对象
     getChild2Window() {

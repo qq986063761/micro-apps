@@ -79,8 +79,7 @@ export default {
     
     // 暴露弹窗方法到全局，供其他应用调用
     window.child2Modal = {
-      show: this.showModalFromExternal,
-      showWithInput: this.showModalWithInput
+      show: this.showModalFromExternal
     }
   },
   beforeDestroy() {
@@ -129,12 +128,6 @@ export default {
 
       cb && cb({ value: '123' })
     },
-    showModalWithInput(title, message) {
-      this.modalTitle = title || 'Child2 输入弹窗'
-      this.modalMessage = message || '请输入一些内容：'
-      this.modalShowInput = true
-      this.modalVisible = true
-    }
   },
   watch: {
     '$route'(to, from) {

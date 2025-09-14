@@ -31,7 +31,6 @@
         <p>路由名称: <strong>{{ $route.name }}</strong></p>
         <button @click="goBack" class="back-btn" :disabled="!canGoBack">浏览器返回</button>
         <button @click="callChild2Modal" class="cross-app-btn">调用 Child2 弹窗</button>
-        <button @click="callChild2ModalWithInput" class="cross-app-btn">调用 Child2 输入弹窗</button>
       </div>
     </div>
   </div>
@@ -86,16 +85,6 @@ export default {
         console.log('[Child1] 主应用的 Child2 弹窗方法暂不可用，请确保主应用和 Child2 应用已加载')
       }
     },
-    callChild2ModalWithInput() {
-      console.log('[Child1] 尝试调用 Child2 输入弹窗')
-      
-      // 通过主应用调用 Child2 输入弹窗
-      if (window.parent && window.parent.child2Modal && window.parent.child2Modal.showWithInput) {
-        window.parent.child2Modal.showWithInput('来自 Child1 的输入弹窗', '请输入一些内容：')
-      } else {
-        console.log('[Child1] 主应用的 Child2 输入弹窗方法暂不可用，请确保主应用和 Child2 应用已加载')
-      }
-    }
   },
   watch: {
     '$route'(to, from) {
