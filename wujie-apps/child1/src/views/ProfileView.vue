@@ -72,7 +72,6 @@
 export default {
   name: 'ProfileView',
   mounted() {
-    console.log('[Child1] ProfileView 已挂载')
   }
 }
 </script>

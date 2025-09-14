@@ -40,7 +40,6 @@
 export default {
   name: 'DashboardView',
   mounted() {
-    console.log('[Child1] DashboardView 已挂载')
   }
 }
 </script>

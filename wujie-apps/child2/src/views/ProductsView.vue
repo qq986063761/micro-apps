@@ -96,7 +96,6 @@ export default {
     }
   },
   mounted() {
-    console.log('[Child2] ProductsView 已挂载')
   }
 }
 </script>

@@ -143,7 +143,6 @@ export default {
     }
   },
   mounted() {
-    console.log('[Child2] OrdersView 已挂载')
   }
 }
 </script>

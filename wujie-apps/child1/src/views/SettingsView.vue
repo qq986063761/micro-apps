@@ -131,7 +131,6 @@ export default {
     }
   },
   mounted() {
-    console.log('[Child1] SettingsView 已挂载')
   }
 }
 </script>

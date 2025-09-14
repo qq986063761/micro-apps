@@ -71,7 +71,6 @@ export default {
     }
   },
   mounted() {
-    console.log('[Child2] App 已挂载')
     this.updateCanGoBack()
     
     // 监听浏览器返回按钮
@@ -84,6 +83,7 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('popstate', this.handlePopState)
+    
     // 清理全局方法
     if (window.child2Modal) {
       delete window.child2Modal
@@ -96,7 +96,6 @@ export default {
       }
     },
     handlePopState() {
-      console.log('[Child2] 检测到浏览器返回按钮点击')
       this.updateCanGoBack()
     },
     updateCanGoBack() {

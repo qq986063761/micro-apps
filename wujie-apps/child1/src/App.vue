@@ -52,7 +52,6 @@ export default {
     }
   },
   mounted() {
-    console.log('[Child1] App 已挂载')
     this.updateCanGoBack()
     
     // 监听浏览器返回按钮
@@ -68,7 +67,6 @@ export default {
       }
     },
     handlePopState() {
-      console.log('[Child1] 检测到浏览器返回按钮点击')
       this.updateCanGoBack()
     },
     updateCanGoBack() {
