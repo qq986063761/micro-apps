@@ -97,20 +97,6 @@ export default new Vuex.Store({
     syncGlobalState({ commit }, globalState) {
       // 可以根据需要同步全局状态到本地
       console.log('同步全局状态:', globalState)
-    },
-    // 监听主应用状态变化
-    watchGlobalState({ dispatch }) {
-      if (window.__POWERED_BY_QIANKUN__ && window.microAppStore) {
-        // 使用 Vuex 的 watch 功能监听全局状态变化
-        window.microAppStore.watch(
-          (state) => state.lastUpdate,
-          () => {
-            const globalState = window.microAppStore.getters.globalState
-            dispatch('syncGlobalState', globalState)
-          },
-          { immediate: true }
-        )
-      }
     }
   }
 })

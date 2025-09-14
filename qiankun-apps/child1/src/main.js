@@ -11,7 +11,7 @@ let instance = null
 function render(props = {}) {
   const { container } = props
 
-  instance = new Vue({
+  window.vm = instance = new Vue({
     router,
     store,
     render: h => h(App)

@@ -74,20 +74,6 @@ export default new Vuex.Store({
       if (globalState.user) {
         commit('SET_CURRENT_USER', globalState.user)
       }
-    },
-    // 监听主应用状态变化
-    watchGlobalState({ dispatch }) {
-      if (window.__POWERED_BY_QIANKUN__ && window.microAppStore) {
-        // 使用 Vuex 的 watch 功能监听全局状态变化
-        window.microAppStore.watch(
-          (state) => state.lastUpdate,
-          () => {
-            const globalState = window.microAppStore.getters.globalState
-            dispatch('syncGlobalState', globalState)
-          },
-          { immediate: true }
-        )
-      }
     }
   }
 })
