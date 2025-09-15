@@ -5,7 +5,7 @@
 - 支持沙箱隔离子应用，互相样式不冲突
 
 # 通信
-- 可利用 window 调用，也可用 wujie bus 事件
+- 可利用 window 调用（所有域名必须相同），也可用 wujie bus 事件
 - 子应用调主应用：访问 window.parent.$microApp 我们定方法就行
 - 主应用调子应用：访问 child.window.$microApp 我们定方法就行
 - 子应用互相调：让所有子应用同时存在，然后访问 window.parent.$microApp 通过父调用 child.window.$microApp 的方法
