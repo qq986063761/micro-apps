@@ -1,12 +1,12 @@
 <template>
   <div id="app">
+    <Child1Button />
+
     <nav>
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </nav>
     <router-view/>
-
-    <Child1Button />
   </div>
 </template>
 
@@ -25,10 +25,10 @@ export default {
 
     // 动态获取modal
     const Child1Modal = await import('child1/modal')
-    console.log('Child1Modal', Child1Modal.default)
+    // console.log('Child1Modal', Child1Modal.default)
     Child1Modal.default.show()
 
-    console.log('app mounted', this.$ajax)
+    console.log('main app mounted', this.$ajax)
     this.$ajax.postRoot()
   }
 }

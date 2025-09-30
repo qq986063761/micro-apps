@@ -26,8 +26,27 @@ module.exports = defineConfig({
         name: "main",
         // 引用其他模块暴漏的资源
         remotes: {
-          "child1": "child1@http://localhost:8081/remoteEntry.js"
+          // "child1": "child1@http://localhost:8081/remoteEntry.js"
           // "child1": "child1@http://127.0.0.1:49243/remoteEntry.js"
+          "child1": `promise new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = window.__REMOTES__;
+            script.type = 'text/javascript';
+            script.onload = () => {
+              // 代理对象：透传 get/init 给远端容器
+              const proxy = {
+                get: (request) => window.child1.get(request),
+                init: (arg) => {
+                  try { return window.child1.init(arg); } catch (e) { /* already initialized */ }
+                }
+              };
+              resolve(proxy);
+            };
+            script.onerror = (e) => {
+              console.error('Failed to load remote child1:', remoteUrl, e);
+            };
+            document.head.appendChild(script);
+          })`
         },
         // 共享一个包
         // shared: {
