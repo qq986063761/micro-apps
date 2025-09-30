@@ -2,6 +2,11 @@
   <div id="app">
     <Child1Button />
 
+    <section style="margin:20px;padding:12px;border:1px dashed #ccc;">
+      <h3>Remote from child2</h3>
+      <Child2About />
+    </section>
+
     <nav>
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
@@ -13,7 +18,8 @@
 <script>
 export default {
   components: { 
-    Child1Button: () => import('child1/Button')
+    Child1Button: () => import('child1/Button'),
+    Child2About: () => import('child2/AboutView')
   },
   methods: {
     

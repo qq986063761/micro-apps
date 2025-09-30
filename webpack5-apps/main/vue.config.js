@@ -6,7 +6,7 @@ module.exports = defineConfig({
   publicPath: 'auto',
   configureWebpack: {
     // Explicitly declare environment supports async/await to avoid external script warning
-    // target: ["web", "es5"],
+    target: ["web", "es5"],
     output: {
        // 禁止新语法，支持老浏览器
       environment: {
@@ -46,7 +46,9 @@ module.exports = defineConfig({
               console.error('Failed to load remote child1:', remoteUrl, e);
             };
             document.head.appendChild(script);
-          })`
+          })`,
+          // child2 直接使用固定地址（如需动态注入可仿照上面的 promise 方案）
+          "child2": "child2@http://localhost:8082/remoteEntry.js"
         },
         // 共享一个包
         // shared: {

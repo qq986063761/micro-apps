@@ -5,7 +5,7 @@ module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: 'auto', // 必须，不然 main 引入报错
   configureWebpack: {
-    // target: ["web", "es5"],
+    target: ["web", "es5"],
     output: {
        // 禁止新语法，支持老浏览器
       environment: {
