@@ -3,6 +3,7 @@
     <div class="app-header">
       <h2>用户管理系统</h2>
       <div class="header-info">
+        <input type="text" v-model="inputValue" />
         <span class="user-count">用户总数: {{ userCount }}</span>
         <button @click="refreshData" class="refresh-btn">刷新</button>
       </div>
@@ -27,6 +28,11 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'App',
+  data() {
+    return {
+      inputValue: ''
+    }
+  },
   computed: {
     ...mapState(['userCount'])
   },
@@ -42,6 +48,7 @@ export default {
     }
   },
   mounted() {
+    console.log('child1 mounted')
     this.fetchUsers()
   }
 }
