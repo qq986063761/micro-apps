@@ -5,8 +5,24 @@
       <router-link to="/about">About</router-link>
     </nav>
     <router-view/>
+
+    <Child1Button />
   </div>
 </template>
+
+<script>
+export default {
+  components: { 
+    Child1Button: () => import('child1/Button')
+  },
+  methods: {
+    // async loadButton() {
+    //   const { default: Button } = await import('child1/Button')
+    //   this.Child1Button = Button
+    // }
+  }
+}
+</script>
 
 <style lang="scss">
 #app {
