@@ -1,4 +1,4 @@
-# webpack5-child2
+# child2
 
 ## Project setup
 ```
