@@ -1,32 +1,48 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/>
+    <SideMenu />
+    <div class="main-content">
+      <router-view/>
+    </div>
   </div>
 </template>
+
+<script>
+import SideMenu from './components/SideMenu.vue'
+
+export default {
+  name: 'App',
+  components: {
+    SideMenu
+  }
+}
+</script>
 
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
+  height: 100vh;
+  display: flex;
 }
 
-nav {
-  padding: 30px;
+.main-content {
+  flex: 1;
+  margin-left: 200px;
+  height: 100vh;
+  overflow: hidden;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+body {
+  margin: 0;
+  padding: 0;
 }
 </style>

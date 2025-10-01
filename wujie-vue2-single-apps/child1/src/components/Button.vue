@@ -1,0 +1,20 @@
+<template>
+  <button>{{ text || '没获取到 child1 中的 store 数据' }}</button>
+</template>
+
+<script>
+import { mapState } from 'vuex'
+export default {
+  name: 'Button',
+  mounted() {
+    console.log('child1 Button mounted', this)
+  },
+  computed: {
+    ...mapState(['text'])
+  }
+}
+</script>
+
+<style>
+
+</style>

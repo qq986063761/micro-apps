@@ -5,12 +5,22 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    text: 'child1 store text'
   },
   getters: {
   },
   mutations: {
+    setData(state) {
+      state.text = 'child1 store 数据加载完成'
+    }
   },
   actions: {
+    async getData({ commit }) {
+      await new Promise(resolve => setTimeout(() => {
+        commit('setData')
+        resolve()
+      }, 1000))
+    }
   },
   modules: {
   }
