@@ -9,6 +9,7 @@
       :sync="true"
       :fetch="fetch"
       :props="props"
+      :loading="loadingEl"
       :beforeLoad="beforeLoad"
       :beforeMount="beforeMount"
       :afterMount="afterMount"
@@ -21,6 +22,11 @@
 <script>
 export default {
   name: 'MicroApp',
+  data() {
+    return {
+      loadingEl: document.createElement('span')
+    }
+  },
   props: {
     name: {
       type: String,
