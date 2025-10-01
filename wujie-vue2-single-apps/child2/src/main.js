@@ -2,6 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import plugin from './plugins'  // 引入插件 
+
+window.__REMOTES__ = window.parent.__REMOTES__
+
+Vue.use(plugin)
 
 Vue.config.productionTip = false
 

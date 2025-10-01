@@ -1,7 +1,7 @@
 {
-  "name": "qiankun-micro-frontend-demo",
+  "name": "wujie-micro-frontend-demo",
   "version": "1.0.0",
-  "description": "基于 Vue2 + qiankun 的微前端架构演示项目",
+  "description": "基于 Vue2 + wujie 的微前端架构演示项目",
   "scripts": {
     "install:all": "npm i && npm run install:main && npm run install:child1 && npm run install:child2",
     "install:main": "cd main && npm install",
