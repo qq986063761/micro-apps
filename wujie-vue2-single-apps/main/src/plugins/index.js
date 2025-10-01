@@ -1,7 +1,23 @@
+import router from '@/router'
+
 // 提供给子应用
 window.$microApp = {
   child1: {},
-  child2: {}
+  child2: {},
+  toPage: ({ module = '', routeName = '', params, query }) => {
+    // 先跳模块在主应用路由
+    if (module) {
+      router.push({
+        name: module,
+        params: {
+          ...params,
+          routeName,
+          init: true
+        },
+        query
+      })
+    }
+  }
 }
 
 export default {
@@ -21,6 +37,7 @@ export default {
       return window.$microApp.child1.Button
     })
 
+    // 引入 child1 的插件
     const child1Export = await import('child1/export')
     const { Button, modal, init } = child1Export.default
 
