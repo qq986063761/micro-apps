@@ -1,4 +1,7 @@
 <template>
+<!-- 
+  :sync="true" 子应用内路由变化后，刷新不会回到子应用初始页面
+ -->
   <div class="micro-app-container">
     <WujieVue
       v-if="url"
