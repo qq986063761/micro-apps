@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import store from '@/store'
 import router from '@/router'
-import Modal from '@/components/Modal.vue'
+import Modal from '@/components/Modal1.vue'
 
 export default {
   show() {

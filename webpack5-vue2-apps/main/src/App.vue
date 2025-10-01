@@ -18,21 +18,19 @@
 <script>
 export default {
   components: { 
-    Child1Button: () => import('child1/Button'),
     Child2About: () => import('child2/AboutView')
   },
   methods: {
     
   },
   async mounted() {
-    // 动态获取组件
-    //  const Child1Button = await import('child1/Button')
-    //  console.log('Child1Button', Child1Button.default)
-
-    // 动态获取modal
-    const Child1Modal = await import('child1/modal')
-    // console.log('Child1Modal', Child1Modal.default)
-    Child1Modal.default.show()
+    // 等待插件加载完成后再使用
+    setTimeout(() => {
+      // 使用全局注册的 modal
+      if (this.$modal) {
+        this.$modal.show()
+      }
+    }, 1000)
 
     console.log('main app mounted', this.$ajax)
     this.$ajax.postRoot()

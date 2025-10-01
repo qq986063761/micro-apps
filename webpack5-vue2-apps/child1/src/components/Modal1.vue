@@ -4,7 +4,6 @@
 
 <script>
 import { mapState } from 'vuex'
-// import ajax from '@/ajax'
 
 export default {
   name: 'Modal',
@@ -13,10 +12,8 @@ export default {
   },
   methods: {
     show() {
-      console.log('show child1 modal', this, this.child1State, this.$ajax)
+      console.log('show child1 modal1', this, this.child1State, this.$ajax)
       this.$ajax.postChild1()
-
-      this.$modal1.show()
     }
   }
 }

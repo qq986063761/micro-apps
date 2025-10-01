@@ -30,7 +30,7 @@ module.exports = defineConfig({
         filename: "remoteEntry.js",
         // 暴露组件
         exposes: {
-          "./Button": "./src/components/Button.vue",
+          "./exposes": "./src/plugins/exposes.js",
           "./modal": "./src/components/modal.js",
         },
         // 依赖其他应用
