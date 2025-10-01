@@ -6,9 +6,9 @@
     <ul class="menu-list">
       <li 
         v-for="item in menuItems" 
-        :key="item.path"
-        :class="{ active: currentPath === item.path }"
-        @click="navigateTo(item.path)"
+        :key="item.key"
+        :class="{ active: currentApp === item.key }"
+        @click="selectApp(item.key)"
       >
         <i :class="item.icon"></i>
         <span>{{ item.name }}</span>
@@ -22,33 +22,30 @@ export default {
   name: 'SideMenu',
   data() {
     return {
+      currentApp: 'home',
       menuItems: [
         {
-          path: '/',
+          key: 'home',
           name: '首页',
           icon: 'el-icon-house'
         },
         {
-          path: '/child1',
+          key: 'child1',
           name: 'Child1',
           icon: 'el-icon-document'
         },
         {
-          path: '/child2',
+          key: 'child2',
           name: 'Child2',
           icon: 'el-icon-folder'
         }
       ]
     }
   },
-  computed: {
-    currentPath() {
-      return this.$route.path
-    }
-  },
   methods: {
-    navigateTo(path) {
-      this.$router.push(path)
+    selectApp(appKey) {
+      this.currentApp = appKey
+      this.$emit('app-change', appKey)
     }
   }
 }
