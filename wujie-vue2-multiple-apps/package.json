@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "基于 Vue2 + qiankun 的微前端架构演示项目",
   "scripts": {
-    "install:all": "npm run install:main && npm run install:child1 && npm run install:child2",
+    "install:all": "npm i && npm run install:main && npm run install:child1 && npm run install:child2",
     "install:main": "cd main && npm install",
     "install:child1": "cd child1 && npm install",
     "install:child2": "cd child2 && npm install",
