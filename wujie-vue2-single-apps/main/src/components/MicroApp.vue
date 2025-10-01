@@ -10,11 +10,6 @@
       :fetch="fetch"
       :props="props"
       :loading="loadingEl"
-      :beforeLoad="beforeLoad"
-      :beforeMount="beforeMount"
-      :afterMount="afterMount"
-      :beforeUnmount="beforeUnmount"
-      :afterUnmount="afterUnmount"
     />
   </div>
 </template>
@@ -59,21 +54,6 @@ export default {
     },
     fetch(url, options) {
       return window.fetch(url, options)
-    },
-    beforeLoad() {
-      console.log(`${this.name} 开始加载`)
-    },
-    beforeMount() {
-      console.log(`${this.name} 开始挂载`)
-    },
-    afterMount() {
-      console.log(`${this.name} 挂载完成`)
-    },
-    beforeUnmount() {
-      console.log(`${this.name} 开始卸载`)
-    },
-    afterUnmount() {
-      console.log(`${this.name} 卸载完成`)
     }
   },
   mounted() {
