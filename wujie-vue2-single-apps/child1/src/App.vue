@@ -8,6 +8,15 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'App',
+  mounted() {
+    console.log('child1 App mounted', window.$wujie, window.$wujie.location.href, window.location.href)
+  }
+}
+</script>
+
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

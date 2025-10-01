@@ -19,13 +19,8 @@
 </template>
 
 <script>
-import WujieVue from 'wujie-vue2'
-
 export default {
   name: 'MicroApp',
-  components: {
-    WujieVue
-  },
   props: {
     name: {
       type: String,
@@ -41,6 +36,21 @@ export default {
     }
   },
   methods: {
+    // 获取子应用的iframe元素
+    getIframe() {
+      // 方法1: 通过iframe的name属性获取（推荐方式）
+      const iframe = document.querySelector(`iframe[name="${this.name}"]`)
+      
+      // 获取iframe的contentWindow
+      if (iframe) {
+        window.$microApp[this.name].window = iframe.contentWindow
+      } else {
+        // 如果iframe还没有创建，延迟重试
+        setTimeout(() => {
+          this.getIframe()
+        }, 100)
+      }
+    },
     fetch(url, options) {
       return window.fetch(url, options)
     },
@@ -59,6 +69,12 @@ export default {
     afterUnmount() {
       console.log(`${this.name} 卸载完成`)
     }
+  },
+  mounted() {
+    // 延迟获取iframe，因为wujie可能还没有完全创建
+    this.$nextTick(() => {
+      this.getIframe()
+    })
   }
 }
 </script>

@@ -30,18 +30,14 @@ module.exports = defineConfig({
     target: ["web", "es5"],
     output: {
       environment: {
-        asyncFunction: true
+        asyncFunction: false
       }
     },
     plugins: [
       new ModuleFederationPlugin({
         name: "child2",
-        filename: "remoteEntry.js",
-        // 依赖其他应用
-        remotes:{
-          "child1": getRemote('child1'),
-        }
-      }),
+        filename: "remoteEntry.js"
+      })
     ],
   },
   devServer: {
