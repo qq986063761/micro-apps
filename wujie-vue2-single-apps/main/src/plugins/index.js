@@ -1,3 +1,5 @@
+
+
 export default {
   async install(Vue) {
     const compMap = {

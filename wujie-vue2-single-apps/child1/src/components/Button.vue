@@ -1,5 +1,7 @@
 <template>
-  <button>{{ text || '没获取到 child1 中的 store 数据' }}</button>
+  <el-button class="child1-button" type="primary" @click="handleClick">
+    {{ text || '没获取到 child1 中 store 数据' }}
+  </el-button>
 </template>
 
 <script>
@@ -11,10 +13,11 @@ export default {
   },
   computed: {
     ...mapState(['text'])
+  },
+  methods: {
+    handleClick() {
+      this.$ajax.post()
+    }
   }
 }
 </script>
-
-<style>
-
-</style>

@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import WujieVue from 'wujie-vue2'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 import plugin from './plugins'
 
 Vue.config.productionTip = false
@@ -22,6 +24,7 @@ window.__REMOTES__ = {
 }
 
 Vue.use(WujieVue)
+Vue.use(ElementUI);
 Vue.use(plugin)
 
 new Vue({

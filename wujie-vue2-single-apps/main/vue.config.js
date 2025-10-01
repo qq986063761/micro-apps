@@ -17,7 +17,7 @@ const getRemote = (moduleName) => {
       resolve(proxy);
     };
     script.onerror = (e) => {
-      console.error('Failed to load remote ${moduleName}:', remoteUrl, e);
+      console.error('Failed to load remote ${moduleName}:', script.src, e);
     };
     document.head.appendChild(script);
   })`
