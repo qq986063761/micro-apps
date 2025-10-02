@@ -1,5 +1,15 @@
+import router from '@/router'
+
 // 提供给父应用
-window.$microApp = {}
+window.$microApp = {
+  toPage({ routeName = '', params, query }) {
+    router.push({
+      name: routeName,
+      params,
+      query
+    })
+  }
+}
 
 export default {
   async install(Vue) {

@@ -4,15 +4,37 @@ import router from '@/router'
 window.$microApp = {
   child1: {},
   child2: {},
-  toPage: ({ module = '', routeName = '', params, query }) => {
+  toPage({ module = '', routeName = '', params, query }) {
     // 先跳模块在主应用路由
     if (module) {
+      // 如果不在子应用，就先跳到子应用
+      if (module !== window.vm.$route.name) {
+        router.push({
+          name: module
+        })
+      }
+
+      const next = () => {
+        const { window: appWindow } = window.$microApp[module]
+        const { toPage: appToPage } = appWindow && appWindow.$microApp || {}
+
+        if (!appToPage) {
+          setTimeout(next, 300)
+        } else {
+          appToPage({
+            routeName,
+            params,
+            query
+          })
+        }
+      }
+      next()
+    } else {
       router.push({
-        name: module,
+        name: routeName,
         params: {
+          init: true,
           ...params,
-          routeName,
-          init: true
         },
         query
       })
