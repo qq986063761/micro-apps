@@ -1,7 +1,11 @@
 import router from '@/router'
+import store from '@/store'
 
 // 提供给父应用
 window.$microApp = {
+  vm: null,
+  store,
+  router,
   toPage({ routeName = '', params, query }) {
     router.push({
       name: routeName,

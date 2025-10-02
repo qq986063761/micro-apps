@@ -12,7 +12,7 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(plugin)
 
-new Vue({
+window.$microApp.vm = new Vue({
   router,
   store,
   render: h => h(App)

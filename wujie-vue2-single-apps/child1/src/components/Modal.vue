@@ -66,7 +66,7 @@ export default {
     },
     handleConfirm() {
       if (this.onConfirm) {
-        try { this.onConfirm({ num: 1, date: new Date() }) } catch (e) { /* noop */ }
+        try { this.onConfirm({ num: 1, date: new Date(), cb: () => {} }) } catch (e) { /* noop */ }
       }
       this.visible = false
     },

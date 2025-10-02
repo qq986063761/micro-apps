@@ -1,14 +1,22 @@
 import router from '@/router'
+import store from '@/store'
 
 // 提供给子应用
 window.$microApp = {
+  vm: null,
+  store,
+  router,
   child1: {},
   child2: {},
+  useComp({ module = '', name = '', method = '', args = [] }) {
+    const app = window.$microApp[module]
+    app[name][method](...args)
+  },
   toPage({ module = '', routeName = '', params, query }) {
     // 先跳模块在主应用路由
     if (module) {
       // 如果不在子应用，就先跳到子应用
-      if (module !== window.vm.$route.name) {
+      if (module !== window.$microApp.vm.$route.name) {
         router.push({
           name: module
         })

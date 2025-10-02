@@ -20,16 +20,22 @@ export default {
   },
   methods: {
     openChild1Modal() {
-      const { modal } = window.parent.$microApp.child1
-      modal.show({
-        title: 'child1 弹窗',
-        content: 'child1 弹窗内容',
-        onConfirm: data => {
-          console.log('child1 弹窗回调 onConfirm', data)
-        },
-        onCancel: data => {
-          console.log('child1 弹窗回调 onCancel', data)
-        }
+      const { useComp } = window.parent.$microApp
+      
+      useComp({
+        module: 'child1',
+        name: 'modal',
+        method: 'show',
+        args: [{
+          title: 'child1 弹窗',
+          content: 'child1 弹窗内容',
+          onConfirm: data => {
+            console.log('child1 弹窗回调 onConfirm', data)
+          },
+          onCancel: data => {
+            console.log('child1 弹窗回调 onCancel', data)
+          }
+        }]
       })
     }
   }

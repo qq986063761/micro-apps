@@ -18,7 +18,7 @@ Vue.config.warnHandler = function (msg, vm, trace) {
   console.warn(msg, trace)
 }
 
-// 全局配置 child1 的远程地址
+// 全局配置子应用的远程暴露地址
 window.__REMOTES__ = {
   "child1": "http://localhost:8081/remoteEntry.js"
 }
@@ -27,7 +27,7 @@ Vue.use(WujieVue)
 Vue.use(ElementUI);
 Vue.use(plugin)
 
-window.vm = new Vue({
+window.$microApp.vm = new Vue({
   router,
   store,
   render: h => h(App)
