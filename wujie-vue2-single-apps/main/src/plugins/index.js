@@ -7,12 +7,17 @@ window.$microApp = {
   store,
   router,
   child1: {},
-  child2: {},
-  useComp({ module = '', name = '', method = '', args = [] }) {
+  child2: {}, 
+  async useComp({ module = '', name = '', method = '', args = [] }) {
     const app = window.$microApp[module]
+    const { init } = app
+
+    // 子组件使用前初始化数据
+    init && await init()
+
     app[name][method](...args)
   },
-  toPage({ module = '', routeName = '', params, query }) {
+  async toPage({ module = '', routeName = '', params, query }) {
     // 先跳模块在主应用路由
     if (module) {
       // 如果不在子应用，就先跳到子应用
@@ -53,18 +58,23 @@ window.$microApp = {
 export default {
   async install(Vue) {
     Vue.component('Child1Button', async () => {
-      await new Promise(resolve => {
-        const next = () => {
-          if (!window.$microApp.child1.Button) {
+      const Child1Button = await new Promise(resolve => {
+        const { init, Button } = window.$microApp.child1
+
+        const next = async () => {
+          if (!Button) {
             setTimeout(next, 300)
           } else {
-            resolve()
+            // 子组件使用前初始化数据
+            init && await init()
+
+            resolve(Button)
           }
         }
         next()
       })
       
-      return window.$microApp.child1.Button
+      return Child1Button
     })
 
     // 引入 child1 的插件
@@ -73,9 +83,8 @@ export default {
 
     window.$microApp.child1.Button = Button
     window.$microApp.child1.modal = modal
-    
-    init(data => {
-      console.log('main 中的 child1 插件初始化完成', data, child1Export)
-    })
+    window.$microApp.child1.init = init
+
+    console.log('main 中的 child1 插件初始化完成', child1Export.default)
   }
 }

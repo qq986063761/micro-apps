@@ -20,18 +20,23 @@ export default {
     const parentMicroApp = window.parent.$microApp
 
     Vue.component('Child1Button', async () => {
-      await new Promise(resolve => {
-        const next = () => {
-          if (!parentMicroApp.child1.Button) {
+      const Child1Button = await new Promise(resolve => {
+        const { init, Button } = parentMicroApp.child1
+
+        const next = async () => {
+          if (!Button) {
             setTimeout(next, 300)
           } else {
-            resolve()
+            // 子组件使用前初始化数据
+            init && await init()
+
+            resolve(Button)
           }
         }
         next()
       })
       
-      return parentMicroApp.child1.Button
+      return Child1Button
     })
   }
 }

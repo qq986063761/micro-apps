@@ -29,10 +29,9 @@ const data = {
 
 export default {
   ...data,
-  async init(cb) {
+  // 提供初始化数据方法，主应用在调用子应用组件之前会执行
+  async init(opts) {
     // 如果需要等子应用数据初始化
     await store.dispatch('getData')
-
-    cb(data)
   }
 }
