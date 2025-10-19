@@ -6,8 +6,8 @@ window.$microApp = {
   vm: null,
   store,
   router,
-  toPage({ routeName = '', params, query }) {
-    router.push({
+  toPage({ routeName = '', params, query, method = 'replace' }) {
+    router[method]({
       name: routeName,
       params,
       query

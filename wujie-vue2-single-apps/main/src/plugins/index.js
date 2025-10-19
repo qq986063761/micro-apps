@@ -20,7 +20,8 @@ window.$microApp = {
   async toPage({ module = '', routeName = '', params, query }) {
     // 先跳模块在主应用路由
     if (module) {
-      // 如果不在子应用，就先跳到子应用
+      // 如果主应用路由不在子应用模块页面，就先跳到子应用页面
+      // 这里 module 名和主应用内对应路由名一致
       if (module !== window.$microApp.vm.$route.name) {
         router.push({
           name: module
@@ -37,7 +38,8 @@ window.$microApp = {
           appToPage({
             routeName,
             params,
-            query
+            query,
+            method: 'replace'
           })
         }
       }
