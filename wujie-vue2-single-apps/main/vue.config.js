@@ -38,7 +38,7 @@ module.exports = defineConfig({
         name: "main",
         filename: "remoteEntry.js",
         // 依赖其他应用
-        remotes:{
+        remotes: {
           "child1": getRemote('child1'),
         }
       }),

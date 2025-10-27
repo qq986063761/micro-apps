@@ -6,6 +6,7 @@ window.$mApp = {
   vm: null,
   store,
   router,
+  components: {}, // 提供给子应用的内联组件
   child1: {},
   child2: {},
   // 使用组件
