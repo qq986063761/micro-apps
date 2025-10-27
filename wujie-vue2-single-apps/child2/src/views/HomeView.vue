@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     openChild1Modal() {
-      const { useComp } = window.parent.$microApp
+      const { useComp } = window.parent.$mApp
       
       useComp({
         module: 'child1',

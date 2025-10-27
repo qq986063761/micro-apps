@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     handleClick() {
-      const { toPage } = window.parent.$microApp
+      const { toPage } = window.parent.$mApp
 
       toPage({
         module: 'child2',

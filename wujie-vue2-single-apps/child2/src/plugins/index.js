@@ -2,7 +2,7 @@ import router from '@/router'
 import store from '@/store'
 
 // 提供给父应用
-window.$microApp = {
+window.$mApp = {
   vm: null,
   store,
   router,
@@ -17,7 +17,7 @@ window.$microApp = {
 
 export default {
   async install(Vue) {
-    const parentMicroApp = window.parent.$microApp
+    const parentMicroApp = window.parent.$mApp
 
     Vue.component('Child1Button', async () => {
       const Child1Button = await new Promise(resolve => {

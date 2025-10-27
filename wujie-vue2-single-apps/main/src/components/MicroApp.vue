@@ -47,7 +47,7 @@ export default {
       
       // 获取iframe的contentWindow
       if (iframe) {
-        window.$microApp[this.name].window = iframe.contentWindow
+        window.$mApp[this.name].window = iframe.contentWindow
       } else {
         // 如果iframe还没有创建，延迟重试
         setTimeout(() => {

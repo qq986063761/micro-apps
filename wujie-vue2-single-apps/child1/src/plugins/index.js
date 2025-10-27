@@ -2,7 +2,7 @@ import router from '@/router'
 import store from '@/store'
 
 // 提供给子应用
-window.$microApp = {
+window.$mApp = {
   vm: null,
   store,
   router,
