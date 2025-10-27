@@ -7,9 +7,10 @@ window.$mApp = {
   store,
   router,
   child1: {},
-  child2: {}, 
-  async useComp({ module = '', name = '', method = '', args = [] }) {
-    const app = window.$mApp[module]
+  child2: {},
+  // 使用组件
+  async useComp({ appName = '', name = '', method = '', args = [] }) {
+    const app = window.$mApp[appName]
     const { init } = app
 
     // 子组件使用前初始化数据，但不建议
@@ -17,19 +18,20 @@ window.$mApp = {
 
     app[name][method](...args)
   },
-  async toPage({ module = '', routeName = '', params, query, method = 'push' }) {
+  // 跳转路由
+  async toPage({ appName = '', routeName = '', params, query, method = 'push' }) {
     // 先跳模块在主应用路由
-    if (module) {
+    if (appName) {
       // 如果主应用路由不在子应用模块页面，就先跳到子应用页面
-      // 这里 module 名和主应用内对应路由名一致
-      if (module !== window.$mApp.vm.$route.name) {
+      // 这里 appName 名和主应用内对应路由名一致
+      if (appName !== window.$mApp.vm.$route.name) {
         router[method]({
-          name: module
+          name: appName
         })
       }
 
       const next = () => {
-        const { window: appWindow } = window.$mApp[module]
+        const { window: appWindow } = window.$mApp[appName]
         const { toPage: appToPage } = appWindow && appWindow.$mApp || {}
 
         if (!appToPage) {
