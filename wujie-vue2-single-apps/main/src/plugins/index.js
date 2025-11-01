@@ -86,6 +86,7 @@ export default {
     const child1Export = await import('child1/export')
     const { Button, modal, init } = child1Export.default
 
+    // 保存子组件的组件和方法
     window.$mApp.child1.Button = Button
     window.$mApp.child1.modal = modal
     window.$mApp.child1.init = init
