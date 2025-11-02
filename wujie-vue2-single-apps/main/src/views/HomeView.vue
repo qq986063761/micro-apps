@@ -1,8 +1,11 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="header">
+      <img alt="Vue logo" src="../assets/logo.png">
+      <HelloWorld msg="Welcome to Your Vue.js App"/>
+    </div>
     
+    <h1>【webpack5联邦】测试引入子应用组件</h1>
     <Child1Button />
   </div>
 </template>
@@ -22,5 +25,9 @@ export default {
 <style lang="scss">
 .home {
   padding: 20px;
+
+  .header {
+    text-align: center;
+  }
 }
 </style>

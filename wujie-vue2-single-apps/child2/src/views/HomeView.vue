@@ -1,9 +1,14 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="header">
+      <img alt="Vue logo" src="../assets/logo.png">
+      <HelloWorld msg="Welcome to Your Vue.js App"/>
+    </div>
+    
+    <h1>【webpack5联邦】测试引入其他应用组件</h1>
     <Child1Button />
 
+    <h1>【同域】测试互相调用其他应用组件</h1>
     <el-button type="danger" @click="openChild1Modal">
       打开 child1 弹窗
     </el-button>
@@ -41,3 +46,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.home {
+  .header {
+    text-align: center;
+  }
+}
+</style>
