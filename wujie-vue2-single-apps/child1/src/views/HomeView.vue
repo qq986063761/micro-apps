@@ -5,7 +5,7 @@
       <HelloWorld msg="Welcome to Your Vue.js App"/>
     </div>
 
-    <h1>【同域】测试下切换子应用时，数据缓存</h1>
+    <h1>【同域】测试切换子应用，数据缓存</h1>
     <el-input v-model="input" placeholder="请输入内容，切换子应用返回能保存状态"/>
 
     <h1>【同域】测试子应用互相跳转路由</h1>
