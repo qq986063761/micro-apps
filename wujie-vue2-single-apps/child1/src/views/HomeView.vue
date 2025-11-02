@@ -31,10 +31,12 @@ export default {
       const { toPage } = window.parent.$mApp
 
       toPage({
-        module: 'child2',
-        routeName: 'about',
-        query: {},
-        params: {}
+        app: 'child2',
+        route: {
+          name: 'about',
+          query: {},
+          params: {}
+        }
       })
     }
   }

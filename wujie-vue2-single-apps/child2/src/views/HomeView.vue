@@ -28,7 +28,7 @@ export default {
       const { useComp } = window.parent.$mApp
       
       useComp({
-        module: 'child1',
+        app: 'child1',
         name: 'modal',
         method: 'show',
         args: [{

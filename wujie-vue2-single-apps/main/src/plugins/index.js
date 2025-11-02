@@ -10,7 +10,7 @@ window.$mApp = {
   child1: {},
   child2: {},
   // 使用组件
-  async useComp({ appName = '', name = '', method = '', args = [] }) {
+  async useComp({ app: appName = '', name = '', method = '', args = [] }) {
     const app = window.$mApp[appName]
     const { init } = app
 
@@ -20,7 +20,9 @@ window.$mApp = {
     app[name][method](...args)
   },
   // 跳转路由
-  async toPage({ appName = '', routeName = '', params, query, method = 'push' }) {
+  async toPage({ app: appName = '', route, method = 'push' }) {
+    const { name, query, params } = route
+
     // 先跳模块在主应用路由
     if (appName) {
       // 如果主应用路由不在子应用模块页面，就先跳到子应用页面
@@ -39,7 +41,7 @@ window.$mApp = {
           setTimeout(next, 300)
         } else {
           appToPage({
-            routeName,
+            name,
             params,
             query,
             method: 'replace'
@@ -49,7 +51,7 @@ window.$mApp = {
       next()
     } else {
       router[method]({
-        name: routeName,
+        name,
         params: {
           init: true,
           ...params,
