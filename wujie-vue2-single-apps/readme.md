@@ -10,16 +10,20 @@
   - 每个应用定义自己的 window.$mApp 对象，同域可引入父应用的 $mApp（之前我们 window.dd = window.parent.dd 没出问题）
 ```js
 // 只能同域，这种传参可以完全保持支持复杂参数形式，可以传函数
-window.parent.$mApp.useComp('okr', 'addTask', [{
-  num: 1,
-  cb: (data) => {
-    console.log(data)
-  },
-  onVisible: (val) => {
-    console.log(data)
-  }
-}])
-
+window.parent.$mApp.useComp({ 
+  app: 'okr', 
+  name = 'addTask', 
+  method = 'show', 
+  args = [{
+    num: 1,
+    cb: (data) => {
+      console.log(data)
+    },
+    onVisible: (val) => {
+      console.log(data)
+    }
+  }]
+}
 ```
 
 # 组件调用-方案2-支持跨域
