@@ -80,10 +80,9 @@ window.$mApp = {
 
 export default {
   async install(Vue) {
-    const { child1 } = window.$mApp.apps
-
     Vue.component('Child1Button', async () => {
       const Child1Button = await new Promise(resolve => {
+        const { child1 } = window.$mApp.apps
         const { init, Button } = child1
 
         const next = async () => {
@@ -103,6 +102,7 @@ export default {
     })
 
     // 引入 child1 的插件
+    const { child1 } = window.$mApp.apps
     const child1Export = await import('child1/export')
     const { Button, modal, init } = child1Export.default
 
