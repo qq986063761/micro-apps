@@ -71,6 +71,10 @@ window.$mApp = {
         query
       })
     }
+  },
+  // 接收其他模块的数据监听事件
+  async onEvent() {
+
   }
 }
 

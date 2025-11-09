@@ -6,12 +6,16 @@ window.$mApp = {
   vm: null,
   store,
   router,
-  toPage({ name = '', params, query, method = 'replace' }) {
+  async toPage({ name = '', params, query, method = 'replace' }) {
     router[method]({
       name,
       params,
       query
     })
+  },
+  // 接收其他模块的数据监听事件
+  async onEvent() {
+
   }
 }
 
