@@ -9,11 +9,21 @@ window.$mApp = {
   router,
   theme: getTheme(), // 主题变量，供子应用使用
   components: {}, // 提供给子应用的内联组件
-  child1: {},
-  child2: {},
+  // 子应用列表
+  apps: {
+    child1: {},
+    child2: {},
+  },
+  // 子应用初始化完后告诉主应用初始化完成
+  async initApp({ app: appName = '' }) {
+    if (!this.$mApp.apps[appName]) {
+      console.error(`子应用 ${appName} 不存在`)
+      return
+    }
+  },
   // 使用组件
   async useComp({ app: appName = '', name = '', method = '', args = [] }) {
-    const app = window.$mApp[appName]
+    const app = window.$mApp.apps[appName]
     const { init } = app
 
     // 子组件使用前初始化数据，但不建议
@@ -36,7 +46,7 @@ window.$mApp = {
       }
 
       const next = () => {
-        const { window: appWindow } = window.$mApp[appName]
+        const { window: appWindow } = window.$mApp.apps[appName]
         const { toPage: appToPage } = appWindow && appWindow.$mApp || {}
 
         if (!appToPage) {
@@ -66,9 +76,11 @@ window.$mApp = {
 
 export default {
   async install(Vue) {
+    const { child1 } = window.$mApp.apps
+
     Vue.component('Child1Button', async () => {
       const Child1Button = await new Promise(resolve => {
-        const { init, Button } = window.$mApp.child1
+        const { init, Button } = child1
 
         const next = async () => {
           if (!Button) {
@@ -91,9 +103,9 @@ export default {
     const { Button, modal, init } = child1Export.default
 
     // 保存子组件的组件和方法
-    window.$mApp.child1.Button = Button
-    window.$mApp.child1.modal = modal
-    window.$mApp.child1.init = init
+    child1.Button = Button
+    child1.modal = modal
+    child1.init = init
 
     console.log('main 中的 child1 插件初始化完成', child1Export.default)
   }
