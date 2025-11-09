@@ -82,10 +82,10 @@ export default {
   async install(Vue) {
     Vue.component('Child1Button', async () => {
       const Child1Button = await new Promise(resolve => {
-        const { child1 } = window.$mApp.apps
-        const { init, Button } = child1
-
         const next = async () => {
+          const { child1 } = window.$mApp.apps
+          const { init, Button } = child1
+        
           if (!Button) {
             setTimeout(next, 300)
           } else {
