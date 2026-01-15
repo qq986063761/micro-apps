@@ -4,25 +4,17 @@ import federation from '@originjs/vite-plugin-federation'
 import path from 'path'
 
 const getRemote = (moduleName) => {
-  return `promise new Promise((resolve) => {
-    const script = document.createElement('script');
-    script.src = window.__REMOTES__['${moduleName}'];
-    script.type = 'text/javascript';
-    script.onload = () => {
-      // 代理对象：透传 get/init 给远端容器
-      const proxy = {
-        get: (request) => window['${moduleName}'].get(request),
-        init: (arg) => {
-          try { return window['${moduleName}'].init(arg); } catch (e) { /* already initialized */ }
-        }
-      };
-      resolve(proxy);
-    };
-    script.onerror = (e) => {
-      console.error('Failed to load remote ${moduleName}:', script.src, e);
-    };
-    document.head.appendChild(script);
-  })`
+  return {
+    external: new Promise((resolve) => {
+      // 动态获取远程模块的 URL
+      // 在 Node.js 环境中 window 不存在，使用默认值
+      const url = (typeof window !== 'undefined' && window.__REMOTES__?.[moduleName]) 
+        ? window.__REMOTES__[moduleName] 
+        : `http://localhost:8081/remoteEntry.js`;
+      resolve(url);
+    }),
+    externalType: 'promise'
+  }
 }
 
 export default defineConfig({
