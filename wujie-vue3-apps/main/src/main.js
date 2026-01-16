@@ -29,8 +29,16 @@ app.config.warnHandler = function (msg, vm, trace) {
  * @param {Object} remoteConfig - remote 配置对象
  */
 function initRemotes() {
+  // 注意：@originjs/vite-plugin-federation 在开发模式下不会生成 remoteEntry.js
+  // 远程应用需要先构建（vite build），然后使用 preview 模式或直接访问构建后的文件
+  // 因此开发模式也使用 /assets/remoteEntry.js 路径（需要 child1 先构建）
+  const isDev = import.meta.env.DEV
+  const child1Url = isDev 
+    ? "http://localhost:8081/assets/remoteEntry.js"  // 开发模式：需要 child1 先构建
+    : "http://localhost:8081/assets/remoteEntry.js"  // 预览/生产模式
+  
   const remoteConfig = {
-    "child1": "http://localhost:8081/assets/remoteEntry.js"
+    "child1": child1Url
   }
 
   // 遍历配置，动态设置每个 remote
