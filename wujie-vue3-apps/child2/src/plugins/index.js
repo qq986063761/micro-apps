@@ -1,3 +1,4 @@
+import { h } from 'vue'
 import router from '@/router'
 import { useChild2Store } from '@/store'
 
@@ -40,7 +41,8 @@ export default {
           next()
         })
         
-        return () => Child1Button
+        // 使用 h() 函数渲染组件，而不是直接返回组件对象
+        return () => h(Child1Button)
       }
     })
   }

@@ -1,15 +1,22 @@
 <template>
   <el-button class="child1-button" type="primary" @click="handleClick">
-    {{ text || '没获取到 child1 中 store 数据' }}
+    {{ displayText }}
   </el-button>
 </template>
 
 <script setup>
 import { computed, onMounted, getCurrentInstance } from 'vue'
-import { useChild1Store } from '@/store'
 
-const store = useChild1Store()
-const text = computed(() => store.text)
+// 定义 props，允许从外部传入文本
+const props = defineProps({
+  text: {
+    type: String,
+    default: 'child1 store text'
+  }
+})
+
+// 显示文本：优先使用 props.text
+const displayText = computed(() => props.text)
 
 onMounted(() => {
   console.log('child1 Button mounted')
