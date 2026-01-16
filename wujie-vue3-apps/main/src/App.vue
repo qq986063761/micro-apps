@@ -2,9 +2,11 @@
   <div id="app">
     <SideMenu />
     <div class="main-content">
-      <keep-alive>
-        <router-view />
-      </keep-alive>
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </div>
   </div>
 </template>

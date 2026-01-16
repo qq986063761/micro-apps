@@ -6,7 +6,14 @@
     </div>
     
     <h1>【webpack5联邦】测试引入子应用组件</h1>
-    <Child1Button />
+    <Suspense>
+      <template #default>
+        <Child1Button />
+      </template>
+      <template #fallback>
+        <div>加载中...</div>
+      </template>
+    </Suspense>
   </div>
 </template>
 

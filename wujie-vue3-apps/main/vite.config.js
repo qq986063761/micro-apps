@@ -3,28 +3,17 @@ import vue from '@vitejs/plugin-vue'
 import federation from '@originjs/vite-plugin-federation'
 import path from 'path'
 
-const getRemote = (moduleName) => {
-  return {
-    external: new Promise((resolve) => {
-      // 动态获取远程模块的 URL
-      // 在 Node.js 环境中 window 不存在，使用默认值
-      const url = (typeof window !== 'undefined' && window.__REMOTES__?.[moduleName]) 
-        ? window.__REMOTES__[moduleName] 
-        : `http://localhost:8081/remoteEntry.js`;
-      resolve(url);
-    }),
-    externalType: 'promise'
-  }
-}
-
 export default defineConfig({
   plugins: [
     vue(),
     federation({
       name: 'main',
       filename: 'remoteEntry.js',
+      // 在开发模式下需要声明 remotes，即使 URL 是动态的
+      // 这样插件才能生成 virtual:__federation__ 虚拟模块
+      // 运行时可以通过 setRemote API 动态更新 URL
       remotes: {
-        child1: getRemote('child1'),
+        child1: 'http://localhost:8081/remoteEntry.js',
       },
       shared: {
         vue: {
