@@ -38,4 +38,13 @@ export default defineConfig({
     minify: false,
     cssCodeSplit: false,
   },
+  preview: {
+    port: 8081,
+    cors: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    },
+  },
 })

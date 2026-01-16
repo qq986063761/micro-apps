@@ -30,7 +30,7 @@ app.config.warnHandler = function (msg, vm, trace) {
  */
 function initRemotes() {
   const remoteConfig = {
-    "child1": "http://localhost:8081/remoteEntry.js"
+    "child1": "http://localhost:8081/assets/remoteEntry.js"
   }
 
   // 遍历配置，动态设置每个 remote

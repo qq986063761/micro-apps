@@ -6,7 +6,12 @@
     </div>
     
     <h1>【webpack5联邦】测试引入其他应用组件</h1>
-    <Child1Button />
+    <Suspense>
+      <Child1Button />
+      <template #fallback>
+        <div>加载中...</div>
+      </template>
+    </Suspense>
 
     <h1>【同域】测试互相调用其他应用组件</h1>
     <el-button type="danger" @click="openChild1Modal">
