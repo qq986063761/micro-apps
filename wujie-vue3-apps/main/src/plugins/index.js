@@ -24,11 +24,6 @@ window.$mApp = {
   // 使用组件
   async useComp({ app: appName = '', name = '', method = '', args = [] }) {
     const app = window.$mApp.apps[appName]
-    const { init } = app
-
-    // 子组件使用前初始化数据，但不建议
-    init && await init()
-
     app[name][method](...args)
   },
   // 跳转路由
@@ -87,14 +82,11 @@ export default {
         const Child1Button = await new Promise(resolve => {
           const next = async () => {
             const { child1 } = window.$mApp.apps
-            const { init, Button } = child1
+            const { Button } = child1
         
             if (!Button) {
               setTimeout(next, 300)
             } else {
-              // 子组件使用前初始化数据，但不建议
-              init && await init()
-
               resolve(Button)
             }
           }
@@ -109,12 +101,11 @@ export default {
     const { child1 } = window.$mApp.apps
     try {
       const child1Export = await import('child1/export')
-      const { Button, modal, init } = child1Export.default
+      const { Button, modal } = child1Export.default
 
       // 保存子组件的组件和方法
       child1.Button = Button
       child1.modal = modal
-      child1.init = init
 
       console.log('main 中的 child1 插件初始化完成', child1Export.default)
     } catch (error) {

@@ -16,15 +16,15 @@ tempApp.config.globalProperties.$ajax = ajax
 const data = {
   Button,
   modal,
-  store: useChild1Store,
+  // store: useChild1Store,
 }
 
 export default {
   ...data,
   // 提供初始化数据方法，主应用在调用子应用组件之前会执行
-  async init(opts) {
-    // 如果需要等子应用数据初始化
-    const store = useChild1Store()
-    await store.getData()
-  }
+  // async init(opts) {
+  //   // 如果需要等子应用数据初始化
+  //   const store = useChild1Store()
+  //   await store.getData()
+  // }
 }
