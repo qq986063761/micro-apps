@@ -22,19 +22,18 @@ const input = ref('')
 const handleClick = () => {
   // 使用无界 API
   if (window.$wujie) {
-    const { methods } = window.$wujie.props
+    const { bus } = window.$wujie
     
-    // 方式1: 通过 props 中的 methods 调用
-    if (methods && methods.toChildPage) {
-      methods.toChildPage({
-        app: 'child2',
-        route: {
-          name: 'about',
-          query: {},
-          params: {}
-        }
-      })
-    }
+    // 通过 app:toPage 事件通知主应用进行路由跳转
+    bus.$emit('app:toPage', {
+      app: 'child2',
+      route: {
+        name: 'about',
+        query: {},
+        params: {}
+      },
+      method: 'push'
+    })
   }
 }
 </script>

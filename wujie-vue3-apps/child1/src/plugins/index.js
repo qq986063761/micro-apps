@@ -25,18 +25,6 @@ export default {
           success: true
         })
       })
-
-      // 注意：应用挂载在 main.js 中处理
-      // 这里只负责设置事件监听
-
-      // 将路由跳转方法暴露给 props 中的 methods，供主应用调用
-      // 实际上主应用已经通过 eventBus 调用，这里可以保留作为备用
-      if (methods) {
-        // 子应用可以调用主应用传递的方法
-        // methods.toMainPage() - 跳转主应用路由
-        // methods.toChildPage() - 跳转其他子应用路由
-        // methods.useChildComp() - 使用其他子应用的组件
-      }
     }
   }
 }

@@ -3,9 +3,16 @@ import WujieVue from 'wujie-vue3'
 const { bus } = WujieVue
 import { h } from 'vue'
 
+const apps = {
+  child1: {},
+  child2: {},
+}
+window.apps = apps
+
 // 统一监听所有子应用的初始化事件
 bus.$on('app:init', ({ appName, data }) => {
   console.log(`子应用 ${appName} 初始化完成`, data)
+  apps[appName].init = true
 })
 
 // 监听子应用的路由跳转请求
@@ -19,7 +26,7 @@ bus.$on('app:toPage', (data) => {
     // 1. 先跳转主应用路由到子应用页面
     const currentRoute = router.currentRoute.value
     if (appName !== currentRoute.name) {
-      router[method]({
+      router.push({
         name: appName
       })
     }
@@ -27,9 +34,10 @@ bus.$on('app:toPage', (data) => {
     // 2. 通过 eventBus 发送路由跳转事件到指定子应用
     // 延迟发送，确保子应用已经加载
     setTimeout(() => {
+      console.log(`发送路由跳转事件到 ${appName}`, { route: { name, params, query }, method })
       bus.$emit(`${appName}:toPage`, {
         route: { name, params, query },
-        method: 'replace'
+        method
       })
     }, 300)
   } else {
@@ -55,19 +63,15 @@ bus.$on('app:useComp', (data) => {
     return
   }
 
-  // 通过 eventBus 发送组件调用事件到指定子应用
-  bus.$emit(`${appName}:useComp`, {
-    componentName: name,
-    method,
-    args
-  })
-})
+  apps[appName][name][method](...args)
 
-const apps = {
-  child1: {},
-  child2: {},
-}
-window.apps = apps
+  // 通过 eventBus 发送组件调用事件到指定子应用
+  // bus.$emit(`${appName}:useComp`, {
+  //   componentName: name,
+  //   method,
+  //   args
+  // })
+})
 
 export default {
   async install(app) {

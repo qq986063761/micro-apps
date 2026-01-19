@@ -5,10 +5,12 @@ export default {
     // 使用无界 API
     if (window.$wujie) {
       const { bus } = window.$wujie
-      const { appName, methods } = window.$wujie.props
+      const { appName } = window.$wujie.props
 
+      console.log(`child2 插件初始化完成`, appName)
       // 监听主应用发送的路由跳转事件（使用应用名隔离事件）
       bus.$on(`${appName}:toPage`, ({ route, method = 'replace' }) => {
+        console.log(`跳转路由 ${route} ${method}`)
         router[method](route)
       })
 
