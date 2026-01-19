@@ -77,23 +77,6 @@ window.$mApp = {
 
 export default {
   async install(app) {
-    // 尝试注册子应用的 store，以便子应用组件能在主应用上下文中使用 store
-    try {
-      // 尝试导入子应用的 store 定义
-      const child1StoreModule = await import('child1/store')
-      if (child1StoreModule && child1StoreModule.useChild1Store) {
-        // 在主应用的 Pinia 实例中注册子应用的 store
-        // 注意：这需要确保 Pinia 实例已经创建
-        const pinia = app.config.globalProperties.$pinia
-        if (pinia) {
-          // Pinia 会自动处理 store 的注册，我们只需要确保 store 定义可用
-          console.log('子应用 store 已可用')
-        }
-      }
-    } catch (error) {
-      console.warn('无法导入子应用 store，子应用组件可能无法使用 store', error)
-    }
-
     // 动态注册 Child1Button 组件
     app.component('Child1Button', {
       async setup() {

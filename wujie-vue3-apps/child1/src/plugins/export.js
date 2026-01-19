@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
-import { useChild1Store } from '@/store'
-import router from '@/router'
+// import { useChild1Store } from '@/store'
+// import router from '@/router'
 import ajax from '@/ajax'
 import Button from '@/components/Button.vue'
 import modal from '@/components/modal.js'
