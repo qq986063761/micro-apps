@@ -1,40 +1,21 @@
-import { h } from 'vue'
 import router from '@/router'
-import { useMainStore } from '@/store'
-import { getTheme } from '@/assets/theme'
+import { bus } from 'wujie-vue3'
 
-// 提供给子应用
-window.$mApp = {
-  vm: null,
-  store: useMainStore,
-  router,
-  theme: getTheme(), // 主题变量，供子应用使用
-  components: {}, // 提供给子应用的内联组件
-  // 子应用列表
-  apps: {
-    child1: {},
-    child2: {},
-  },
-  // 子应用初始化完后告诉主应用初始化完成
-  async initApp({ app: appName = '' }) {
-    if (!this.apps[appName]) {
-      console.error(`子应用 ${appName} 不存在`)
-      return
-    }
-  },
-  // 使用组件
-  async useComp({ app: appName = '', name = '', method = '', args = [] }) {
-    const app = window.$mApp.apps[appName]
-    app[name][method](...args)
-  },
+// 子应用组件注册表（用于 useComp）
+const appComponents = {
+  child1: {},
+  child2: {}
+}
+
+// 创建通信工具
+export const createAppCommunication = () => {
   // 跳转路由
-  async toPage({ app: appName = '', route, method = 'push' }) {
+  const toPage = ({ app: appName = '', route, method = 'push' }) => {
     const { name, query, params } = route
 
-    // 先跳模块在主应用路由
+    // 如果指定了子应用，需要先跳转到子应用页面，再通知子应用跳转
     if (appName) {
-      // 如果主应用路由不在子应用模块页面，就先跳到子应用页面
-      // 这里 appName 名和主应用内对应路由名一致
+      // 1. 先跳转主应用路由到子应用页面
       const currentRoute = router.currentRoute.value
       if (appName !== currentRoute.name) {
         router[method]({
@@ -42,23 +23,17 @@ window.$mApp = {
         })
       }
 
-      const next = () => {
-        const { window: appWindow } = window.$mApp.apps[appName]
-        const { toPage: appToPage } = appWindow && appWindow.$mApp || {}
-
-        if (!appToPage) {
-          setTimeout(next, 300)
-        } else {
-          appToPage({
-            name,
-            params,
-            query,
-            method: 'replace'
-          })
-        }
-      }
-      next()
+      // 2. 通过 eventBus 发送路由跳转事件到指定子应用
+      // 延迟发送，确保子应用已经加载
+      setTimeout(() => {
+        bus.$emit('app:routeChange', {
+          appName, // 在数据中指定目标应用
+          route: { name, params, query },
+          method: 'replace'
+        })
+      }, 300)
     } else {
+      // 跳转主应用路由
       router[method]({
         name,
         params: {
@@ -68,50 +43,86 @@ window.$mApp = {
         query
       })
     }
-  },
-  // 接收其他模块的数据监听事件
-  async onEvent() {
+  }
 
+  // 使用组件（调用子应用的组件方法）
+  const useComp = ({ app: appName = '', name = '', method = '', args = [] }) => {
+    if (!appName || !name || !method) {
+      console.error('useComp 参数不完整', { appName, name, method })
+      return
+    }
+
+    // 通过 eventBus 发送组件调用事件到指定子应用
+    bus.$emit('app:useComp', {
+      appName,
+      componentName: name,
+      method,
+      args
+    })
+  }
+
+  // 获取 props（用于初始化数据和方法）
+  const getProps = (appName) => {
+    return {
+      appName,
+      // 通过 props 传递方法给子应用
+      methods: {
+        // 子应用调用此方法可以跳转主应用路由
+        toMainPage: (route, method = 'push') => {
+          router[method](route)
+        },
+        // 子应用调用此方法可以跳转其他子应用路由
+        toChildPage: ({ app, route, method = 'push' }) => {
+          toPage({ app, route, method })
+        },
+        // 子应用调用此方法可以使用其他子应用的组件
+        useChildComp: ({ app, name, method, args }) => {
+          useComp({ app, name, method, args })
+        }
+      }
+    }
+  }
+
+  // 初始化事件监听
+  const setupEventListeners = () => {
+    // 统一监听所有子应用的初始化事件
+    bus.$on('app:init', ({ appName, data }) => {
+      console.log(`子应用 ${appName} 初始化完成`, data)
+    })
+
+    // 统一监听子应用注册组件事件
+    bus.$on('app:registerComponent', ({ appName, componentName, component }) => {
+      if (!appComponents[appName]) {
+        appComponents[appName] = {}
+      }
+      appComponents[appName][componentName] = component
+      console.log(`子应用 ${appName} 注册组件: ${componentName}`)
+    })
+  }
+
+  setupEventListeners()
+
+  return {
+    toPage,
+    useComp,
+    getProps,
+    appComponents
   }
 }
 
+const appComm = createAppCommunication()
+
+// 导出供外部使用
+export { appComm, bus }
+
 export default {
   async install(app) {
-    // 动态注册 Child1Button 组件
-    app.component('Child1Button', {
-      async setup() {
-        const Child1Button = await new Promise(resolve => {
-          const next = async () => {
-            const { child1 } = window.$mApp.apps
-            const { Button } = child1
-        
-            if (!Button) {
-              setTimeout(next, 300)
-            } else {
-              resolve(Button)
-            }
-          }
-          next()
-        })
-        
-        // 使用 h() 函数渲染组件，而不是直接返回组件对象
-        return () => h(Child1Button)
+    // 如果需要动态注册子应用的组件，可以通过 eventBus 监听
+    bus.$on('app:registerComponent', ({ appName, componentName, component }) => {
+      if (appName === 'child1' && componentName === 'Button') {
+        // 可以在这里注册为全局组件
+        app.component('Child1Button', component)
       }
     })
-
-    // 引入 child1 的插件
-    const { child1 } = window.$mApp.apps
-    try {
-      const child1Export = await import('child1/export')
-      const { Button, modal } = child1Export.default
-
-      // 保存子组件的组件和方法
-      child1.Button = Button
-      child1.modal = modal
-
-      console.log('main 中的 child1 插件初始化完成', child1Export.default)
-    } catch (error) {
-      console.warn('child1 插件加载失败，可能子应用未启动', error)
-    }
   }
 }

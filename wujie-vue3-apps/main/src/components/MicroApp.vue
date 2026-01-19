@@ -8,14 +8,15 @@
       :url="url"
       :sync="true"
       :fetch="fetch"
-      :props="props"
+      :props="appProps"
       :loading="loadingEl"
     />
   </div>
 </template>
 
 <script>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, computed } from 'vue'
+import { appComm } from '@/plugins'
 
 export default {
   name: 'MicroApp',
@@ -36,40 +37,23 @@ export default {
   setup(props) {
     const loadingEl = ref(document.createElement('span'))
     
-    // 获取子应用的iframe元素
-    const getIframe = () => {
-      // 方法1: 通过iframe的name属性获取（推荐方式）
-      const iframe = document.querySelector(`iframe[name="${props.name}"]`)
-      
-      // 获取iframe的contentWindow
-      if (iframe) {
-        // 确保 apps[props.name] 存在
-        if (!window.$mApp.apps[props.name]) {
-          window.$mApp.apps[props.name] = {}
-        }
-        window.$mApp.apps[props.name].window = iframe.contentWindow
-      } else {
-        // 如果iframe还没有创建，延迟重试
-        setTimeout(() => {
-          getIframe()
-        }, 100)
+    // 使用无界的 props API 传递数据和方法
+    const appProps = computed(() => {
+      const baseProps = appComm.getProps(props.name)
+      return {
+        ...baseProps,
+        ...props.props // 合并外部传入的 props
       }
-    }
+    })
     
     const fetch = (url, options) => {
       return window.fetch(url, options)
     }
     
-    onMounted(() => {
-      // 延迟获取iframe，因为wujie可能还没有完全创建
-      nextTick(() => {
-        getIframe()
-      })
-    })
-    
     return {
       loadingEl,
-      fetch
+      fetch,
+      appProps
     }
   }
 }

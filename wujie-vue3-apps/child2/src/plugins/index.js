@@ -1,49 +1,38 @@
-import { h } from 'vue'
 import router from '@/router'
-import { useChild2Store } from '@/store'
-
-// 提供给父应用
-window.$mApp = {
-  vm: null,
-  store: useChild2Store,
-  router,
-  async toPage({ name = '', params, query, method = 'replace' }) {
-    router[method]({
-      name,
-      params,
-      query
-    })
-  },
-  // 接收其他模块的数据监听事件
-  async onEvent() {
-
-  }
-}
 
 export default {
   async install(app) {
-    const parentMicroApp = window.parent.$mApp
+    // 使用无界 API
+    if (window.$wujie) {
+      const { bus } = window.$wujie
+      const { appName, methods } = window.$wujie.props
 
-    // 动态注册 Child1Button 组件
-    app.component('Child1Button', {
-      async setup() {
-        const Child1Button = await new Promise(resolve => {
-          const { child1 } = parentMicroApp.apps || {}
-          const { Button } = child1 || {}
+      // 监听主应用发送的路由跳转事件
+      bus.$on('app:routeChange', ({ appName: targetApp, route, method = 'replace' }) => {
+        // 只有目标是自己时才处理
+        if (targetApp === appName) {
+          router[method](route)
+        }
+      })
 
-          const next = async () => {
-            if (!Button) {
-              setTimeout(next, 300)
-            } else {
-              resolve(Button)
-            }
-          }
-          next()
-        })
-        
-        // 使用 h() 函数渲染组件，而不是直接返回组件对象
-        return () => h(Child1Button)
-      }
-    })
+      // 监听主应用发送的组件调用事件
+      bus.$on('app:useComp', ({ appName: targetApp, componentName, method, args }) => {
+        // 只有目标是自己时才处理
+        if (targetApp === appName) {
+          console.log(`调用组件 ${componentName} 的方法 ${method}`, args)
+          
+          // 可以通过 eventBus 发送组件调用结果
+          bus.$emit('app:useCompResult', {
+            appName,
+            componentName,
+            method,
+            success: true
+          })
+        }
+      })
+
+      // 注意：应用挂载在 main.js 中处理
+      // 这里只负责设置事件监听
+    }
   }
 }

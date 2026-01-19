@@ -20,16 +20,22 @@ import HelloWorld from '@/components/HelloWorld.vue'
 const input = ref('')
 
 const handleClick = () => {
-  const { toPage } = window.parent.$mApp
-
-  toPage({
-    app: 'child2',
-    route: {
-      name: 'about',
-      query: {},
-      params: {}
+  // 使用无界 API
+  if (window.$wujie) {
+    const { methods } = window.$wujie.props
+    
+    // 方式1: 通过 props 中的 methods 调用
+    if (methods && methods.toChildPage) {
+      methods.toChildPage({
+        app: 'child2',
+        route: {
+          name: 'about',
+          query: {},
+          params: {}
+        }
+      })
     }
-  })
+  }
 }
 </script>
 

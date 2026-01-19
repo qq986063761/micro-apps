@@ -24,24 +24,29 @@
 import HelloWorld from '@/components/HelloWorld.vue'
 
 const openChild1Modal = () => {
-  const { useComp } = window.parent.$mApp
-  
-  console.log('useComp', useComp)
-  useComp({
-    app: 'child1',
-    name: 'modal',
-    method: 'show',
-    args: [{
-      title: 'child1 弹窗',
-      content: 'child1 弹窗内容',
-      onConfirm: data => {
-        console.log('child1 弹窗回调 onConfirm', data)
-      },
-      onCancel: data => {
-        console.log('child1 弹窗回调 onCancel', data)
-      }
-    }]
-  })
+  // 使用无界 API
+  if (window.$wujie) {
+    const { methods } = window.$wujie.props
+    
+    // 方式1: 通过 props 中的 methods 调用
+    if (methods && methods.useChildComp) {
+      methods.useChildComp({
+        app: 'child1',
+        name: 'modal',
+        method: 'show',
+        args: [{
+          title: 'child1 弹窗',
+          content: 'child1 弹窗内容',
+          onConfirm: data => {
+            console.log('child1 弹窗回调 onConfirm', data)
+          },
+          onCancel: data => {
+            console.log('child1 弹窗回调 onCancel', data)
+          }
+        }]
+      })
+    }
+  }
 }
 </script>
 

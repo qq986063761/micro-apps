@@ -67,5 +67,4 @@ app.use(ElementPlus)
 app.use(plugin)
 
 // 挂载应用
-const vm = app.mount('#app')
-window.$mApp.vm = vm
+app.mount('#app')
