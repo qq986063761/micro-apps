@@ -48,7 +48,7 @@ function initRemotes() {
     if (remoteUrl) {
       // 使用 virtual:__federation__ API 动态设置 remote
       setRemote(remoteName, {
-        url: () => Promise.resolve(remoteUrl), // remoteUrl,
+        url: remoteUrl,
         format: 'esm', // 使用 esm 格式
         from: 'vite',  // 来源是 vite
       })

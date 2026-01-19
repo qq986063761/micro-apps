@@ -43,7 +43,11 @@ export default {
       
       // 获取iframe的contentWindow
       if (iframe) {
-        window.$mApp[props.name].window = iframe.contentWindow
+        // 确保 apps[props.name] 存在
+        if (!window.$mApp.apps[props.name]) {
+          window.$mApp.apps[props.name] = {}
+        }
+        window.$mApp.apps[props.name].window = iframe.contentWindow
       } else {
         // 如果iframe还没有创建，延迟重试
         setTimeout(() => {
