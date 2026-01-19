@@ -32,6 +32,7 @@ bus.$on('app:toPage', (data) => {
     }
 
     const toPage = () => {
+      console.log('toPage', appName)
       if (!apps[appName].init) {
         setTimeout(toPage, 150)
         return
