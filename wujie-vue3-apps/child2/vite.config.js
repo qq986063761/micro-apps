@@ -34,5 +34,15 @@ export default defineConfig({
     target: 'esnext',
     minify: false,
     cssCodeSplit: false,
+    watch: {}, // 启用 watch 模式时会自动使用此配置
+  },
+  preview: {
+    port: 8082,
+    cors: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    },
   },
 })
