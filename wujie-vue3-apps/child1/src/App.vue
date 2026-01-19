@@ -8,17 +8,25 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { onMounted } from 'vue'
 
-export default {
-  name: 'App',
-  setup() {
-    onMounted(() => {
-      console.log('child1 App mounted', window.$wujie, window.$wujie?.location?.href, window.location.href)
-    })
+onMounted(() => {
+  console.log('child1 App mounted', window.$wujie, window.$wujie?.location?.href, window.location.href)
+  
+  // 通知主应用子应用加载完成
+  if (window.$wujie) {
+    const { bus } = window.$wujie
+    const { appName } = window.$wujie.props || {}
+    
+    if (appName && bus) {
+      bus.$emit('app:init', {
+        appName,
+        data: { timestamp: Date.now() }
+      })
+    }
   }
-}
+})
 </script>
 
 <style lang="scss">

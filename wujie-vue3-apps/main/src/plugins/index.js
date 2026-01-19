@@ -31,15 +31,18 @@ bus.$on('app:toPage', (data) => {
       })
     }
 
-    // 2. 通过 eventBus 发送路由跳转事件到指定子应用
-    // 延迟发送，确保子应用已经加载
-    setTimeout(() => {
-      console.log(`发送路由跳转事件到 ${appName}`, { route: { name, params, query }, method })
+    const toPage = () => {
+      if (!apps[appName].init) {
+        setTimeout(toPage, 150)
+        return
+      }
+
       bus.$emit(`${appName}:toPage`, {
         route: { name, params, query },
         method
       })
-    }, 300)
+    }
+    toPage()
   } else {
     // 跳转主应用路由
     router[method]({
