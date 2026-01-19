@@ -26,6 +26,7 @@ import HelloWorld from '@/components/HelloWorld.vue'
 const openChild1Modal = () => {
   const { useComp } = window.parent.$mApp
   
+  console.log('useComp', useComp)
   useComp({
     app: 'child1',
     name: 'modal',
