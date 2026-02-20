@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     handleClick() {
-      const { toPage } = window.parent.$mApp
+      const { toPage } = window.parent.$app
 
       toPage({
         app: 'child2',

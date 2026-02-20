@@ -27,7 +27,7 @@ Vue.use(WujieVue)
 Vue.use(ElementUI);
 Vue.use(plugin)
 
-window.$mApp.vm = new Vue({
+window.$app.vm = new Vue({
   router,
   store,
   render: h => h(App)

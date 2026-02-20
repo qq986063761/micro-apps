@@ -7,10 +7,10 @@
 
 # 组件调用-方案1-不支持跨域
   - webpack5 联邦，不加载子应用，就能引入子应用的组件（不用一次性把所有子应用都渲染），但子应用要在组件使用前自己加载自己需要的公用数据（组织架构等数据）
-  - 每个应用定义自己的 window.$mApp 对象，同域可引入父应用的 $mApp（之前我们 window.dd = window.parent.dd 没出问题）
+  - 每个应用定义自己的 window.$app 对象，同域可引入父应用的 $app（之前我们 window.dd = window.parent.dd 没出问题）
 ```js
 // 只能同域，这种传参可以完全保持支持复杂参数形式，可以传函数
-window.parent.$mApp.useComp({ 
+window.parent.$app.useComp({ 
   app: 'okr', 
   name = 'addTask', 
   method = 'show', 
@@ -59,7 +59,7 @@ window.addEventListener('message', (event) => {
 ```
 
 # 页面跳转
-  - 利用 window.$mApp 实现参数传递跳转页面
+  - 利用 window.$app 实现参数传递跳转页面
   - 子应用在主应用内的时候，自己初始化后不要跳页面，等主应用调子应用 toPage 方法的时候再跳页面
 
 # 数据监听变化

@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     openChild1Modal() {
-      const { useComp } = window.parent.$mApp
+      const { useComp } = window.parent.$app
       
       useComp({
         app: 'child1',

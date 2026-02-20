@@ -3,7 +3,7 @@ import store from '@/store'
 import { getTheme } from '@/assets/theme'
 
 // 提供给子应用
-window.$mApp = {
+window.$app = {
   vm: null,
   store,
   router,
@@ -16,14 +16,14 @@ window.$mApp = {
   },
   // 子应用初始化完后告诉主应用初始化完成
   async initApp({ app: appName = '' }) {
-    if (!this.$mApp.apps[appName]) {
+    if (!this.$app.apps[appName]) {
       console.error(`子应用 ${appName} 不存在`)
       return
     }
   },
   // 使用组件
   async useComp({ app: appName = '', name = '', method = '', args = [] }) {
-    const app = window.$mApp.apps[appName]
+    const app = window.$app.apps[appName]
     const { init } = app
 
     // 子组件使用前初始化数据，但不建议
@@ -39,15 +39,15 @@ window.$mApp = {
     if (appName) {
       // 如果主应用路由不在子应用模块页面，就先跳到子应用页面
       // 这里 appName 名和主应用内对应路由名一致
-      if (appName !== window.$mApp.vm.$route.name) {
+      if (appName !== window.$app.vm.$route.name) {
         router[method]({
           name: appName
         })
       }
 
       const next = () => {
-        const { window: appWindow } = window.$mApp.apps[appName]
-        const { toPage: appToPage } = appWindow && appWindow.$mApp || {}
+        const { window: appWindow } = window.$app.apps[appName]
+        const { toPage: appToPage } = appWindow && appWindow.$app || {}
 
         if (!appToPage) {
           setTimeout(next, 300)
@@ -83,7 +83,7 @@ export default {
     Vue.component('Child1Button', async () => {
       const Child1Button = await new Promise(resolve => {
         const next = async () => {
-          const { child1 } = window.$mApp.apps
+          const { child1 } = window.$app.apps
           const { init, Button } = child1
         
           if (!Button) {
@@ -102,7 +102,7 @@ export default {
     })
 
     // 引入 child1 的插件
-    const { child1 } = window.$mApp.apps
+    const { child1 } = window.$app.apps
     const child1Export = await import('child1/export')
     const { Button, modal, init } = child1Export.default
 

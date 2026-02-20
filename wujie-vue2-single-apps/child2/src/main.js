@@ -11,7 +11,7 @@ Vue.use(plugin)
 
 Vue.config.productionTip = false
 
-window.$mApp.vm = new Vue({
+window.$app.vm = new Vue({
   router,
   store,
   render: h => h(App)
