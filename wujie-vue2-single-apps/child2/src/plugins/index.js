@@ -25,7 +25,7 @@ export default {
 
     Vue.component('Child1Button', async () => {
       const Child1Button = await new Promise(resolve => {
-        const { init, Button } = parentMicroApp.child1
+        const { init, Button } = parentMicroApp.apps.child1
 
         const next = async () => {
           if (!Button) {

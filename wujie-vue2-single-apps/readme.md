@@ -61,6 +61,10 @@ window.addEventListener('message', (event) => {
 # 页面跳转
   - 利用 window.$app 实现参数传递跳转页面
   - 子应用在主应用内的时候，自己初始化后不要跳页面，等主应用调子应用 toPage 方法的时候再跳页面
+  - 何时可安全调用子应用 toPage：
+    - 子应用做了无界生命周期改造时：MicroApp 的 afterMount 触发即表示子应用已挂载，此时 window.$app.apps[appName].ready === true
+    - 未改造时：主应用提供 whenChildReady(appName)，轮询到子应用 window.$app.toPage 存在即就绪
+  - 复杂场景（先跳主应用路由再调子应用 toPage 并传 params: { init: true }）：先主应用 router.push 到子应用页，再 await window.$app.whenChildReady('child1')，然后 window.$app.toPage({ app: 'child1', route: { name: '子应用路由名', params: { init: true }, query } })
 
 # 数据监听变化
   - 

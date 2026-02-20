@@ -4,7 +4,6 @@
  -->
   <div class="micro-app-container">
     <WujieVue
-      v-if="url"
       :width="'100%'"
       :height="'100%'"
       :name="name"
@@ -13,16 +12,32 @@
       :fetch="fetch"
       :props="props"
       :loading="loadingEl"
+      :afterMount="onChildAfterMount"
     />
   </div>
 </template>
 
 <script>
+// 创建 Element UI 风格的 loading 元素（与 el-loading-mask 结构一致，样式由已引入的 element-ui 提供）
+function createElementUILoadingEl() {
+  const mask = document.createElement('div')
+  mask.className = 'el-loading-mask'
+  mask.innerHTML = `
+    <div class="el-loading-spinner">
+      <svg viewBox="25 25 50 50" class="circular">
+        <circle cx="50" cy="50" r="20" fill="none" class="path"></circle>
+      </svg>
+      <p class="el-loading-text">加载中...</p>
+    </div>
+  `
+  return mask
+}
+
 export default {
   name: 'MicroApp',
   data() {
     return {
-      loadingEl: document.createElement('span')
+      loadingEl: createElementUILoadingEl()
     }
   },
   props: {
@@ -40,30 +55,30 @@ export default {
     }
   },
   methods: {
-    // 获取子应用的iframe元素
-    getIframe() {
-      // 方法1: 通过iframe的name属性获取（推荐方式）
-      const iframe = document.querySelector(`iframe[name="${this.name}"]`)
-      
-      // 获取iframe的contentWindow
-      if (iframe) {
-        window.$app[this.name].window = iframe.contentWindow
-      } else {
-        // 如果iframe还没有创建，延迟重试
-        setTimeout(() => {
-          this.getIframe()
-        }, 100)
-      }
-    },
     fetch(url, options) {
+      // 需要改参数就可以拦截请求
       return window.fetch(url, options)
+    },
+    /**
+     * 无界子应用挂载完成后调用（子应用需做生命周期改造时才会触发，见无界文档）。
+     * 在此统一设置 slot.window / slot.ready，符合无界生命周期，无需在 mounted 中轮询 iframe。
+     */
+    onChildAfterMount(appWindow) {
+      console.log('MicroApp onChildAfterMount', this.name, appWindow)
+      const slot = window.$app?.apps?.[this.name]
+      if (slot) {
+        slot.window = appWindow
+        slot.ready = true
+      }
     }
   },
-  mounted() {
-    // 延迟获取iframe，因为wujie可能还没有完全创建
-    this.$nextTick(() => {
-      this.getIframe()
-    })
+  activated() {
+    console.log('MicroApp activated', this.name)
+    // this.loadingEl.style.display = 'block'
+  },
+  deactivated() {
+    console.log('MicroApp deactivated', this.name)
+    // this.loadingEl.style.display = 'none'
   }
 }
 </script>
