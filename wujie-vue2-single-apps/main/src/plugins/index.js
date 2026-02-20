@@ -11,8 +11,14 @@ window.$app = {
   components: {}, // 提供给子应用的内联组件
   // 子应用列表
   apps: {
-    child1: {},
-    child2: {},
+    child1: {
+      window: null,
+      ready: false  
+    },
+    child2: {
+      window: null,
+      ready: false
+    },
   },
   /**
    * 跳转路由

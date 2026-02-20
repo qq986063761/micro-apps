@@ -35,25 +35,44 @@ function createElementUILoadingEl() {
   return mask
 }
 
+// 按 name 映射子应用的 url 和 props，子应用用 window.$wujie.props.$app 获取，避免跨域时 window.parent 不可用
+const APP_CONFIG = {
+  child1: {
+    url: 'http://localhost:8081',
+    props: {
+      data: { message: 'child1 初始化数据' }
+    }
+  },
+  child2: {
+    url: 'http://localhost:8082',
+    props: {
+      data: { message: 'child2 初始化数据' }
+    }
+  }
+}
+
 export default {
   name: 'MicroApp',
+  props: {
+    name: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       loadingEl: createElementUILoadingEl()
     }
   },
-  props: {
-    name: {
-      type: String,
-      required: true
+  computed: {
+    url() {
+      const config = APP_CONFIG[this.name]
+      return config ? config.url : ''
     },
-    url: {
-      type: String,
-      required: true
-    },
-    props: {
-      type: Object,
-      default: () => ({})
+    props() {
+      const config = APP_CONFIG[this.name]
+      const base = config?.props ? { ...config.props } : {}
+      return { ...base, $app: window.$app }
     }
   },
   methods: {
