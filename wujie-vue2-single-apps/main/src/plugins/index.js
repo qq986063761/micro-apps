@@ -41,7 +41,7 @@ window.$app = {
         const { to: childTo } = childWindow && childWindow.$app || {}
 
         if (!childTo) {
-          setTimeout(next, 100)
+          setTimeout(next, 60)
         } else {
           childTo({
             name,

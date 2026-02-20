@@ -7,6 +7,7 @@ window.$app = {
   store,
   router,
   async to({ name = '', params, query, method = 'replace' }) {
+    if (router.currentRoute.name === name) return
     router[method]({
       name,
       params,

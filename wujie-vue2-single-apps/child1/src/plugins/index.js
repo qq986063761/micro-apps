@@ -14,9 +14,10 @@ window.$app = {
   vm: null,
   store,
   router,
-  async to({ routeName = '', params, query, method = 'replace' }) {
+  async to({ name = '', params, query, method = 'replace' }) {
+    if (router.currentRoute.name === name) return
     router[method]({
-      name: routeName,
+      name,
       params,
       query
     })
