@@ -9,6 +9,7 @@
 
 <script>
 import { mapState } from 'vuex'
+
 export default {
   name: 'Child1Button',
   mounted() {
@@ -18,7 +19,8 @@ export default {
     ...mapState(['text'])
   },
   methods: {
-    handleClick() {
+    handleClick(e) {
+      // 先触发自定义的点击处理
       this.$ajax.post()
     }
   }

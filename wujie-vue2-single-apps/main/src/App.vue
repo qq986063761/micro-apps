@@ -44,15 +44,15 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  height: 100vh;
+  height: 100%;
   display: flex;
 }
 
 .main-content {
   flex: 1;
   margin-left: 200px;
-  height: 100vh;
-  overflow: hidden;
+  height: 100%;
+  overflow: auto;
   background: #f0f2f5; // 柔和灰蓝背景，让卡片更聚焦
 }
 
@@ -60,9 +60,12 @@ export default {
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .hello {
