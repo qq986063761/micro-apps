@@ -37,12 +37,13 @@ export default {
   methods: {
     openChild1Modal() {
       const { use } = window.$app
+
       use({
         name: 'modal',
         method: 'show',
         args: [{
-          title: 'child1 弹窗',
-          content: 'child1 弹窗内容',
+          title: 'child2 调用 child1 弹窗',
+          content: 'child2 调用 child1 弹窗内容',
           onConfirm: data => {
             console.log('child1 弹窗回调 onConfirm', data)
           },

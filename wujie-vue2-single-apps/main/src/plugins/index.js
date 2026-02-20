@@ -59,6 +59,8 @@ window.$app = {
   },
   // 使用组件
   use({ app, name = '', method = '', args = [] }) {
+    console.log('main use', app, name, method, args)
+
     const appInstance = window.$app.apps[app]
     return appInstance[name][method](...args)
   },

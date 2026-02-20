@@ -42,6 +42,7 @@ window.$app = {
     })
   },
   use({ name, method, args }) {
+    console.log('child2 use', name, method, args)
     const { use } = window.$parentApp || {}
     let app = ''
 

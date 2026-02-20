@@ -5,14 +5,8 @@
     :width="width"
     :close-on-click-modal="false"
     :append-to-body="true"
-    @close="handleCancel"
   >
-    <div v-if="isVNode">
-      <component :is="content" />
-    </div>
-    <div v-else>
-      <div v-html="content"></div>
-    </div>
+    <div v-html="content"></div>
 
     <span slot="footer" class="dialog-footer">
       <el-button @click="handleCancel">{{ cancelText }}</el-button>
@@ -30,16 +24,13 @@ export default {
       visible: false,
       dialogTitle: '提示',
       content: '',
-      isVNode: false,
       width: '480px',
       confirmText: '确 定',
-      cancelText: '取 消',
-      onConfirm: null,
-      onCancel: null
+      cancelText: '取 消'
     }
   },
   methods: {
-    // options: { title, content (string|component), width, confirmText, cancelText, onConfirm, onCancel }
+    // options: { title, content (string), width, confirmText, cancelText, onConfirm, onCancel }
     show(options = {}) {
       const {
         title,
@@ -57,15 +48,13 @@ export default {
       this.cancelText = cancelText || '取 消'
       this.onConfirm = typeof onConfirm === 'function' ? onConfirm : null
       this.onCancel = typeof onCancel === 'function' ? onCancel : null
-
-      // content can be a string (HTML) or a component/options
-      this.isVNode = typeof content === 'object' && content !== null
       this.content = content || ''
 
       this.visible = true
     },
     handleConfirm() {
       if (this.onConfirm) {
+        // 测试跨应用调用组件时，回调函数是否能正常传递不同类型的数据
         try { this.onConfirm({ num: 1, date: new Date(), cb: () => {} }) } catch (e) { /* noop */ }
       }
       this.visible = false
