@@ -66,7 +66,7 @@ export default {
       if (childApp) {
         window.$app.to({
           app: childApp,
-          route: childRoute
+          ...childRoute
         })
       } else {
         this.$router.push({ name: routeName })

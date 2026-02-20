@@ -21,21 +21,19 @@ window.$app = {
   /**
    * 跳转路由
    */
-  to({ app: appName = '', route, method = 'push' }) {
-    const { name, query, params } = route
-
+  to({ app, name, query, params }) {
     // 先跳模块在主应用路由
-    if (appName) {
+    if (app) {
       // 如果主应用路由不在子应用模块页面，就先跳到子应用页面
       // 这里 appName 名和主应用内对应路由名一致
-      if (appName !== window.$app.vm.$route.name) {
-        router[method]({
-          name: appName
+      if (app !== window.$app.vm.$route.name) {
+        router.push({
+          name: app
         })
       }
 
       const next = () => {
-        const { window: childWindow } = window.$app.apps[appName]
+        const { window: childWindow } = window.$app.apps[app]
         const { to: childTo } = childWindow && childWindow.$app || {}
 
         if (!childTo) {
@@ -62,9 +60,9 @@ window.$app = {
     }
   },
   // 使用组件
-  use({ app: appName = '', name = '', method = '', args = [] }) {
-    const app = window.$app.apps[appName]
-    return app[name][method](...args)
+  use({ app, name = '', method = '', args = [] }) {
+    const appInstance = window.$app.apps[app]
+    return appInstance[name][method](...args)
   },
   // 接收其他模块的数据监听事件
   onEvent() {

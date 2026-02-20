@@ -29,15 +29,21 @@ window.$app = {
   onDeactivated() {},
   /** 子应用即将卸载时调用，可在此做清理、保存状态等 */
   onBeforeUnmount() {},
-  to({ name = '', params, query, method = 'replace' }) {
-    console.log('child1 to', name, params, query, method)
+  to({ app, name = '', params, query }) {
+    // 如果是跨应用跳转，则调用父应用的 to 方法
+    if (app) {
+      window.$parentApp.to({ app, name, params, query })
+      return
+    }
+    
+    console.log('child1 to', name, params, query)
     const cur = router.currentRoute
     const sameName = cur.name === name
     const sameParams = shallowEqual(cur.params, params)
     const sameQuery = shallowEqual(cur.query, query)
     if (sameName && sameParams && sameQuery) return
     
-    router[method]({
+    router.push({
       name,
       params: params ?? {},
       query: query ?? {}

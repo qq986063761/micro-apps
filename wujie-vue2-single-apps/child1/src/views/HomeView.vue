@@ -27,15 +27,13 @@ export default {
   methods: {
     handleClick() {
       // 优先用无界to（跨域安全），同域或独立运行时回退到 window.parent
-      const { to } = window.$parentApp
+      const { to } = window.$app
       
       to({
         app: 'child2',
-        route: {
-          name: 'about',
-          query: {},
-          params: {}
-        }
+        name: 'about',
+        query: {},
+        params: {}
       })
     }
   }
