@@ -72,20 +72,22 @@ const getParentApp = () => window.$wujie?.props?.$app ?? window.parent?.$app
 // })
 window.$parentApp = getParentApp()
 
+// 异步组件加载中占位（用 render 避免依赖模板编译器）
+const Child1ButtonLoading = {
+  render(h) {
+    return h('div', '组件加载中...')
+  }
+}
+
 export default {
   async install(Vue) {
     const parentMicroApp = window.$parentApp
+    const { child1 } = parentMicroApp?.apps || {}
 
-    Vue.component('Child1Button', async () => {
-      const Child1Button = await new Promise(resolve => {
-        const child1Slot = parentMicroApp?.apps?.child1
-        if (!child1Slot) {
-          resolve(() => null) // 无主应用或未注入时返回空组件
-          return
-        }
-        const { init, Button } = child1Slot
-
-        const next = async () => {
+    Vue.component('Child1Button', () => ({
+      component: new Promise(resolve => {
+        const next = () => {
+          const { Button } = child1
           if (!Button) {
             setTimeout(next, 60)
           } else {
@@ -93,9 +95,8 @@ export default {
           }
         }
         next()
-      })
-      
-      return Child1Button
-    })
+      }),
+      loading: Child1ButtonLoading
+    }))
   }
 }
