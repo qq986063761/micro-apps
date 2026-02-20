@@ -30,10 +30,14 @@ window.$app = {
     const sameParams = shallowEqual(cur.params, params)
     const sameQuery = shallowEqual(cur.query, query)
     if (sameName && sameParams && sameQuery) return
+    
     router[method]({
       name,
       params: params ?? {},
       query: query ?? {}
+    }).catch(err => {
+      // Vue Router 以 resolved path+query 判断“同一位置”，params 若未写在 path 里不会进 URL，仍会报冗余导航
+      if (err.name !== 'NavigationDuplicated') throw err
     })
   },
   // 接收其他模块的数据监听事件
