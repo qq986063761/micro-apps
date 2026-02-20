@@ -66,9 +66,6 @@ export default {
           if (!Button) {
             setTimeout(next, 300)
           } else {
-            // 子组件使用前初始化数据，但不建议
-            init && await init()
-
             resolve(Button)
           }
         }
