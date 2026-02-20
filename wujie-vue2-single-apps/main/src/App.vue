@@ -11,11 +11,29 @@
 
 <script>
 import SideMenu from './components/SideMenu.vue'
+import { mapState } from 'vuex'
+import { injectThemeToDocument } from './assets/theme'
 
 export default {
   name: 'App',
   components: {
     SideMenu
+  },
+  computed: {
+    ...mapState(['theme'])
+  },
+  watch: {
+    theme: {
+      handler() {
+        // 主题切换时，更新主应用主题
+        injectThemeToDocument(document)
+      },
+      immediate: true
+    }
+  },
+  mounted() {
+    // 初始化时注入主题
+    injectThemeToDocument(document)
   }
 }
 </script>

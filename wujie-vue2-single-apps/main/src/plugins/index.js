@@ -1,13 +1,11 @@
 import router from '@/router'
 import store from '@/store'
-import { getTheme } from '@/assets/theme'
 
 // 提供给子应用
 window.$app = {
   vm: null,
   store,
   router,
-  theme: getTheme(), // 主题变量，供子应用使用
   components: {}, // 提供给子应用的内联组件
   // 子应用列表
   apps: {

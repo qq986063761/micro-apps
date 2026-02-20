@@ -2,6 +2,16 @@
   <div class="side-menu">
     <div class="menu-header">
       <h2>微前端应用</h2>
+      <el-tooltip 
+        :content="currentTheme === 'light' ? '当前为浅色主题' : '当前为深色主题'"
+        placement="bottom"
+      >
+        <button 
+          class="theme-toggle-btn" 
+          :style="{ backgroundColor: themeColor }"
+          @click="toggleTheme"
+        ></button>
+      </el-tooltip>
     </div>
     <ul class="menu-list">
       <li 
@@ -18,6 +28,9 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+import { colors } from '@/assets/theme'
+
 export default {
   name: 'SideMenu',
   data() {
@@ -54,11 +67,30 @@ export default {
     }
   },
   computed: {
+    ...mapState(['theme']),
     currentRouteName() {
       return this.$route.name
+    },
+    currentTheme() {
+      return this.theme
+    },
+    themeColor() {
+      return colors[this.theme]?.primary || colors.light.primary
+    }
+  },
+  watch: {
+    theme: {
+      handler() {
+        // 主题切换后，更新当前激活的子应用主题
+        this.updateActiveChildAppTheme()
+        // 更新主应用主题
+        this.updateMainAppTheme()
+      },
+      immediate: false
     }
   },
   methods: {
+    ...mapActions(['toggleTheme']),
     navigateTo(item) {
       const { routeName, childApp, childRoute } = item
 
@@ -71,6 +103,24 @@ export default {
       } else {
         this.$router.push({ name: routeName })
       }
+    },
+    updateActiveChildAppTheme() {
+      // 获取当前路由对应的子应用
+      const currentRouteName = this.$route.name
+      const activeApp = this.menuItems.find(item => item.routeName === currentRouteName)?.childApp
+      
+      if (activeApp) {
+        const appWindow = window.$app?.apps?.[activeApp]?.window
+        if (appWindow && appWindow.document) {
+          const { injectThemeToDocument } = require('@/assets/theme')
+          injectThemeToDocument(appWindow.document)
+        }
+      }
+    },
+    updateMainAppTheme() {
+      // 更新主应用主题
+      const { injectThemeToDocument } = require('@/assets/theme')
+      injectThemeToDocument(document)
     }
   }
 }
@@ -90,12 +140,34 @@ export default {
   .menu-header {
     padding: 20px;
     border-bottom: 1px solid #434a50;
+    display: flex;
+    align-items: center;
     
     h2 {
       color: #fff;
       margin: 0;
       font-size: 18px;
       font-weight: 500;
+    }
+
+    .theme-toggle-btn {
+      margin-left: 8px;
+      width: 24px;
+      height: 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+      flex-shrink: 0;
+
+      &:hover {
+        opacity: 0.8;
+        transform: scale(1.1);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
     }
   }
 

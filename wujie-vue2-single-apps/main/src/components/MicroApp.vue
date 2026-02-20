@@ -26,6 +26,7 @@
 
 <script>
 import { injectThemeToDocument } from '@/assets/theme'
+import { mapState } from 'vuex'
 
 // 按 name 映射子应用的 url 和 props，子应用用 window.$wujie.props.$app 获取，避免跨域时 window.parent 不可用
 const APP_CONFIG = {
@@ -57,6 +58,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['theme']),
     url() {
       const config = APP_CONFIG[this.name]
       return config ? config.url : ''
@@ -65,6 +67,15 @@ export default {
       const config = APP_CONFIG[this.name]
       const base = config?.props ? { ...config.props } : {}
       return { ...base, $app: window.$app }
+    }
+  },
+  watch: {
+    theme: {
+      handler() {
+        // 主题切换时，更新当前子应用的主题
+        this.updateChildAppTheme()
+      },
+      immediate: false
     }
   },
   methods: {
@@ -82,10 +93,22 @@ export default {
       // 注入主题 CSS 变量到子应用
       if (appWindow && appWindow.document) {
         try {
-          injectThemeToDocument(appWindow.document, window.$app.theme, 'theme')
+          injectThemeToDocument(appWindow.document)
           console.log('主题 CSS 变量已注入到子应用', this.name)
         } catch (e) {
           console.warn('注入主题 CSS 变量失败', e)
+        }
+      }
+    },
+    updateChildAppTheme() {
+      // 更新当前子应用的主题
+      const appWindow = window.$app?.apps?.[this.name]?.window
+      if (appWindow && appWindow.document) {
+        try {
+          injectThemeToDocument(appWindow.document)
+          console.log('主题已更新到子应用', this.name)
+        } catch (e) {
+          console.warn('更新子应用主题失败', e)
         }
       }
     },
