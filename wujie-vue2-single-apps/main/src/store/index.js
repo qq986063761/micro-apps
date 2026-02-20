@@ -29,7 +29,7 @@ export default new Vuex.Store({
       }
     },
     ADD_USR(state, usr) {
-      state.usrs.push(usr)
+      state.usrs = [...state.usrs, usr]
       // 通知子应用更新
       if (window.$app && window.$app.emit) {
         window.$app.emit('store-state', { prop: 'usrs', value: state.usrs })
