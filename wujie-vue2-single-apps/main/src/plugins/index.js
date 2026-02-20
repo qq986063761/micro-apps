@@ -95,7 +95,7 @@ export default {
     // 引入 child1 的插件
     const { child1 } = window.$app.apps
     const child1Export = await import('child1/export')
-    const { Button, modal, init } = child1Export.default
+    const { Button, modal } = child1Export.default
 
     // 保存子组件的组件和方法
     child1.Button = Button
