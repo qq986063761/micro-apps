@@ -18,11 +18,17 @@ function shallowEqual(a, b) {
   return keysA.every(k => A[k] === B[k])
 }
 
-// 提供给子应用
+// 提供给子应用（主应用在对应无界生命周期会调用以下可选钩子）
 window.$app = {
   vm: null,
   store,
   router,
+  /** 保活模式下再次被激活时调用，可在此刷新数据等 */
+  onActivated() {},
+  /** 保活模式下被切走时调用，可在此暂停轮询、动画等 */
+  onDeactivated() {},
+  /** 子应用即将卸载时调用，可在此做清理、保存状态等 */
+  onBeforeUnmount() {},
   async to({ name = '', params, query, method = 'replace' }) {
     console.log('child1 to', name, params, query, method)
     const cur = router.currentRoute

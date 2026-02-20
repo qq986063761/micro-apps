@@ -13,7 +13,13 @@
       :sync="true"
       :fetch="fetch"
       :props="props"
+      :beforeLoad="onChildBeforeLoad"
+      :beforeMount="onChildBeforeMount"
       :afterMount="onChildAfterMount"
+      :beforeUnmount="onChildBeforeUnmount"
+      :afterUnmount="onChildAfterUnmount"
+      :activated="onChildActivated"
+      :deactivated="onChildDeactivated"
     />
   </div>
 </template>
@@ -64,6 +70,14 @@ export default {
       // 需要改参数就可以拦截请求
       return window.fetch(url, options)
     },
+    /** 子应用加载前 */
+    onChildBeforeLoad(appWindow) {
+      console.log('MicroApp onChildBeforeLoad', this.name)
+    },
+    /** 子应用挂载前 */
+    onChildBeforeMount(appWindow) {
+      console.log('MicroApp onChildBeforeMount', this.name)
+    },
     /**
      * 无界子应用挂载完成后调用（子应用需做生命周期改造时才会触发，见无界文档）。
      * 在此统一设置 slot.window / slot.ready，符合无界生命周期，无需在 mounted 中轮询 iframe。
@@ -75,6 +89,42 @@ export default {
       if (slot) {
         slot.window = appWindow
         slot.ready = true
+      }
+    },
+    /** 子应用卸载前，可通知子应用做清理（如调用子应用 window.$app.onBeforeUnmount） */
+    onChildBeforeUnmount(appWindow) {
+      console.log('MicroApp onChildBeforeUnmount', this.name)
+      try {
+        appWindow?.$app?.onBeforeUnmount?.()
+      } catch (e) {
+        console.warn('MicroApp onChildBeforeUnmount child callback error', e)
+      }
+    },
+    /** 子应用卸载后 */
+    onChildAfterUnmount(appWindow) {
+      console.log('MicroApp onChildAfterUnmount', this.name)
+      const slot = window.$app?.apps?.[this.name]
+      if (slot) {
+        slot.window = null
+        slot.ready = false
+      }
+    },
+    /** 保活模式下子应用被再次激活，可通知子应用刷新（如调用子应用 window.$app.onActivated） */
+    onChildActivated(appWindow) {
+      console.log('MicroApp onChildActivated', this.name)
+      try {
+        appWindow?.$app?.onActivated?.()
+      } catch (e) {
+        console.warn('MicroApp onChildActivated child callback error', e)
+      }
+    },
+    /** 保活模式下子应用被停用，可通知子应用暂停（如调用子应用 window.$app.onDeactivated） */
+    onChildDeactivated(appWindow) {
+      console.log('MicroApp onChildDeactivated', this.name)
+      try {
+        appWindow?.$app?.onDeactivated?.()
+      } catch (e) {
+        console.warn('MicroApp onChildDeactivated child callback error', e)
       }
     }
   },
