@@ -21,7 +21,7 @@ window.$app = {
   /**
    * 跳转路由
    */
-  async to({ app: appName = '', route, method = 'push' }) {
+  to({ app: appName = '', route, method = 'push' }) {
     const { name, query, params } = route
 
     // 先跳模块在主应用路由
@@ -62,12 +62,12 @@ window.$app = {
     }
   },
   // 使用组件
-  async use({ app: appName = '', name = '', method = '', args = [] }) {
+  use({ app: appName = '', name = '', method = '', args = [] }) {
     const app = window.$app.apps[appName]
-    app[name][method](...args)
+    return app[name][method](...args)
   },
   // 接收其他模块的数据监听事件
-  async onEvent() {
+  onEvent() {
 
   }
 }
@@ -100,7 +100,6 @@ export default {
     // 保存子组件的组件和方法
     child1.Button = Button
     child1.modal = modal
-    child1.init = init
 
     console.log('main 中 child1 组件加载完成', child1Export.default)
   }

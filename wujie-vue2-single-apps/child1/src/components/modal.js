@@ -1,14 +1,14 @@
 import Vue from 'vue'
-import Modal from './Modal.vue'
+import ComponentVue from './Modal.vue'
 import router from '@/router'
 import store from '@/store'
 
-const ModalComponent = Vue.extend(Modal)
+const Component = Vue.extend(ComponentVue)
 
 export default {
   show(...args) {
     if (!this.vm) {
-      this.vm = new ModalComponent({
+      this.vm = new Component({
         router,
         store
       })

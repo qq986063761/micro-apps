@@ -21,21 +21,38 @@ window.$app = {
   onDeactivated() {},
   /** 子应用即将卸载时调用，可在此做清理、保存状态等 */
   onBeforeUnmount() {},
-  async to({ name = '', params, query, method = 'replace' }) {
+  to({ name = '', params, query, method = 'replace' }) {
     console.log('child2 to', name, params, query, method)
     const cur = router.currentRoute
     const sameName = cur.name === name
     const sameParams = shallowEqual(cur.params, params)
     const sameQuery = shallowEqual(cur.query, query)
     if (sameName && sameParams && sameQuery) return
+    
     router[method]({
       name,
       params: params ?? {},
       query: query ?? {}
     })
   },
+  use({ name, method, args }) {
+    const { use } = window.$parentApp || {}
+    let app = ''
+
+    // 不同组件对应不同子应用
+    switch (name) {
+      case 'modal':
+        app = 'child1'
+        break
+    }
+
+    // window.$wujie?.bus.$off("on-visible", )
+    // window.$wujie?.bus.$on("on-visible", )
+
+    return use({ app, name, method, args })
+  },
   // 接收其他模块的数据监听事件
-  async onEvent() {
+  onEvent() {
 
   }
 }

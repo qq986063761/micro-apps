@@ -23,10 +23,8 @@ export default {
   name: 'HomeView',
   methods: {
     openChild1Modal() {
-      const { use } = window.$parentApp || {}
-
+      const { use } = window.$app
       use({
-        app: 'child1',
         name: 'modal',
         method: 'show',
         args: [{

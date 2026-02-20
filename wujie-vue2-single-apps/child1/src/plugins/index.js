@@ -29,7 +29,7 @@ window.$app = {
   onDeactivated() {},
   /** 子应用即将卸载时调用，可在此做清理、保存状态等 */
   onBeforeUnmount() {},
-  async to({ name = '', params, query, method = 'replace' }) {
+  to({ name = '', params, query, method = 'replace' }) {
     console.log('child1 to', name, params, query, method)
     const cur = router.currentRoute
     const sameName = cur.name === name
@@ -46,8 +46,11 @@ window.$app = {
       if (err.name !== 'NavigationDuplicated') throw err
     })
   },
+  use({  }) {
+
+  },
   // 接收其他模块的数据监听事件
-  async onEvent() {
+  onEvent() {
 
   }
 }
