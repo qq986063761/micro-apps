@@ -12,12 +12,10 @@ window.$app = {
   // 子应用列表
   apps: {
     child1: {
-      window: null,
-      ready: false  
+      window: null 
     },
     child2: {
-      window: null,
-      ready: false
+      window: null
     },
   },
   /**

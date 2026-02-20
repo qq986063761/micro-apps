@@ -88,7 +88,6 @@ export default {
       const slot = window.$app?.apps?.[this.name]
       if (slot) {
         slot.window = appWindow
-        slot.ready = true
       }
     },
     /** 子应用卸载前，可通知子应用做清理（如调用子应用 window.$app.onBeforeUnmount） */
@@ -106,7 +105,6 @@ export default {
       const slot = window.$app?.apps?.[this.name]
       if (slot) {
         slot.window = null
-        slot.ready = false
       }
     },
     /** 保活模式下子应用被再次激活，可通知子应用刷新（如调用子应用 window.$app.onActivated） */
