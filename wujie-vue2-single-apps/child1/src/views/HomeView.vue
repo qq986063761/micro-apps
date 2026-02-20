@@ -1,26 +1,24 @@
 <template>
   <div class="home">
-    <div class="header">
-      <img alt="Vue logo" src="../assets/logo.png">
-      <HelloWorld msg="Welcome to Your Vue.js App"/>
-    </div>
+    <el-card class="card" shadow="hover">
+      <template #header>
+        <span>【同域】测试切换子应用，数据缓存</span>
+      </template>
+      <el-input v-model="input" placeholder="请输入内容，切换子应用返回能保存状态"/>
+    </el-card>
 
-    <h1>【同域】测试切换子应用，数据缓存</h1>
-    <el-input v-model="input" placeholder="请输入内容，切换子应用返回能保存状态"/>
-
-    <h1>【同域】测试子应用互相跳转路由</h1>
-    <el-button type="danger" @click="handleClick">跳转到 child2 的 about 页面</el-button>
+    <el-card class="card" shadow="hover">
+      <template #header>
+        <span>【同域】测试子应用互相跳转路由</span>
+      </template>
+      <el-button type="danger" @click="handleClick">跳转到 child2 的 about 页面</el-button>
+    </el-card>
   </div>
 </template>
 
 <script>
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
   name: 'HomeView',
-  components: {
-    HelloWorld
-  },
   data() {
     return {
       input: ''
@@ -46,9 +44,10 @@ export default {
 
 <style lang="scss">
 .home {
+  padding: 20px;
 
-  .header {
-    text-align: center;
+  .card {
+    margin-bottom: 20px;
   }
 }
 </style>

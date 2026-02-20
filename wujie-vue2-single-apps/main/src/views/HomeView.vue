@@ -1,24 +1,18 @@
 <template>
   <div class="home">
-    <div class="header">
-      <img alt="Vue logo" src="../assets/logo.png">
-      <HelloWorld msg="Welcome to Your Vue.js App"/>
-    </div>
-    
-    <h1>【webpack5联邦】测试引入子应用组件</h1>
-    <Child1Button />
+    <el-card class="card" shadow="hover">
+      <template #header>
+        <span>【webpack5联邦】测试引入子应用组件</span>
+      </template>
+      <Child1Button />
+    </el-card>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  }
+  name: 'HomeView'
 }
 </script>
 
@@ -26,8 +20,8 @@ export default {
 .home {
   padding: 20px;
 
-  .header {
-    text-align: center;
+  .card {
+    margin-bottom: 20px;
   }
 }
 </style>
