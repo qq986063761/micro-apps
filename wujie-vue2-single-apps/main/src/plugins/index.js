@@ -37,13 +37,13 @@ window.$app = {
       }
 
       const next = () => {
-        const { window: appWindow } = window.$app.apps[appName]
-        const { to: appToPage } = appWindow && appWindow.$app || {}
+        const { window: childWindow } = window.$app.apps[appName]
+        const { to: childTo } = childWindow && childWindow.$app || {}
 
-        if (!appToPage) {
-          setTimeout(next, 300)
+        if (!childTo) {
+          setTimeout(next, 100)
         } else {
-          appToPage({
+          childTo({
             name,
             params,
             query,
@@ -64,7 +64,7 @@ window.$app = {
     }
   },
   // 使用组件
-  async useComp({ app: appName = '', name = '', method = '', args = [] }) {
+  async use({ app: appName = '', name = '', method = '', args = [] }) {
     const app = window.$app.apps[appName]
     app[name][method](...args)
   },

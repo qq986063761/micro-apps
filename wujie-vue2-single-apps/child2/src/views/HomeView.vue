@@ -25,9 +25,9 @@ export default {
   },
   methods: {
     openChild1Modal() {
-      const { useComp } = window.$parentApp || {}
+      const { use } = window.$parentApp || {}
 
-      useComp({
+      use({
         app: 'child1',
         name: 'modal',
         method: 'show',

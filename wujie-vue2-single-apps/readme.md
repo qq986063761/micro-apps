@@ -1,5 +1,5 @@
 # 样式
-  - 原理是利用iframe，样式互不影响
+  - 原理类似 iframe，样式互不影响
   - 主题：父应用提供主题变量
 
 # 三方公用组件
@@ -14,7 +14,7 @@
 ```js
 // 推荐：从 props 取（跨域安全）；仅同域时可用 window.parent.$app
 const $app = window.$wujie?.props?.$app ?? window.parent?.$app
-$app.useComp({ 
+$app.use({ 
   app: 'okr', 
   name = 'addTask', 
   method = 'show', 

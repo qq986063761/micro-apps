@@ -6,9 +6,9 @@
     <ul class="menu-list">
       <li 
         v-for="item in menuItems" 
-        :key="item.path"
-        :class="{ active: currentPath === item.path }"
-        @click="navigateTo(item.path)"
+        :key="item.routeName"
+        :class="{ active: currentRouteName === item.routeName }"
+        @click="navigateTo(item)"
       >
         <i :class="item.icon"></i>
         <span>{{ item.name }}</span>
@@ -24,31 +24,53 @@ export default {
     return {
       menuItems: [
         {
-          path: '/',
+          routeName: 'home',
           name: '首页',
           icon: 'el-icon-house'
         },
         {
-          path: '/child1',
+          routeName: 'child1',
           name: 'Child1',
-          icon: 'el-icon-document'
+          icon: 'el-icon-document',
+          childApp: 'child1',
+          childRoute: {
+            name: 'home',
+            params: { init: true },
+            query: {}
+          }
         },
         {
-          path: '/child2',
+          routeName: 'child2',
           name: 'Child2',
-          icon: 'el-icon-folder'
+          icon: 'el-icon-folder',
+          childApp: 'child2',
+          childRoute: {
+            name: 'home',
+            params: { init: true },
+            query: {}
+          }
         }
       ]
     }
   },
   computed: {
-    currentPath() {
-      return this.$route.path
+    currentRouteName() {
+      return this.$route.name
     }
   },
   methods: {
-    navigateTo(path) {
-      this.$router.push(path)
+    navigateTo(item) {
+      const { routeName, childApp, childRoute } = item
+
+      // 子应用跳转
+      if (childApp) {
+        window.$app.to({
+          app: childApp,
+          route: childRoute
+        })
+      } else {
+        this.$router.push({ name: routeName })
+      }
     }
   }
 }
