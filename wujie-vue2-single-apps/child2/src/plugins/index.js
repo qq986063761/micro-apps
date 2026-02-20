@@ -63,7 +63,7 @@ window.$app = {
     return use({ app, name, method, args })
   },
   // 接收其他模块的数据监听事件
-  onEvent() {
+  on() {
 
   }
 }

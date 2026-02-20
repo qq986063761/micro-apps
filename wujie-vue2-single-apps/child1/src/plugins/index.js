@@ -57,8 +57,27 @@ window.$app = {
 
   },
   // 接收其他模块的数据监听事件
-  onEvent() {
-
+  on(type, opts) {
+    if (type === 'store-state') {
+      // 同步主应用的 store 数据到子应用 store
+      const { prop, value } = opts || {}
+      if (prop && value !== undefined) {
+        // 根据属性名动态更新对应的 store 属性
+        switch (prop) {
+          case 'usrs':
+            store.commit('SET_USRS', value)
+            console.log('子应用收到主应用 store-state 更新通知，已同步 usrs 数据', value)
+            break
+          // 可以在这里添加其他属性的同步逻辑
+          // case 'otherProp':
+          //   store.commit('SET_OTHER_PROP', value)
+          //   console.log('子应用收到主应用 store-state 更新通知，已同步 otherProp 数据', value)
+          //   break
+          default:
+            console.warn(`子应用收到未知的 store-state 属性: ${prop}`)
+        }
+      }
+    }
   }
 }
 

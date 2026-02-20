@@ -65,8 +65,22 @@ window.$app = {
     return appInstance[name][method](...args)
   },
   // 接收其他模块的数据监听事件
-  onEvent() {
+  on() {
 
+  },
+  // 向所有子应用发送事件通知
+  emit(type, data) {
+    Object.keys(window.$app.apps).forEach(appName => {
+      const app = window.$app.apps[appName]
+      const childWindow = app.window
+      if (childWindow && childWindow.$app && childWindow.$app.on) {
+        try {
+          childWindow.$app.on(type, data)
+        } catch (e) {
+          console.warn(`通知子应用 ${appName} 失败:`, e)
+        }
+      }
+    })
   }
 }
 

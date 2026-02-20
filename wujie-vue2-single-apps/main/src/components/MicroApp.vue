@@ -123,6 +123,22 @@ export default {
       if (slot) {
         slot.window = appWindow
       }
+      // 子应用挂载完成后，同步主应用的 store 数据
+      if (window.$app && window.$app.store && window.$app.store.state) {
+        setTimeout(() => {
+          if (window.$app.emit) {
+            // 同步所有需要同步的 store 属性
+            const state = window.$app.store.state
+            if (state.usrs) {
+              window.$app.emit('store-state', { prop: 'usrs', value: state.usrs })
+            }
+            // 可以在这里添加其他需要同步的属性
+            // if (state.otherProp) {
+            //   window.$app.emit('store-state', { prop: 'otherProp', value: state.otherProp })
+            // }
+          }
+        }, 100)
+      }
     },
     /** 子应用卸载前，可通知子应用做清理（如调用子应用 window.$app.onBeforeUnmount） */
     onChildBeforeUnmount(appWindow) {

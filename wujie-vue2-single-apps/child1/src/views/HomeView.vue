@@ -26,16 +26,46 @@
       </template>
       <el-button type="danger" @click="handleClick">跳转到 child2 的 about 页面</el-button>
     </el-card>
+
+    <el-card class="card" shadow="hover">
+      <template #header>
+        <span>子应用用户数据展示（从主应用同步）</span>
+      </template>
+      <div class="usrs-display">
+        <el-alert
+          v-if="usrs.length === 0"
+          title="暂无用户数据"
+          type="info"
+          :closable="false"
+          style="margin-bottom: 16px;">
+        </el-alert>
+        <el-table v-else :data="usrs" border style="width: 100%">
+          <el-table-column prop="id" label="ID" width="80"></el-table-column>
+          <el-table-column prop="name" label="姓名" width="120"></el-table-column>
+          <el-table-column prop="email" label="邮箱"></el-table-column>
+          <el-table-column prop="role" label="角色" width="100"></el-table-column>
+        </el-table>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'HomeView',
   data() {
     return {
       input: ''
     }
+  },
+  computed: {
+    ...mapState(['usrs'])
+  },
+  mounted() {
+    // 初始化时从主应用同步数据
+    this.syncUsrsFromMain()
   },
   methods: {
     handleClick() {
@@ -48,6 +78,13 @@ export default {
         query: {},
         params: {}
       })
+    },
+    syncUsrsFromMain() {
+      // 从主应用获取初始数据
+      const parentApp = window.$parentApp
+      if (parentApp && parentApp.store && parentApp.store.state.usrs) {
+        this.$store.commit('SET_USRS', parentApp.store.state.usrs)
+      }
     }
   }
 }
