@@ -47,10 +47,11 @@ window.$app = {
       name,
       params: params ?? {},
       query: query ?? {}
-    }).catch(err => {
-      // Vue Router 以 resolved path+query 判断“同一位置”，params 若未写在 path 里不会进 URL，仍会报冗余导航
-      if (err.name !== 'NavigationDuplicated') throw err
     })
+    // .catch(err => {
+    //   // Vue Router 以 resolved path+query 判断“同一位置”，params 若未写在 path 里不会进 URL，仍会报冗余导航
+    //   if (err.name !== 'NavigationDuplicated') throw err
+    // })
   },
   use({  }) {
 

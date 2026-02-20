@@ -11,7 +11,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setData(state) {
-      state.text = 'child1 store 数据加载完成，点击发起应用内 ajax 请求'
+      state.text = 'child1 的 store 数据加载完成，点击发起应用内 ajax 请求'
     }
   },
   actions: {

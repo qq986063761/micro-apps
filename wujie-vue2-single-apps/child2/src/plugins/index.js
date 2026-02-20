@@ -40,6 +40,10 @@ window.$app = {
       params: params ?? {},
       query: query ?? {}
     })
+    // .catch(err => {
+    //   // NavigationDuplicated: Avoided redundant navigation to current location: "/home". 避免重复导航报错
+    //   if (err.name !== 'NavigationDuplicated') throw err
+    // })
   },
   use({ name, method, args }) {
     console.log('child2 use', name, method, args)
