@@ -2,7 +2,7 @@
   <div class="home">
     <el-card class="card" shadow="hover">
       <template #header>
-        <span>【webpack5联邦】测试引入子应用组件</span>
+        <span>不加载子应用直接使用组件</span>
       </template>
       <Child1Button />
     </el-card>
@@ -19,9 +19,11 @@ export default {
 <style lang="scss">
 .home {
   padding: 20px;
+  min-height: 100%;
 
   .card {
     margin-bottom: 20px;
+    border-radius: 8px;
   }
 }
 </style>

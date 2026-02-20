@@ -2,14 +2,14 @@
   <div class="home">
     <el-card class="card" shadow="hover">
       <template #header>
-        <span>【同域】测试切换子应用，数据缓存</span>
+        <span>切换子应用后返回，数据能被缓存</span>
       </template>
       <el-input v-model="input" placeholder="请输入内容，切换子应用返回能保存状态"/>
     </el-card>
 
     <el-card class="card" shadow="hover">
       <template #header>
-        <span>【同域】测试子应用互相跳转路由</span>
+        <span>跨应用跳转路由</span>
       </template>
       <el-button type="danger" @click="handleClick">跳转到 child2 的 about 页面</el-button>
     </el-card>
@@ -45,9 +45,11 @@ export default {
 <style lang="scss">
 .home {
   padding: 20px;
+  min-height: 100%;
 
   .card {
     margin-bottom: 20px;
+    border-radius: 8px;
   }
 }
 </style>

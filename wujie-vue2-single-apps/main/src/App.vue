@@ -35,6 +35,7 @@ export default {
   margin-left: 200px;
   height: 100vh;
   overflow: hidden;
+  background: #f0f2f5; // 柔和灰蓝背景，让卡片更聚焦
 }
 
 * {

@@ -2,14 +2,14 @@
   <div class="home">
     <el-card class="card" shadow="hover">
       <template #header>
-        <span>【webpack5联邦】测试引入其他应用组件</span>
+        <span>不加载应用直接使用其他应用组件</span>
       </template>
       <Child1Button />
     </el-card>
 
     <el-card class="card" shadow="hover">
       <template #header>
-        <span>【同域】测试互相调用其他应用组件</span>
+        <span>跨应用调用组件</span>
       </template>
       <el-button type="danger" @click="openChild1Modal">
         打开 child1 弹窗
@@ -48,9 +48,11 @@ export default {
 <style lang="scss">
 .home {
   padding: 20px;
+  min-height: 100%;
 
   .card {
     margin-bottom: 20px;
+    border-radius: 8px;
   }
 }
 </style>
