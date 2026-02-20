@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { injectThemeToDocument } from '@/assets/theme'
+
 // 按 name 映射子应用的 url 和 props，子应用用 window.$wujie.props.$app 获取，避免跨域时 window.parent 不可用
 const APP_CONFIG = {
   child1: {
@@ -77,6 +79,15 @@ export default {
     /** 子应用挂载前 */
     onChildBeforeMount(appWindow) {
       console.log('MicroApp onChildBeforeMount', this.name)
+      // 注入主题 CSS 变量到子应用
+      if (appWindow && appWindow.document) {
+        try {
+          injectThemeToDocument(appWindow.document, window.$app.theme, 'theme')
+          console.log('主题 CSS 变量已注入到子应用', this.name)
+        } catch (e) {
+          console.warn('注入主题 CSS 变量失败', e)
+        }
+      }
     },
     /**
      * 无界子应用挂载完成后调用（子应用需做生命周期改造时才会触发，见无界文档）。

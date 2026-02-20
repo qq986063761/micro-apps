@@ -87,7 +87,7 @@ export default {
 
         const next = async () => {
           if (!Button) {
-            setTimeout(next, 300)
+            setTimeout(next, 60)
           } else {
             resolve(Button)
           }

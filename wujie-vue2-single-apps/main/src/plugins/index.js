@@ -70,32 +70,37 @@ window.$app = {
   }
 }
 
+// 异步组件加载中占位（用 render 避免依赖模板编译器）
+const Child1ButtonLoading = {
+  render(h) {
+    return h('div', '组件加载中...')
+  }
+}
+
 export default {
   async install(Vue) {
-    Vue.component('Child1Button', async () => {
-      const Child1Button = await new Promise(resolve => {
-        const next = async () => {
-          const { child1 } = window.$app.apps
-          const { init, Button } = child1
-        
+    const { child1 } = window.$app.apps
+
+    Vue.component('Child1Button', () => ({
+      component: new Promise(resolve => {
+        const next = () => {
+          const { Button } = child1
           if (!Button) {
-            setTimeout(next, 300)
+            setTimeout(next, 60)
           } else {
             resolve(Button)
           }
         }
         next()
-      })
-      
-      return Child1Button
-    })
+      }),
+      loading: Child1ButtonLoading
+    }))
 
     // 引入 child1 的插件
-    const { child1 } = window.$app.apps
     const child1Export = await import('child1/export')
     const { Button, modal } = child1Export.default
 
-    // 保存子组件的组件和方法
+    // 保存子组件的组件
     child1.Button = Button
     child1.modal = modal
 
