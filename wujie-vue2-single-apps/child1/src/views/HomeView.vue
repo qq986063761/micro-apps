@@ -28,9 +28,10 @@ export default {
   },
   methods: {
     handleClick() {
-      const { toPage } = window.parent.$app
-
-      toPage({
+      // 优先用无界to（跨域安全），同域或独立运行时回退到 window.parent
+      const { to } = window.$parentApp
+      
+      to({
         app: 'child2',
         route: {
           name: 'about',

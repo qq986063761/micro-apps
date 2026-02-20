@@ -6,7 +6,7 @@ window.$app = {
   vm: null,
   store,
   router,
-  async toPage({ name = '', params, query, method = 'replace' }) {
+  async to({ name = '', params, query, method = 'replace' }) {
     router[method]({
       name,
       params,
@@ -19,13 +19,27 @@ window.$app = {
   }
 }
 
+// 主应用 $app 挂到全局，业务中直接用 window.$parentApp（优先无界 props，同域/独立运行回退到 window.parent）
+const getParentApp = () => window.$wujie?.props?.$app ?? window.parent?.$app
+// Object.defineProperty(window, '$parentApp', {
+//   get: getParentApp,
+//   configurable: true,
+//   enumerable: true
+// })
+window.$parentApp = getParentApp()
+
 export default {
   async install(Vue) {
-    const parentMicroApp = window.parent.$app
+    const parentMicroApp = window.$parentApp
 
     Vue.component('Child1Button', async () => {
       const Child1Button = await new Promise(resolve => {
-        const { init, Button } = parentMicroApp.apps.child1
+        const child1Slot = parentMicroApp?.apps?.child1
+        if (!child1Slot) {
+          resolve(() => null) // 无主应用或未注入时返回空组件
+          return
+        }
+        const { init, Button } = child1Slot
 
         const next = async () => {
           if (!Button) {

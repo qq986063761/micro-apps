@@ -14,68 +14,10 @@ window.$app = {
     child1: {},
     child2: {},
   },
-  // 子应用初始化完后告诉主应用初始化完成
-  async initApp({ app: appName = '' }) {
-    if (!this.$app.apps[appName]) {
-      console.error(`子应用 ${appName} 不存在`)
-      return
-    }
-  },
-  // 使用组件
-  async useComp({ app: appName = '', name = '', method = '', args = [] }) {
-    const app = window.$app.apps[appName]
-    const { init } = app
-
-    // 子组件使用前初始化数据，但不建议
-    init && await init()
-
-    app[name][method](...args)
-  },
   /**
-   * 等待子应用就绪（可调用其 toPage 等 $app 方法）。
-   * - 若子应用做了无界生命周期改造，会在 afterMount 时设置 ready，此时立即就绪。
-   * - 否则通过轮询子应用 window.$app.toPage 是否存在判断就绪（子应用 main.js 执行完即可）。
-   * @param {string} appName - 子应用名，如 'child1'、'child2'
-   * @param {{ timeout?: number }} options - timeout 毫秒，默认 15000
-   * @returns {Promise<void>}
+   * 跳转路由
    */
-  whenChildReady(appName, options = {}) {
-    const { timeout = 15000 } = options
-    const slot = window.$app?.apps?.[appName]
-    if (!slot) {
-      return Promise.reject(new Error(`子应用 ${appName} 未注册`))
-    }
-    if (slot.ready) {
-      return Promise.resolve()
-    }
-    const start = Date.now()
-    return new Promise((resolve, reject) => {
-      const check = () => {
-        if (slot.ready) {
-          resolve()
-          return
-        }
-        const appWindow = slot.window
-        if (appWindow?.$app?.toPage) {
-          slot.ready = true
-          resolve()
-          return
-        }
-        if (Date.now() - start >= timeout) {
-          reject(new Error(`等待子应用 ${appName} 就绪超时`))
-          return
-        }
-        setTimeout(check, 50)
-      }
-      check()
-    })
-  },
-  /**
-   * 跳转路由。
-   * 复杂场景：需先跳主应用路由到子应用容器页，再调子应用 toPage 并传 params（如 init: true）时，
-   * 可先 await window.$app.whenChildReady(appName) 再调用 toPage，确保子应用已就绪。
-   */
-  async toPage({ app: appName = '', route, method = 'push' }) {
+  async to({ app: appName = '', route, method = 'push' }) {
     const { name, query, params } = route
 
     // 先跳模块在主应用路由
@@ -90,7 +32,7 @@ window.$app = {
 
       const next = () => {
         const { window: appWindow } = window.$app.apps[appName]
-        const { toPage: appToPage } = appWindow && appWindow.$app || {}
+        const { to: appToPage } = appWindow && appWindow.$app || {}
 
         if (!appToPage) {
           setTimeout(next, 300)
@@ -114,6 +56,11 @@ window.$app = {
         query
       })
     }
+  },
+  // 使用组件
+  async useComp({ app: appName = '', name = '', method = '', args = [] }) {
+    const app = window.$app.apps[appName]
+    app[name][method](...args)
   },
   // 接收其他模块的数据监听事件
   async onEvent() {

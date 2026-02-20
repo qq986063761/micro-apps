@@ -1,12 +1,20 @@
 import router from '@/router'
 import store from '@/store'
 
+const getParentApp = () => window.$wujie?.props?.$app ?? window.parent?.$app
+// Object.defineProperty(window, '$parentApp', {
+//   get: getParentApp,
+//   configurable: true,
+//   enumerable: true
+// })
+window.$parentApp = getParentApp()
+
 // 提供给子应用
 window.$app = {
   vm: null,
   store,
   router,
-  async toPage({ routeName = '', params, query, method = 'replace' }) {
+  async to({ routeName = '', params, query, method = 'replace' }) {
     router[method]({
       name: routeName,
       params,

@@ -22,7 +22,9 @@ export default {
       child1Props: {
         data: {
           message: '来自主应用的数据'
-        }
+        },
+        // 通过 props 注入，子应用用 window.$wujie.props.$app 获取，避免跨域时 window.parent 不可用
+        $app: window.$app
       }
     }
   }

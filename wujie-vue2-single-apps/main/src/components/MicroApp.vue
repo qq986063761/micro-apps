@@ -3,11 +3,13 @@
   :sync="true" 子应用内路由变化后，刷新不会回到子应用初始页面
  -->
   <div class="micro-app-container">
+    <!-- alive: 保活模式，配合主应用 keep-alive 使用，切走时不调用子应用 __WUJIE_UNMOUNT，避免二次进入白屏 -->
     <WujieVue
       :width="'100%'"
       :height="'100%'"
       :name="name"
       :url="url"
+      :alive="true"
       :sync="true"
       :fetch="fetch"
       :props="props"
