@@ -24,7 +24,7 @@
   },
   "keywords": [
     "vue2",
-    "qiankun",
+    "wujie",
     "micro-frontend",
     "微前端",
     "vuex",
@@ -34,6 +34,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/qiankun-micro-frontend-demo.git"
+    "url": "https://github.com/Tencent/wujie"
   }
 }
