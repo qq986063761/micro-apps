@@ -1,8 +1,9 @@
 <template>
   <div id="app">
     <nav>
-      <router-link to="/child1/home">Home</router-link> |
-      <router-link to="/child1/about">About</router-link>
+      <!-- to 用子路径即可，router 的 base 会拼成完整 hash -->
+      <router-link to="/home">Home</router-link> |
+      <router-link to="/about">About</router-link>
     </nav>
     <router-view/>
   </div>

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <nav>
+    <nav class="child2-nav">
+      <!-- to 用子路径即可，router 的 base 会拼成完整 hash -->
       <router-link to="/child2/home">Home</router-link> |
       <router-link to="/child2/about">About</router-link>
     </nav>
@@ -35,7 +36,7 @@ body {
   height: 100%;
 }
 
-nav {
+.child2-nav {
   padding: 30px;
   text-align: center;
 

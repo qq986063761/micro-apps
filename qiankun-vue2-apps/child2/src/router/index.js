@@ -4,26 +4,33 @@ import HomeView from '../views/HomeView.vue'
 
 Vue.use(VueRouter)
 
-// base 在 qiankun 下为 /child2，hash 为 #/child2，子路径 /home、/about -> #/child2/home、#/child2/about
-const routes = [
-  {
-    path: '/home',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+// 独立运行时：path 为 /home、/about；乾坤下 hash 为 #/child2/xxx，匹配用完整路径，故 path 需带 base
+function getRoutes() {
+  const isQiankun = window.__POWERED_BY_QIANKUN__
+  const prefix = isQiankun ? '/child2' : ''
+  return [
+    ...(isQiankun
+      ? [{ path: '/child2', redirect: '/child2/home' }]
+      : []),
+    {
+      path: prefix + '/home',
+      name: 'home',
+      component: HomeView
+    },
+    {
+      path: prefix + '/about',
+      name: 'about',
+      component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    }
+  ]
+}
 
 function createRouter() {
   const base = window.__POWERED_BY_QIANKUN__ ? '/child2' : '/'
   const r = new VueRouter({
     mode: 'hash',
     base,
-    routes
+    routes: getRoutes()
   })
   r.beforeEach((to, from, next) => {
     console.log('child2 router beforeEach', to, from)
@@ -58,4 +65,4 @@ VueRouter.prototype.replace = function replace(location, onResolve, onReject) {
   })
 }
 
-export { createRouter, routes }
+export { createRouter, getRoutes }
