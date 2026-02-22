@@ -42,7 +42,7 @@ export default {
           icon: 'el-icon-house'
         },
         {
-          routeName: 'child',
+          routeName: 'child1',
           name: 'Child1',
           icon: 'el-icon-document',
           childApp: 'child1',
@@ -53,7 +53,7 @@ export default {
           }
         },
         {
-          routeName: 'child',
+          routeName: 'child2',
           name: 'Child2',
           icon: 'el-icon-folder',
           childApp: 'child2',
@@ -86,11 +86,10 @@ export default {
     }
   },
   methods: {
-    /** 菜单项是否激活：首页看 routeName，子应用看 routeName + childApp */
+    /** 菜单项是否激活：首页看 routeName，子应用看 currentChildApp（因子应用有 /child1、/child1/home 等多条路由） */
     isMenuActive(item) {
-      if (this.currentRouteName !== item.routeName) return false
-      if (!item.childApp) return true
-      return this.currentChildApp === item.childApp
+      if (item.childApp) return this.currentChildApp === item.childApp
+      return this.currentRouteName === item.routeName
     },
     ...mapActions(['toggleTheme']),
     navigateTo(item) {

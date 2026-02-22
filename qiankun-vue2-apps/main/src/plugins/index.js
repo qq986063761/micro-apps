@@ -20,20 +20,14 @@ window.$app = {
   },
   /**
    * 跳转路由
-   * 主/子共用同一 hash，只改主应用路由即可，子应用会根据 hash 自动匹配
+   * 子应用：只改主应用 path（hash），子应用挂载后会按 hash 自动匹配 path/query；若需把 params 传到子应用 $route.params 需在无界等场景下再调子应用 to
    */
   to({ app, name, query, params, method = 'push' }) {
     if (app) {
-      let path = `/${app}`
-      if (name === 'home') path += '/home'
-      else if (name === 'about') path += '/about'
+      let path = `/${app}/${name}`
       router[method]({ path, query })
     } else {
-      router[method]({
-        name,
-        params: { init: true, ...params },
-        query
-      })
+      router[method]({ name, params, query })
     }
   },
   // 使用组件（优先从 MF 暴露的 slot[name]，如 child1 的 modal/Button）

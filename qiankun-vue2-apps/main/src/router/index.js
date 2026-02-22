@@ -11,33 +11,15 @@ const routes = [
     name: 'home',
     component: HomeView
   },
-  {
-    path: '/child1',
-    name: 'child',
-    meta: { app: 'child1' },
-    component: ChildView
-  },
-  {
-    path: '/child1/:pathMatch(.*)',
-    name: 'child',
-    meta: { app: 'child1' },
-    component: ChildView
-  },
-  {
-    path: '/child2',
-    name: 'child',
-    meta: { app: 'child2' },
-    component: ChildView
-  },
-  {
-    path: '/child2/:pathMatch(.*)',
-    name: 'child',
-    meta: { app: 'child2' },
-    component: ChildView
-  }
+  // 子应用挂载页：path 必须与 qiankun activeRule 的 hash 一致；用通配符 /* 统一匹配该子应用下所有路径，无需为每个子路由单独配
+  { path: '/child1', name: 'child1', component: ChildView, meta: { app: 'child1' } },
+  { path: '/child1/*', name: 'child1-page', component: ChildView, meta: { app: 'child1' } },
+  { path: '/child2', name: 'child2', component: ChildView, meta: { app: 'child2' } },
+  { path: '/child2/*', name: 'child2-page', component: ChildView, meta: { app: 'child2' } },
 ]
 
 const router = new VueRouter({
+  mode: 'hash', // 必须用 hash，与 qiankun activeRule(location.hash) 一致，否则 push 改的是 pathname 子应用不会激活
   routes
 })
 

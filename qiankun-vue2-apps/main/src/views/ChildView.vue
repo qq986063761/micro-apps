@@ -1,32 +1,45 @@
 <template>
-  <div class="child-view">
+  <div
+    class="child-view"
+    v-loading="loading"
+  >
     <div
       v-show="currentApp === 'child1'"
+      id="subapp-child1"
       class="child-view-slot"
-    >
-      <MicroApp name="child1" />
-    </div>
+    />
     <div
       v-show="currentApp === 'child2'"
+      id="subapp-child2"
       class="child-view-slot"
-    >
-      <MicroApp name="child2" />
-    </div>
+    />
   </div>
 </template>
 
 <script>
-import MicroApp from '@/components/MicroApp.vue'
+import { mapState } from 'vuex'
+import { ensureAppsRegistered } from '@/micro-apps'
 
 export default {
   name: 'ChildView',
-  components: {
-    MicroApp
+  data() {
+    return {
+      loading: true
+    }
   },
   computed: {
+    ...mapState(['theme']),
     currentApp() {
       return this.$route.meta?.app || (this.$route.path.startsWith('/child1') ? 'child1' : 'child2')
     }
+  },
+  mounted() {
+    ensureAppsRegistered()
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.loading = false
+      }, 300)
+    })
   }
 }
 </script>
@@ -35,6 +48,7 @@ export default {
 .child-view {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .child-view-slot {
