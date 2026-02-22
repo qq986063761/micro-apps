@@ -6,8 +6,8 @@ module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: 'auto',
   configureWebpack: {
-    entry: { app: './src/bootstrap.js' },
-    target: ['web', 'es5'],
+    // entry: { app: './src/bootstrap.js' },
+    // target: ['web', 'es5'],
     output: {
       // 必须与主应用 registerMicroApps 的 name 一致，qiankun 通过 window[name] 读取生命周期
       library: name + '-app',
