@@ -7,10 +7,6 @@ Vue.use(VueRouter)
 // base 在 qiankun 下为 /child2，hash 为 #/child2，子路径 /home、/about -> #/child2/home、#/child2/about
 const routes = [
   {
-    path: '/',
-    redirect: { name: 'home' }
-  },
-  {
     path: '/home',
     name: 'home',
     component: HomeView
