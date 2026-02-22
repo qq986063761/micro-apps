@@ -6,12 +6,12 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/home',
+    path: 'home',
     name: 'home',
     component: HomeView
   },
   {
-    path: '/about',
+    path: 'about',
     name: 'about',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -20,10 +20,11 @@ const routes = [
   }
 ]
 
-function createRouter(base = '/') {
+function createRouter() {
+  const base = window.__POWERED_BY_QIANKUN__ ? '/child1' : '/'
   const r = new VueRouter({
+    mode: 'hash',
     base,
-    mode: 'history',
     routes
   })
   r.beforeEach((to, from, next) => {

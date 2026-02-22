@@ -16,8 +16,7 @@ let instance = null
 
 function render(props = {}) {
   const { container } = props
-  const base = window.__POWERED_BY_QIANKUN__ ? '/child2/' : '/'
-  routerInstance = createRouter(base)
+  routerInstance = createRouter()
   window.__CHILD_ROUTER_INSTANCE__ = routerInstance
   instance = new Vue({
     router: routerInstance,
