@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import store from '@/store'
-import router from '@/router'
 import ajax from '@/ajax'
 import ElementUI from 'element-ui';
 import Button from '@/components/Button.vue'
@@ -14,10 +13,12 @@ Vue.use(ElementUI);
 // 内部能访问自己的 ajax
 Vue.prototype.$ajax = ajax
 
-// 构造一个支持应用内 router、store 的构造器
+// 构造一个支持应用内 router、store 的构造器（router 用 getter，取当前 mount 的实例）
 const ImportedButton = Vue.extend({
   extends: Button,
-  router,
+  get router() {
+    return window.__CHILD_ROUTER_INSTANCE__ || null
+  },
   store,
 })
 

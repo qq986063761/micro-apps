@@ -18,11 +18,12 @@ function render(props = {}) {
   const { container } = props
   const base = window.__POWERED_BY_QIANKUN__ ? '/child2/' : '/'
   routerInstance = createRouter(base)
+  window.__CHILD_ROUTER_INSTANCE__ = routerInstance
   instance = new Vue({
     router: routerInstance,
     store,
     render: h => h(App)
-  }).$mount(container ? container : '#app')
+  }).$mount(container ? container.querySelector('#app') : '#app')
 
   if (props.setAppInstance) {
     props.setAppInstance('child2', { $app: window.$app })
@@ -51,6 +52,7 @@ export async function unmount() {
     instance = null
   }
   routerInstance = null
+  window.__CHILD_ROUTER_INSTANCE__ = null
 }
 
 // 开发/构建兜底：确保 qiankun 能从 window[appName] 读到生命周期（Vue CLI dev 下 UMD 有时未挂到 window）

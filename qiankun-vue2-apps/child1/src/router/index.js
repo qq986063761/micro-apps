@@ -33,7 +33,7 @@ function createRouter(base = '/') {
   return r
 }
 
-const router = createRouter()
+// 不在此处创建单例，由 main.js 在 render 内每次 mount 时 createRouter(base)，保证 qiankun 每次加载子应用都用新路由实例
 
 // 全局处理路由重复导航错误
 const originalPush = VueRouter.prototype.push
@@ -59,5 +59,4 @@ VueRouter.prototype.replace = function replace(location, onResolve, onReject) {
   })
 }
 
-export default router
 export { createRouter, routes }

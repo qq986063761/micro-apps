@@ -1,5 +1,7 @@
-import router from '@/router'
 import store from '@/store'
+
+// 使用当前 render 内创建的路由实例（qiankun 每次 mount 新建），避免与默认单例不一致
+const getRouter = () => window.__CHILD_ROUTER_INSTANCE__ || null
 
 // 乾坤：从 props 取主应用 $app；独立运行时从 parent 取
 const getParentApp = () => window.__QIANKUN_PROPS__?.$app ?? window.parent?.$app
@@ -22,7 +24,9 @@ function shallowEqual(a, b) {
 window.$app = {
   vm: null,
   store,
-  router,
+  get router() {
+    return getRouter()
+  },
   /** 保活模式下再次被激活时调用，可在此刷新数据等 */
   onActivated() {},
   /** 保活模式下被切走时调用，可在此暂停轮询、动画等 */
@@ -37,13 +41,15 @@ window.$app = {
     }
     
     console.log('child1 to', name, params, query)
-    const cur = router.currentRoute
+    const r = getRouter()
+    if (!r) return
+    const cur = r.currentRoute
     const sameName = cur.name === name
     const sameParams = shallowEqual(cur.params, params)
     const sameQuery = shallowEqual(cur.query, query)
     if (sameName && sameParams && sameQuery) return
     
-    router.push({
+    r.push({
       name,
       params: params ?? {},
       query: query ?? {}
