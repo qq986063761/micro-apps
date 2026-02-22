@@ -1,5 +1,5 @@
 {
-  "name": "qiankun-micro-frontend-demo",
+  "name": "qiankun-vue2-demo",
   "version": "1.0.0",
   "description": "基于 Vue2 + qiankun 的微前端架构演示项目",
   "scripts": {
@@ -34,6 +34,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/qiankun-micro-frontend-demo.git"
+    "url": "https://github.com/umijs/qiankun"
   }
 }

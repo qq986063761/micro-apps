@@ -1,13 +1,20 @@
-# 样式隔离
-- 乾坤支持沙箱隔离子应用，互相样式不冲突，但会被主应用影响
+# 样式
+  - 乾坤子应用与主应用同文档，样式共享；可通过 experimentalStyleIsolation 做样式隔离
+  - 主题：主应用提供主题变量，注入到 document，子应用同文档自动生效
 
-# 通信
-- 子应用调主应用：直接把方法定在 window 上，子应用从 window 调
-- 主应用调子应用：注册时把 vm 传给主应用保存，主应用调子应用
-- 子应用互相调：公用的子应用组件要开发在主应用中
+# 三方公用组件
+  - 如 Element，可统一 CDN 或各应用自引
 
-# 路由
-- 各自路由独立，通过通信通知数据变化
+# 跨应用调用弹窗类组件
+  - 子应用通过 webpack5 Module Federation 暴露组件给主应用，主应用可单独使用组件
+  - 子应用通过乾坤 props 注入的 `window.__QIANKUN_PROPS__.$app`（或 window.$parentApp）调用主应用 use 等方法
 
-# 状态管理
-- 各自 store 独立，通过通信通知数据变化
+# 跨应用引入局部组件
+  - 主应用通过 MF 引入子应用暴露的组件（如 Button、modal）
+
+# 页面跳转
+  - 子调主/其他子应用：通过 window.$parentApp.to() 跳转
+  - 主调子：主应用先切到对应子应用路由，再通过 $app.apps[appName].appInstance.$app.to() 跳子应用内路由
+
+# 数据变化后通知子应用
+  - 主应用 $app.emit(type, data)，子应用在 $app.on(type, data) 中接收并同步 store 等

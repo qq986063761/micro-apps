@@ -1,40 +1,105 @@
 import { registerMicroApps, start } from 'qiankun'
-import store from './store'
+import { injectThemeToDocument } from '@/assets/theme'
 
-// 将全局状态管理器挂载到全局，供子应用使用
-window.microAppStore = store
+const isDev = process.env.NODE_ENV === 'development'
+const child1Entry = isDev ? '//localhost:8081' : '//localhost:8081'
+const child2Entry = isDev ? '//localhost:8082' : '//localhost:8082'
 
-// 注册微应用
+// 主应用为 hash 路由时按 hash 匹配子应用
+function activeRuleByHash(prefix) {
+  return (location) =>
+    location.hash === prefix || location.hash.startsWith(prefix + '/')
+}
+
+let qiankunStarted = false
+
+/**
+ * 在 MicroApp 组件首次挂载时调用，确保容器已存在后再注册并启动 qiankun（只执行一次）
+ */
+export function ensureAppsRegistered() {
+  if (qiankunStarted) return
+  qiankunStarted = true
+
+  console.log('ensureAppsRegistered', child1Entry, child2Entry, document.getElementById('subapp-container'))
+  registerMicroApps(
+    [
+      {
+        name: 'child1',
+        entry: child1Entry,
+        container: '#subapp-child1',
+        activeRule: activeRuleByHash('#/child1'),
+        props: {
+          get $app() {
+            return window.$app
+          },
+          setAppInstance(appName, instance) {
+            if (window.$app?.apps?.[appName]) {
+              window.$app.apps[appName].appInstance = instance
+            }
+          }
+        }
+      },
+      {
+        name: 'child2',
+        entry: child2Entry,
+        container: '#subapp-child2',
+        activeRule: activeRuleByHash('#/child2'),
+        props: {
+          get $app() {
+            return window.$app
+          },
+          setAppInstance(appName, instance) {
+            if (window.$app?.apps?.[appName]) {
+              window.$app.apps[appName].appInstance = instance
+            }
+          }
+        }
+      }
+    ],
+    {
+      beforeLoad: (app) => {
+        console.log('qiankun beforeLoad', app.name)
+      },
+      beforeMount: (app) => {
+        console.log('qiankun beforeMount', app.name)
+      },
+      afterMount: (app) => {
+        console.log('qiankun afterMount', app.name)
+        injectThemeToDocument(document)
+        // 同步主应用 store 到子应用
+        if (window.$app?.store?.state && window.$app.emit) {
+          setTimeout(() => {
+            const state = window.$app.store.state
+            if (state.usrs) {
+              window.$app.emit('store-state', { prop: 'usrs', value: state.usrs })
+            }
+          }, 100)
+        }
+      },
+      beforeUnmount: (app) => {
+        console.log('qiankun beforeUnmount', app.name)
+        const slot = window.$app?.apps?.[app.name]
+        if (slot?.appInstance?.$app?.onBeforeUnmount) {
+          try {
+            slot.appInstance.$app.onBeforeUnmount()
+          } catch (e) {
+            console.warn('qiankun beforeUnmount child callback error', e)
+          }
+        }
+      },
+      afterUnmount: (app) => {
+        console.log('qiankun afterUnmount', app.name)
+        const slot = window.$app?.apps?.[app.name]
+        if (slot) {
+          slot.appInstance = null
+        }
+      }
+    }
+  )
+  start()
+}
+
+/** @deprecated 改为在 MicroApp 首次挂载时调用 ensureAppsRegistered()，避免 container 尚未渲染 */
 export function registerApps() {
-  registerMicroApps([
-    {
-      name: 'child1',
-      entry: '//localhost:8081',
-      container: '#subapp-viewport',
-      activeRule: '#/user',
-      props: {
-        store: store
-      }
-    },
-    {
-      name: 'child2',
-      entry: '//localhost:8082',
-      container: '#subapp-viewport',
-      activeRule: '#/product',
-      props: {
-        store: store
-      }
-    }
-  ], {
-    // beforeLoad: (app) => console.log('before load', app),
-    // beforeMount: [(app) => console.log('before mount', app)],
-  })
-
-  // 启动 qiankun
-  start({
-    sandbox: {
-      // 子应用样式隔离
-      strictStyleIsolation: true
-    }
-  })
+  ensureAppsRegistered()
 }

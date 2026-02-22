@@ -5,103 +5,74 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    // 全局用户信息
-    userInfo: {
-      name: 'Admin',
-      role: 'administrator',
-      avatar: 'https://via.placeholder.com/40'
-    },
-    // 全局主题设置
-    theme: 'light',
-    // 全局语言设置
-    language: 'zh-CN',
-    // 全局通知设置
-    notifications: {
-      email: true,
-      sms: false
-    },
-    // 最后更新时间
-    lastUpdate: null,
-    // 全局消息
-    message: null
+    theme: 'light', // light, dark
+    usrs: [
+      { id: 1, name: '张三', email: 'zhangsan@example.com', role: '管理员' },
+      { id: 2, name: '李四', email: 'lisi@example.com', role: '用户' },
+      { id: 3, name: '王五', email: 'wangwu@example.com', role: '用户' }
+    ]
   },
   getters: {
-    isDarkTheme: state => state.theme === 'dark',
-    // 获取全局状态（供子应用使用）
-    globalState: state => ({
-      user: state.userInfo,
-      theme: state.theme,
-      language: state.language,
-      notifications: state.notifications,
-      lastUpdate: state.lastUpdate,
-      message: state.message
-    })
   },
   mutations: {
-    setUserInfo(state, userInfo) {
-      state.userInfo = { ...state.userInfo, ...userInfo }
-      state.lastUpdate = new Date().toISOString()
-    },
-    setTheme(state, theme) {
+    SET_THEME(state, theme) {
       state.theme = theme
-      state.lastUpdate = new Date().toISOString()
     },
-    setLanguage(state, language) {
-      state.language = language
-      state.lastUpdate = new Date().toISOString()
+    TOGGLE_THEME(state) {
+      state.theme = state.theme === 'light' ? 'dark' : 'light'
     },
-    setNotifications(state, notifications) {
-      state.notifications = { ...state.notifications, ...notifications }
-      state.lastUpdate = new Date().toISOString()
+    SET_USRS(state, usrs) {
+      state.usrs = usrs
+      // 通知子应用更新
+      if (window.$app && window.$app.emit) {
+        window.$app.emit('store-state', { prop: 'usrs', value: usrs })
+      }
     },
-    setMessage(state, message) {
-      state.message = message
-      state.lastUpdate = new Date().toISOString()
+    ADD_USR(state, usr) {
+      state.usrs = [...state.usrs, usr]
+      // 通知子应用更新
+      if (window.$app && window.$app.emit) {
+        window.$app.emit('store-state', { prop: 'usrs', value: state.usrs })
+      }
     },
-    // 设置全局状态（供子应用调用）
-    setGlobalState(state, newState) {
-      if (newState.user) {
-        state.userInfo = { ...state.userInfo, ...newState.user }
+    UPDATE_USR(state, { id, ...updates }) {
+      const index = state.usrs.findIndex(u => u.id === id)
+      if (index !== -1) {
+        state.usrs[index] = { ...state.usrs[index], ...updates }
+        // 通知子应用更新
+        if (window.$app && window.$app.emit) {
+          window.$app.emit('store-state', { prop: 'usrs', value: state.usrs })
+        }
       }
-      if (newState.theme) {
-        state.theme = newState.theme
+    },
+    DELETE_USR(state, id) {
+      state.usrs = state.usrs.filter(u => u.id !== id)
+      // 通知子应用更新
+      if (window.$app && window.$app.emit) {
+        window.$app.emit('store-state', { prop: 'usrs', value: state.usrs })
       }
-      if (newState.language) {
-        state.language = newState.language
-      }
-      if (newState.notifications) {
-        state.notifications = { ...state.notifications, ...newState.notifications }
-      }
-      if (newState.message !== undefined) {
-        state.message = newState.message
-      }
-      state.lastUpdate = new Date().toISOString()
     }
   },
   actions: {
-    updateUserInfo({ commit }, userInfo) {
-      commit('setUserInfo', userInfo)
+    toggleTheme({ commit }) {
+      commit('TOGGLE_THEME')
     },
-    toggleTheme({ commit, state }) {
-      const newTheme = state.theme === 'light' ? 'dark' : 'light'
-      commit('setTheme', newTheme)
+    setTheme({ commit }, theme) {
+      commit('SET_THEME', theme)
     },
-    updateLanguage({ commit }, language) {
-      commit('setLanguage', language)
+    setUsrs({ commit }, usrs) {
+      commit('SET_USRS', usrs)
     },
-    updateNotifications({ commit }, notifications) {
-      commit('setNotifications', notifications)
+    addUsr({ commit }, usr) {
+      commit('ADD_USR', usr)
     },
-    showMessage({ commit }, message) {
-      commit('setMessage', message)
-      // 3秒后自动清除消息
-      setTimeout(() => {
-        commit('setMessage', null)
-      }, 3000)
+    updateUsr({ commit }, { id, ...updates }) {
+      commit('UPDATE_USR', { id, ...updates })
     },
-    // 设置全局状态（供子应用调用）
-    setGlobalState({ commit }, newState) {
-      commit('setGlobalState', newState)
+    deleteUsr({ commit }, id) {
+      commit('DELETE_USR', id)
     }
+  },
+  modules: {
   }
 })

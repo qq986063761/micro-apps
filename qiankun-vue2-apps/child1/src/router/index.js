@@ -1,34 +1,63 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import HomeView from '../views/HomeView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/user/list',
-    name: 'userList',
-    component: () => import('../views/UserList.vue')
+    path: '/home',
+    name: 'home',
+    component: HomeView
   },
   {
-    path: '/user/profile',
-    name: 'userProfile',
-    component: () => import('../views/UserProfile.vue')
-  },
-  {
-    path: '/user/settings',
-    name: 'userSettings',
-    component: () => import('../views/UserSettings.vue')
-  },
-  {
-    path: '/',
-    redirect: '/user/list'
+    path: '/about',
+    name: 'about',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   }
 ]
 
-const router = new VueRouter({
-  mode: 'hash', // 'history',
-  base: window.__POWERED_BY_QIANKUN__ ? '/user' : '/',
-  routes
-})
+function createRouter(base = '/') {
+  const r = new VueRouter({
+    base,
+    mode: 'history',
+    routes
+  })
+  r.beforeEach((to, from, next) => {
+    console.log('child1 router beforeEach', to, from)
+    next()
+  })
+  return r
+}
+
+const router = createRouter()
+
+// 全局处理路由重复导航错误
+const originalPush = VueRouter.prototype.push
+const originalReplace = VueRouter.prototype.replace
+
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+  return originalPush.call(this, location).catch(err => {
+    if (err.name !== 'NavigationDuplicated') {
+      console.error('Router push error:', err)
+      throw err
+    }
+  })
+}
+
+VueRouter.prototype.replace = function replace(location, onResolve, onReject) {
+  if (onResolve || onReject) return originalReplace.call(this, location, onResolve, onReject)
+  return originalReplace.call(this, location).catch(err => {
+    if (err.name !== 'NavigationDuplicated') {
+      console.error('Router replace error:', err)
+      throw err
+    }
+  })
+}
 
 export default router
+export { createRouter, routes }
