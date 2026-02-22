@@ -13,8 +13,10 @@
   - 主应用通过 MF 引入子应用暴露的组件（如 Button、modal）
 
 # 路由配置
-  - 
-  
+  - 父子应用路由名是否能一样
+  - 主应用
+  - 子应用
+
 # 页面跳转
   - 子调主/其他子应用：通过 window.$parentApp.to() 跳转
   - 主调子：主应用先切到对应子应用路由，再通过 $app.apps[appName].appInstance.$app.to() 跳子应用内路由

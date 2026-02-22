@@ -16,8 +16,8 @@
     <ul class="menu-list">
       <li 
         v-for="item in menuItems" 
-        :key="item.routeName"
-        :class="{ active: currentRouteName === item.routeName }"
+        :key="item.childApp || item.routeName"
+        :class="{ active: isMenuActive(item) }"
         @click="navigateTo(item)"
       >
         <i :class="item.icon"></i>
@@ -42,7 +42,7 @@ export default {
           icon: 'el-icon-house'
         },
         {
-          routeName: 'child1',
+          routeName: 'child',
           name: 'Child1',
           icon: 'el-icon-document',
           childApp: 'child1',
@@ -53,7 +53,7 @@ export default {
           }
         },
         {
-          routeName: 'child2',
+          routeName: 'child',
           name: 'Child2',
           icon: 'el-icon-folder',
           childApp: 'child2',
@@ -71,6 +71,13 @@ export default {
     currentRouteName() {
       return this.$route.name
     },
+    /** 当前激活的子应用（由 path /child1* 或 /child2* 推断） */
+    currentChildApp() {
+      const path = this.$route.path || ''
+      if (path.startsWith('/child1')) return 'child1'
+      if (path.startsWith('/child2')) return 'child2'
+      return null
+    },
     currentTheme() {
       return this.theme
     },
@@ -78,18 +85,13 @@ export default {
       return colors[this.theme]?.primary || colors.light.primary
     }
   },
-  watch: {
-    theme: {
-      handler() {
-        // 主题切换后，更新当前激活的子应用主题
-        this.updateActiveChildAppTheme()
-        // 更新主应用主题
-        this.updateMainAppTheme()
-      },
-      immediate: false
-    }
-  },
   methods: {
+    /** 菜单项是否激活：首页看 routeName，子应用看 routeName + childApp */
+    isMenuActive(item) {
+      if (this.currentRouteName !== item.routeName) return false
+      if (!item.childApp) return true
+      return this.currentChildApp === item.childApp
+    },
     ...mapActions(['toggleTheme']),
     navigateTo(item) {
       const { routeName, childApp, childRoute } = item
@@ -105,9 +107,7 @@ export default {
       }
     },
     updateActiveChildAppTheme() {
-      // 获取当前路由对应的子应用
-      const currentRouteName = this.$route.name
-      const activeApp = this.menuItems.find(item => item.routeName === currentRouteName)?.childApp
+      const activeApp = this.currentChildApp
       
       if (activeApp) {
         const appWindow = window.$app?.apps?.[activeApp]?.window
@@ -121,6 +121,15 @@ export default {
       // 更新主应用主题
       const { injectThemeToDocument } = require('@/assets/theme')
       injectThemeToDocument(document)
+    }
+  },
+  watch: {
+    theme: {
+      handler() {
+        this.updateActiveChildAppTheme()
+        this.updateMainAppTheme()
+      },
+      immediate: false
     }
   }
 }

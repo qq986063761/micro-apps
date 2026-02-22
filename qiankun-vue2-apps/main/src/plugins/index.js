@@ -20,23 +20,14 @@ window.$app = {
   },
   /**
    * 跳转路由
+   * 主/子共用同一 hash，只改主应用路由即可，子应用会根据 hash 自动匹配
    */
   to({ app, name, query, params, method = 'push' }) {
     if (app) {
-      if (app !== window.$app.vm.$route.name) {
-        router.push({ name: app })
-      }
-      const next = () => {
-        const slot = window.$app.apps[app]
-        const childApp = slot?.appInstance?.$app
-        const childTo = childApp?.to
-        if (!childTo) {
-          setTimeout(next, 60)
-        } else {
-          childTo({ name, params, query, method: method || 'replace' })
-        }
-      }
-      next()
+      let path = `/${app}`
+      if (name === 'home') path += '/home'
+      else if (name === 'about') path += '/about'
+      router[method]({ path, query })
     } else {
       router[method]({
         name,

@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import Child1View from '../views/Child1View.vue'
-import Child2View from '../views/Child2View.vue'
+import ChildView from '../views/ChildView.vue'
 
 Vue.use(VueRouter)
 
@@ -14,13 +13,27 @@ const routes = [
   },
   {
     path: '/child1',
-    name: 'child1',
-    component: Child1View
+    name: 'child',
+    meta: { app: 'child1' },
+    component: ChildView
+  },
+  {
+    path: '/child1/:pathMatch(.*)',
+    name: 'child',
+    meta: { app: 'child1' },
+    component: ChildView
   },
   {
     path: '/child2',
-    name: 'child2',
-    component: Child2View
+    name: 'child',
+    meta: { app: 'child2' },
+    component: ChildView
+  },
+  {
+    path: '/child2/:pathMatch(.*)',
+    name: 'child',
+    meta: { app: 'child2' },
+    component: ChildView
   }
 ]
 
