@@ -104,31 +104,6 @@ export default {
       } else {
         this.$router.push({ name: routeName })
       }
-    },
-    updateActiveChildAppTheme() {
-      const activeApp = this.currentChildApp
-      
-      if (activeApp) {
-        const appWindow = window.$app?.apps?.[activeApp]?.window
-        if (appWindow && appWindow.document) {
-          const { injectThemeToDocument } = require('@/assets/theme')
-          injectThemeToDocument(appWindow.document)
-        }
-      }
-    },
-    updateMainAppTheme() {
-      // 更新主应用主题
-      const { injectThemeToDocument } = require('@/assets/theme')
-      injectThemeToDocument(document)
-    }
-  },
-  watch: {
-    theme: {
-      handler() {
-        this.updateActiveChildAppTheme()
-        this.updateMainAppTheme()
-      },
-      immediate: false
     }
   }
 }

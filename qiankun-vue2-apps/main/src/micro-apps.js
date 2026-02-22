@@ -1,5 +1,4 @@
 import { registerMicroApps, start } from 'qiankun'
-import { injectThemeToDocument } from '@/assets/theme'
 
 const isDev = process.env.NODE_ENV === 'development'
 const child1Entry = isDev ? '//localhost:8081' : '//localhost:8081'
@@ -57,7 +56,6 @@ export function ensureAppsRegistered() {
       },
       afterMount: (app) => {
         console.log('qiankun afterMount', app.name)
-        injectThemeToDocument(document)
         // 同步主应用 store 到子应用
         if (window.$app?.store?.state && window.$app.emit) {
           setTimeout(() => {
