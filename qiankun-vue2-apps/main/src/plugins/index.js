@@ -7,10 +7,16 @@ window.$app = {
   store,
   router,
   components: {}, // 提供给子应用的内联组件
-  // 子应用列表（乾坤模式下用 setWindow 传入的 window，主应用通过 slot.window.$app 访问子应用）
+  // 子应用列表（乾坤模式下通过 props.init({ window, vm }) 传入，主应用通过 slot.window / slot.vm 访问子应用）
   apps: {
-    child1: { window: null },
-    child2: { window: null }
+    child1: { 
+      window: null,
+      vm: null
+    },
+    child2: { 
+      window: null, 
+      vm: null 
+    }
   },
   /**
    * 跳转路由

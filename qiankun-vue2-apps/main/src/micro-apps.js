@@ -29,8 +29,11 @@ export function ensureAppsRegistered() {
         activeRule: activeRuleByHash('#/child1'),
         props: {
           $app: window.$app,
-          setWindow(win) {
-            window.$app.apps.child1.window = win
+          init(opts) {
+            if (opts) {
+              window.$app.apps.child1.window = opts.window
+              window.$app.apps.child1.vm = opts.vm
+            }
           }
         }
       },
@@ -41,8 +44,11 @@ export function ensureAppsRegistered() {
         activeRule: activeRuleByHash('#/child2'),
         props: {
           $app: window.$app,
-          setWindow(win) {
-            window.$app.apps.child2.window = win
+          init(opts) {
+            if (opts) {
+              window.$app.apps.child2.window = opts.window
+              window.$app.apps.child2.vm = opts.vm
+            }
           }
         }
       }
@@ -85,6 +91,7 @@ export function ensureAppsRegistered() {
         const slot = window.$app?.apps?.[appKey]
         if (slot) {
           slot.window = null
+          slot.vm = null
         }
       }
     }

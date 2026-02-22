@@ -27,8 +27,8 @@ function render(props = {}) {
     render: h => h(App)
   }).$mount(container ? container.querySelector('#app') : '#app')
 
-  if (props.setWindow) {
-    props.setWindow(window)
+  if (props.init) {
+    props.init({ window, vm: instance })
   }
 }
 
@@ -48,8 +48,8 @@ function restoreFromCache(props) {
   instance = cached
   routerInstance = instanceCache.routerInstance
   window.__CHILD_ROUTER_INSTANCE__ = routerInstance
-  if (props.setWindow) {
-    props.setWindow(window)
+  if (props.init) {
+    props.init({ window, vm: instance })
   }
   return true
 }
