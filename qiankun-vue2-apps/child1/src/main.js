@@ -5,7 +5,7 @@ import store from './store'
 import { createRouter } from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import plugin from './plugins'
+import plugin, { initWindowParentApp } from './plugins'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
@@ -32,6 +32,7 @@ function render(props = {}) {
 }
 
 if (!window.__POWERED_BY_QIANKUN__) {
+  initWindowParentApp()
   render()
 }
 
@@ -41,8 +42,8 @@ export async function bootstrap() {
 
 export async function mount(props) {
   console.log('child1 mount', props)
-  // 供 plugins 里 getParentApp 通过 __QIANKUN_PROPS__.$app 拿到主应用 $app（即 window.$parentApp）
   window.__QIANKUN_PROPS__ = props
+  initWindowParentApp()
   render(props)
 }
 

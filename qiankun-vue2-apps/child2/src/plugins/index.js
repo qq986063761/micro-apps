@@ -72,13 +72,18 @@ window.$app = {
   }
 }
 
-// 乾坤：从 props 取主应用 $app；独立运行时从 parent 取
-const getParentApp = () => window.__QIANKUN_PROPS__?.$app ?? window.parent?.$app
-Object.defineProperty(window, '$parentApp', {
-  get: getParentApp,
-  configurable: true,
-  enumerable: true
-})
+// 在 window.__QIANKUN_PROPS__ 赋值之后由 main.js 调用，再挂载 $parentApp
+let parentAppInited = false
+export function initWindowParentApp() {
+  if (parentAppInited) return
+  parentAppInited = true
+  const getParentApp = () => window.__QIANKUN_PROPS__?.$app ?? window.parent?.$app
+  Object.defineProperty(window, '$parentApp', {
+    get: getParentApp,
+    configurable: true,
+    enumerable: true
+  })
+}
 
 // 异步组件加载中占位（用 render 避免依赖模板编译器）
 const Child1ButtonLoading = {
@@ -89,13 +94,12 @@ const Child1ButtonLoading = {
 
 export default {
   async install(Vue) {
-    const parentMicroApp = window.$parentApp
-    const { child1 } = parentMicroApp?.apps || {}
-
     Vue.component('Child1Button', () => ({
       component: new Promise(resolve => {
         const next = () => {
-          const { Button } = child1
+          const parentMicroApp = window.$parentApp
+          const { child1 } = parentMicroApp?.apps || {}
+          const { Button } = child1 || {}
           if (!Button) {
             setTimeout(next, 60)
           } else {

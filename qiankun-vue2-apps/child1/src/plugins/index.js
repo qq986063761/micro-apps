@@ -3,13 +3,18 @@ import store from '@/store'
 // 使用当前 render 内创建的路由实例（qiankun 每次 mount 新建），避免与默认单例不一致
 const getRouter = () => window.__CHILD_ROUTER_INSTANCE__ || null
 
-// 乾坤：从 props 取主应用 $app；独立运行时从 parent 取
-const getParentApp = () => window.__QIANKUN_PROPS__?.$app ?? window.parent?.$app
-Object.defineProperty(window, '$parentApp', {
-  get: getParentApp,
-  configurable: true,
-  enumerable: true
-})
+// 在 window.__QIANKUN_PROPS__ 赋值之后由 main.js 调用，再挂载 $parentApp
+let parentAppInited = false
+export function initWindowParentApp() {
+  if (parentAppInited) return
+  parentAppInited = true
+  const getParentApp = () => window.__QIANKUN_PROPS__?.$app ?? window.parent?.$app
+  Object.defineProperty(window, '$parentApp', {
+    get: getParentApp,
+    configurable: true,
+    enumerable: true
+  })
+}
 
 function shallowEqual(a, b) {
   const A = a && typeof a === 'object' ? a : {}
