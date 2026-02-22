@@ -58,8 +58,3 @@ export async function unmount() {
   window.__CHILD_ROUTER_INSTANCE__ = null
   if (window.__CHILD_APP__) delete window.__CHILD_APP__['child1']
 }
-
-// 开发/构建兜底：确保 qiankun 能从 window[appName] 读到生命周期（Vue CLI dev 下 UMD 有时未挂到 window）
-if (typeof window !== 'undefined') {
-  window.child1 = { bootstrap, mount, unmount }
-}

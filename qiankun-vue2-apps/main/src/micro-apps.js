@@ -95,7 +95,9 @@ export function ensureAppsRegistered() {
       }
     }
   )
-  start()
+
+  // 禁用预加载
+  start({ prefetch: false })
 }
 
 /** @deprecated 改为在 MicroApp 首次挂载时调用 ensureAppsRegistered()，避免 container 尚未渲染 */
