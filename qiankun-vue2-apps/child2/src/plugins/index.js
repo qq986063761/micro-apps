@@ -25,10 +25,10 @@ window.$app = {
   onDeactivated() {},
   /** 子应用即将卸载时调用，可在此做清理、保存状态等 */
   onBeforeUnmount() {},
-  to({ app, name = '', params, query }) {
+  to({ app, name = '', params, query, method = 'push' }) {
     // 如果是跨应用跳转，则调用父应用的 to 方法
     if (app) {
-      window.$parentApp.to({ app, name, params, query })
+      window.$parentApp.to({ app, name, params, query, method })
       return
     }
 
@@ -37,15 +37,13 @@ window.$app = {
     if (!r) return
     const cur = r.currentRoute
     const sameName = cur.name === name
-    const sameParams = shallowEqual(cur.params, params)
-    const sameQuery = shallowEqual(cur.query, query)
+    const sameParams = shallowEqual(cur.params, params ?? {})
+    const sameQuery = shallowEqual(cur.query, query ?? {})
     if (sameName && sameParams && sameQuery) return
     
-    r.push({
-      name,
-      params: params ?? {},
-      query: query ?? {}
-    })
+    const nav = { name, params: params ?? {}, query: query ?? {} }
+    const fn = method === 'replace' ? r.replace : r.push
+    fn.call(r, nav)
     // .catch(err => {
     //   // NavigationDuplicated: Avoided redundant navigation to current location: "/home". 避免重复导航报错
     //   if (err.name !== 'NavigationDuplicated') throw err

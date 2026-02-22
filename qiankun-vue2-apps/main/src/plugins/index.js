@@ -14,12 +14,32 @@ window.$app = {
   },
   /**
    * 跳转路由
-   * 子应用：只改主应用 path（hash），子应用挂载后会按 hash 自动匹配 path/query；若需把 params 传到子应用 $route.params 需在无界等场景下再调子应用 to
+   * 子应用：先改主应用 path（hash）激活子应用，再通过子应用 window.$app.to 让子应用自己跳路由（支持 params/query）
+   * 子应用未挂载时每 60ms 轮询直到可调用子应用 to
    */
   to({ app, name, query, params, method = 'push' }) {
     if (app) {
-      let path = `/${app}/${name}`
+      const path = `/${app}/${name}`
       router[method]({ path, query })
+      const payload = { name, params, query, method }
+      const slot = window.$app.apps[app]
+      const childTo = slot?.window?.$app?.to
+      if (childTo) {
+        childTo(payload)
+      } else {
+        let count = 0
+        const maxRetry = 50 // 约 3 秒后放弃
+        const timer = setInterval(() => {
+          const s = window.$app.apps[app]
+          const to = s?.window?.$app?.to
+          if (to) {
+            clearInterval(timer)
+            to(payload)
+          } else if (++count >= maxRetry) {
+            clearInterval(timer)
+          }
+        }, 60)
+      }
     } else {
       router[method]({ name, params, query })
     }
