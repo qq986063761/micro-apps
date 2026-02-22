@@ -29,12 +29,10 @@ export function ensureAppsRegistered() {
         container: '#subapp-child1',
         activeRule: activeRuleByHash('#/child1'),
         props: {
-          get $app() {
-            return window.$app
-          },
-          setAppInstance(appName, instance) {
+          $app: window.$app,
+          setWindow(appName, win) {
             if (window.$app?.apps?.[appName]) {
-              window.$app.apps[appName].appInstance = instance
+              window.$app.apps[appName].window = win
             }
           }
         }
@@ -45,12 +43,10 @@ export function ensureAppsRegistered() {
         container: '#subapp-child2',
         activeRule: activeRuleByHash('#/child2'),
         props: {
-          get $app() {
-            return window.$app
-          },
-          setAppInstance(appName, instance) {
+          $app: window.$app,
+          setWindow(appName, win) {
             if (window.$app?.apps?.[appName]) {
-              window.$app.apps[appName].appInstance = instance
+              window.$app.apps[appName].window = win
             }
           }
         }
@@ -78,10 +74,12 @@ export function ensureAppsRegistered() {
       },
       beforeUnmount: (app) => {
         console.log('qiankun beforeUnmount', app.name)
-        const slot = window.$app?.apps?.[app.name]
-        if (slot?.appInstance?.$app?.onBeforeUnmount) {
+        const appKey = app.name === 'child1-app' ? 'child1' : app.name === 'child2-app' ? 'child2' : app.name
+        const slot = window.$app?.apps?.[appKey]
+        const childApp = slot?.window?.__CHILD_APP__?.[appKey]
+        if (childApp?.$app?.onBeforeUnmount) {
           try {
-            slot.appInstance.$app.onBeforeUnmount()
+            childApp.$app.onBeforeUnmount()
           } catch (e) {
             console.warn('qiankun beforeUnmount child callback error', e)
           }
@@ -89,9 +87,10 @@ export function ensureAppsRegistered() {
       },
       afterUnmount: (app) => {
         console.log('qiankun afterUnmount', app.name)
-        const slot = window.$app?.apps?.[app.name]
+        const appKey = app.name === 'child1-app' ? 'child1' : app.name === 'child2-app' ? 'child2' : app.name
+        const slot = window.$app?.apps?.[appKey]
         if (slot) {
-          slot.appInstance = null
+          slot.window = null
         }
       }
     }

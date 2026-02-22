@@ -24,9 +24,11 @@ function render(props = {}) {
     render: h => h(App)
   }).$mount(container ? container.querySelector('#app') : '#app')
 
-  if (props.setAppInstance) {
-    props.setAppInstance('child1', { $app: window.$app })
+  if (props.setWindow) {
+    props.setWindow('child1', window)
   }
+  if (typeof window.__CHILD_APP__ === 'undefined') window.__CHILD_APP__ = {}
+  window.__CHILD_APP__['child1'] = { $app: window.$app }
 }
 
 if (!window.__POWERED_BY_QIANKUN__) {
@@ -39,6 +41,7 @@ export async function bootstrap() {
 
 export async function mount(props) {
   console.log('child1 mount', props)
+  // 供 plugins 里 getParentApp 通过 __QIANKUN_PROPS__.$app 拿到主应用 $app（即 window.$parentApp）
   window.__QIANKUN_PROPS__ = props
   render(props)
 }
@@ -52,6 +55,7 @@ export async function unmount() {
   }
   routerInstance = null
   window.__CHILD_ROUTER_INSTANCE__ = null
+  if (window.__CHILD_APP__) delete window.__CHILD_APP__['child1']
 }
 
 // 开发/构建兜底：确保 qiankun 能从 window[appName] 读到生命周期（Vue CLI dev 下 UMD 有时未挂到 window）

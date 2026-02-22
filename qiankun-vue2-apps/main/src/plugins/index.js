@@ -7,16 +7,10 @@ window.$app = {
   store,
   router,
   components: {}, // 提供给子应用的内联组件
-  // 子应用列表（乾坤模式下用 appInstance 存子应用暴露的实例）
+  // 子应用列表（乾坤模式下用 setWindow 传入的 window；子应用需在 window.__CHILD_APP__ 上挂 { $app } 等供主应用按应用区分）
   apps: {
-    child1: {
-      window: null,
-      appInstance: null
-    },
-    child2: {
-      window: null,
-      appInstance: null
-    }
+    child1: { window: null },
+    child2: { window: null }
   },
   /**
    * 跳转路由
@@ -34,18 +28,20 @@ window.$app = {
   use({ app, name = '', method = '', args = [] }) {
     console.log('main use', app, name, method, args)
     const slot = window.$app.apps[app]
-    const target = slot?.[name] || slot?.appInstance?.[name]
+    const childApp = slot?.window?.__CHILD_APP__?.[app]
+    const target = slot?.[name] || childApp?.[name]
     return target && typeof target[method] === 'function' ? target[method](...args) : undefined
   },
   on() {},
-  // 向所有子应用发送事件通知
+  // 向所有子应用发送事件通知（依赖子应用在 window.__CHILD_APP__[appName] 上挂载 { $app }）
   emit(type, data) {
     Object.keys(window.$app.apps).forEach(appName => {
       const slot = window.$app.apps[appName]
-      const childApp = slot?.appInstance?.$app
-      if (childApp && typeof childApp.on === 'function') {
+      const childApp = slot?.window?.__CHILD_APP__?.[appName]
+      const $app = childApp?.$app
+      if ($app && typeof $app.on === 'function') {
         try {
-          childApp.on(type, data)
+          $app.on(type, data)
         } catch (e) {
           console.warn(`通知子应用 ${appName} 失败:`, e)
         }
