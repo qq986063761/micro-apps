@@ -10,6 +10,19 @@ function activeRuleByHash(prefix) {
     location.hash === prefix || location.hash.startsWith(prefix + '/')
 }
 
+/** 生成子应用 props：$app + init(opts) 写入 window.$app.apps[appKey].window / .vm */
+function createChildProps(appKey) {
+  return {
+    $app: window.$app,
+    init(opts) {
+      if (opts) {
+        window.$app.apps[appKey].window = opts.window
+        window.$app.apps[appKey].vm = opts.vm
+      }
+    }
+  }
+}
+
 let qiankunStarted = false
 
 /**
@@ -27,30 +40,14 @@ export function ensureAppsRegistered() {
         entry: child1Entry,
         container: '#subapp-child1',
         activeRule: activeRuleByHash('#/child1'),
-        props: {
-          $app: window.$app,
-          init(opts) {
-            if (opts) {
-              window.$app.apps.child1.window = opts.window
-              window.$app.apps.child1.vm = opts.vm
-            }
-          }
-        }
+        props: createChildProps('child1')
       },
       {
         name: 'child2-app',
         entry: child2Entry,
         container: '#subapp-child2',
         activeRule: activeRuleByHash('#/child2'),
-        props: {
-          $app: window.$app,
-          init(opts) {
-            if (opts) {
-              window.$app.apps.child2.window = opts.window
-              window.$app.apps.child2.vm = opts.vm
-            }
-          }
-        }
+        props: createChildProps('child2')
       }
     ],
     {
