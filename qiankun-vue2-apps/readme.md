@@ -17,7 +17,7 @@
 
 # 页面跳转
   - 子调主/其他子应用：通过 window.$parentApp.to() 跳转
-  - 主调子：主应用先切到对应子应用路由，再通过 $app.apps[appName].window.__CHILD_APP__[appName].$app.to() 跳子应用内路由
+  - 主调子：主应用先切到对应子应用路由，再通过 $app.apps[appName].window.$app.to() 跳子应用内路由
 
 # 数据变化后通知子应用
   - 主应用 $app.emit(type, data)，子应用在 $app.on(type, data) 中接收并同步 store 等

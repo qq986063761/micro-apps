@@ -30,10 +30,8 @@ export function ensureAppsRegistered() {
         activeRule: activeRuleByHash('#/child1'),
         props: {
           $app: window.$app,
-          setWindow(appName, win) {
-            if (window.$app?.apps?.[appName]) {
-              window.$app.apps[appName].window = win
-            }
+          setWindow(win) {
+            window.$app.apps.child1.window = win
           }
         }
       },
@@ -44,10 +42,8 @@ export function ensureAppsRegistered() {
         activeRule: activeRuleByHash('#/child2'),
         props: {
           $app: window.$app,
-          setWindow(appName, win) {
-            if (window.$app?.apps?.[appName]) {
-              window.$app.apps[appName].window = win
-            }
+          setWindow(win) {
+            window.$app.apps.child2.window = win
           }
         }
       }
@@ -76,10 +72,10 @@ export function ensureAppsRegistered() {
         console.log('qiankun beforeUnmount', app.name)
         const appKey = app.name === 'child1-app' ? 'child1' : app.name === 'child2-app' ? 'child2' : app.name
         const slot = window.$app?.apps?.[appKey]
-        const childApp = slot?.window?.__CHILD_APP__?.[appKey]
-        if (childApp?.$app?.onBeforeUnmount) {
+        const $app = slot?.window?.$app
+        if ($app?.onBeforeUnmount) {
           try {
-            childApp.$app.onBeforeUnmount()
+            $app.onBeforeUnmount()
           } catch (e) {
             console.warn('qiankun beforeUnmount child callback error', e)
           }

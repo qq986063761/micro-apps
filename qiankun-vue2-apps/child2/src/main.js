@@ -25,10 +25,8 @@ function render(props = {}) {
   }).$mount(container ? container.querySelector('#app') : '#app')
 
   if (props.setWindow) {
-    props.setWindow('child2', window)
+    props.setWindow(window)
   }
-  if (typeof window.__CHILD_APP__ === 'undefined') window.__CHILD_APP__ = {}
-  window.__CHILD_APP__['child2'] = { $app: window.$app }
 }
 
 if (!window.__POWERED_BY_QIANKUN__) {
@@ -56,5 +54,4 @@ export async function unmount() {
   }
   routerInstance = null
   window.__CHILD_ROUTER_INSTANCE__ = null
-  if (window.__CHILD_APP__) delete window.__CHILD_APP__['child2']
 }
