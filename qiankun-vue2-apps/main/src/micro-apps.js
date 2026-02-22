@@ -5,7 +5,7 @@ const isDev = process.env.NODE_ENV === 'development'
 const child1Entry = isDev ? '//localhost:8081' : '//localhost:8081'
 const child2Entry = isDev ? '//localhost:8082' : '//localhost:8082'
 
-// 主应用为 hash 路由时按 hash 匹配子应用
+// 按 hash 区分子应用：哪个路由匹配就挂载哪个，切换时会先卸载上一个再挂载当前
 function activeRuleByHash(prefix) {
   return (location) =>
     location.hash === prefix || location.hash.startsWith(prefix + '/')

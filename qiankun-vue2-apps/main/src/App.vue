@@ -2,7 +2,10 @@
   <div id="app" class="main-app">
     <SideMenu />
     <div class="main-content">
-      <router-view />
+      <!-- keep-alive 缓存主应用路由组件；子应用保活见 micro-apps.js 的 childAppActiveRule -->
+      <keep-alive>
+        <router-view />
+      </keep-alive>
     </div>
   </div>
 </template>

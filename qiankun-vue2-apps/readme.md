@@ -6,8 +6,8 @@
   - 如 Element，可统一 CDN 或各应用自引
 
 # 跨应用调用弹窗类组件
-  - 子应用通过 webpack5 Module Federation 暴露组件给主应用，主应用可单独使用组件
-  - 子应用通过乾坤 props 注入的 `window.__QIANKUN_PROPS__.$app`（或 window.$parentApp）调用主应用 use 等方法
+  - 子应用通过 webpack5 Module Federation 暴露组件给主应用，在主应用中注册组件
+  - 子应用通过 window.$parentApp 调用主应用 use 方法
 
 # 跨应用引入局部组件
   - 主应用通过 MF 引入子应用暴露的组件（如 Button、modal）
