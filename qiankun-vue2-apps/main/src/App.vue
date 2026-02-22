@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="main-app">
     <SideMenu />
     <div class="main-content">
       <router-view />
@@ -36,8 +36,9 @@ export default {
 }
 </script>
 
-<style lang="scss">
-#app {
+<style lang="scss" scoped>
+/* 仅作用于主应用根及其子节点，不污染子应用 */
+#app.main-app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -51,7 +52,7 @@ export default {
   margin-left: 200px;
   height: 100%;
   overflow: auto;
-  background: #f0f2f5; // 柔和灰蓝背景，让卡片更聚焦
+  background: #f0f2f5;
 }
 
 .micro-app-container {
@@ -59,21 +60,4 @@ export default {
   height: 100%;
   overflow: hidden;
 }
-
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.hello {
-  color: red;
-}
-
 </style>
