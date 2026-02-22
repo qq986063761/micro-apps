@@ -20,7 +20,7 @@ export function ensureAppsRegistered() {
   if (qiankunStarted) return
   qiankunStarted = true
 
-  console.log('ensureAppsRegistered', child1Entry, child2Entry, document.getElementById('subapp-container'))
+  console.log('ensureAppsRegistered', child1Entry, child2Entry, document.getElementById('subapp-child1'))
   registerMicroApps(
     [
       {
