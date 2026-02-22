@@ -10,7 +10,7 @@ module.exports = defineConfig({
     target: ['web', 'es5'],
     output: {
       // 必须与主应用 registerMicroApps 的 name 一致，qiankun 通过 window[name] 读取生命周期
-      library: name,
+      library: name + '-app',
       libraryTarget: 'umd',
       globalObject: 'window',
       chunkLoadingGlobal: `webpackJsonp_${name}`,

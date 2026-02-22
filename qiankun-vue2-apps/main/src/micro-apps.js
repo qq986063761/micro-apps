@@ -24,7 +24,7 @@ export function ensureAppsRegistered() {
   registerMicroApps(
     [
       {
-        name: 'child1',
+        name: 'child1-app',
         entry: child1Entry,
         container: '#subapp-child1',
         activeRule: activeRuleByHash('#/child1'),
@@ -40,7 +40,7 @@ export function ensureAppsRegistered() {
         }
       },
       {
-        name: 'child2',
+        name: 'child2-app',
         entry: child2Entry,
         container: '#subapp-child2',
         activeRule: activeRuleByHash('#/child2'),
