@@ -51,6 +51,11 @@ export default {
       this.content = content || ''
 
       this.visible = true
+
+      console.log('child1 modal show', {
+        isEqMainWindow: window === window.parent,
+        window
+      })
     },
     handleConfirm() {
       if (this.onConfirm) {
